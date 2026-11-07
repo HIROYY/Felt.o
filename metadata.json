@@ -1,0 +1,6 @@
+{
+  "name": "Felt.O - Apoyo Emocional & Psicología",
+  "description": "Aplicación de apoyo emocional y acompañamiento psicológico con interfaz minimalista, accesible y moderna.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
