@@ -100,14 +100,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="auth-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#4A4553]/40 backdrop-blur-xs overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#050811]/60 backdrop-blur-xs overflow-y-auto"
     >
-      <div className="bg-white border border-[#EFEAE1] rounded-3xl w-full max-w-lg shadow-xl overflow-hidden my-8 transition-colors">
+      <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl w-full max-w-lg shadow-xl overflow-hidden my-8 transition-colors">
         
         {/* Modal Header with Puppy Logo */}
-        <div className="p-6 pb-4 border-b border-[#F5EFE6] flex items-center justify-between bg-[#FFFDF9]">
+        <div className="p-6 pb-4 border-b border-[#F5EFE6] dark:border-[#1E293B] flex items-center justify-between bg-[#FFFDF9] dark:bg-[#161F36]">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-full bg-white border-2 border-[#EADDFE] shadow-xs flex items-center justify-center overflow-hidden p-0.5 shrink-0">
+            <div className="w-12 h-12 rounded-full bg-white dark:bg-white border-2 border-[#EADDFE] dark:border-[#C4B5FD] shadow-xs dark:shadow-[0_0_15px_rgba(196,181,253,0.3)] flex items-center justify-center overflow-hidden p-1 shrink-0">
               <img
                 src={LOGO_URL}
                 alt="Felt.O Cachorro"
@@ -116,14 +116,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 id="auth-modal-title" className="text-lg font-bold text-[#2D2938]">
+                <h2 id="auth-modal-title" className="text-lg font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                   {mode === 'login' ? '¡Bienvenid@ a Felt.O!' : 'Crear Cuenta Segura'}
                 </h2>
-                <span className="text-[11px] bg-[#F3EFFF] text-[#7C5FD1] px-2 py-0.5 rounded-full font-semibold border border-[#E7DCFE]">
+                <span className="text-[11px] bg-[#F3EFFF] dark:bg-[#271F42] text-[#7C5FD1] dark:text-[#C4B5FD] px-2 py-0.5 rounded-full font-semibold border border-[#E7DCFE] dark:border-[#43356E]">
                   🐾 Refugio
                 </span>
               </div>
-              <p className="text-xs text-[#7A7485]">
+              <p className="text-xs text-[#7A7485] dark:text-[#94A3B8]">
                 {mode === 'login' ? 'Tu espacio de calma y apoyo emocional' : 'Completa tus datos para comenzar'}
               </p>
             </div>
@@ -133,7 +133,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               type="button"
               onClick={onClose}
               aria-label="Cerrar ventana"
-              className="p-1.5 text-[#9E97A8] hover:text-[#2D2938] hover:bg-[#F5F0EA] rounded-full transition-colors"
+              className="p-1.5 text-[#9E97A8] hover:text-[#2D2938] dark:hover:text-white hover:bg-[#F5F0EA] dark:hover:bg-[#1E293B] rounded-full transition-colors"
             >
               <X className="w-5 h-5" aria-hidden="true" />
             </button>
@@ -143,10 +143,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {/* Role Segmented Selector */}
         <div className="px-6 pt-5">
           <fieldset>
-            <legend className="text-xs font-semibold text-[#6E6779] mb-2">
+            <legend className="text-xs font-semibold text-[#6E6779] dark:text-[#CBD5E1] mb-2">
               Selecciona tu tipo de perfil
             </legend>
-            <div className="grid grid-cols-2 gap-2 p-1 bg-[#FAF6F0] rounded-2xl border border-[#EFE8DE]">
+            <div className="grid grid-cols-2 gap-2 p-1 bg-[#FAF6F0] dark:bg-[#0C111D] rounded-2xl border border-[#EFE8DE] dark:border-[#1E293B]">
               <button
                 type="button"
                 onClick={() => {
@@ -155,11 +155,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 }}
                 className={`flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold transition-all ${
                   role === 'Paciente'
-                    ? 'bg-white text-[#7252C4] shadow-xs border border-[#EADDFE]'
-                    : 'text-[#6E6779] hover:text-[#2D2938]'
+                    ? 'bg-white dark:bg-[#161F36] text-[#7252C4] dark:text-[#C4B5FD] shadow-xs border border-[#EADDFE] dark:border-[#3B315D]'
+                    : 'text-[#6E6779] dark:text-[#94A3B8] hover:text-[#2D2938] dark:hover:text-[#F1F5F9]'
                 }`}
               >
-                <UserCircle2 className="w-4 h-4 text-[#8C71D6]" aria-hidden="true" />
+                <UserCircle2 className="w-4 h-4 text-[#8C71D6] dark:text-[#A78BFA]" aria-hidden="true" />
                 <span>Paciente</span>
               </button>
 
@@ -171,11 +171,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 }}
                 className={`flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold transition-all ${
                   role === 'Psicólogo'
-                    ? 'bg-white text-[#3D8556] shadow-xs border border-[#D4F2DC]'
-                    : 'text-[#6E6779] hover:text-[#2D2938]'
+                    ? 'bg-white dark:bg-[#161F36] text-[#3D8556] dark:text-[#86EFAC] shadow-xs border border-[#D4F2DC] dark:border-[#1E432E]'
+                    : 'text-[#6E6779] dark:text-[#94A3B8] hover:text-[#2D2938] dark:hover:text-[#F1F5F9]'
                 }`}
               >
-                <Stethoscope className="w-4 h-4 text-[#4E9B66]" aria-hidden="true" />
+                <Stethoscope className="w-4 h-4 text-[#4E9B66] dark:text-[#86EFAC]" aria-hidden="true" />
                 <span>Psicólogo</span>
               </button>
             </div>
@@ -184,19 +184,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {/* Quick Demo Fill Buttons */}
         <div className="px-6 pt-3 flex items-center justify-between gap-2">
-          <span className="text-[11px] text-[#7E7788]">Accesos rápidos de demostración:</span>
+          <span className="text-[11px] text-[#7E7788] dark:text-[#94A3B8]">Accesos rápidos de demostración:</span>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => handleQuickDemo('Paciente')}
-              className="text-[11px] font-semibold text-[#8C71D6] bg-[#F3EFFF] px-2 py-0.5 rounded-full hover:bg-[#EAE1FD] transition-colors"
+              className="text-[11px] font-semibold text-[#8C71D6] dark:text-[#C4B5FD] bg-[#F3EFFF] dark:bg-[#271F42] px-2 py-0.5 rounded-full hover:bg-[#EAE1FD] dark:hover:bg-[#342857] transition-colors"
             >
               Paciente demo
             </button>
             <button
               type="button"
               onClick={() => handleQuickDemo('Psicólogo')}
-              className="text-[11px] font-semibold text-[#4E9B66] bg-[#EDF9F0] px-2 py-0.5 rounded-full hover:bg-[#DDF4E4] transition-colors"
+              className="text-[11px] font-semibold text-[#4E9B66] dark:text-[#86EFAC] bg-[#EDF9F0] dark:bg-[#122A1C] px-2 py-0.5 rounded-full hover:bg-[#DDF4E4] dark:hover:bg-[#1B3C29] transition-colors"
             >
               Psicólogo demo
             </button>
@@ -405,7 +405,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           )}
 
           <div>
-            <label htmlFor="auth-email" className="block text-xs font-semibold text-[#575162] mb-1">
+            <label htmlFor="auth-email" className="block text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1">
               Correo Electrónico
             </label>
             <input
@@ -415,17 +415,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="nombre@ejemplo.com"
-              className="w-full px-3.5 py-2 text-sm bg-[#FAF8F5] border border-[#E8E2D8] rounded-xl text-[#2D2938] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
+              className="w-full px-3.5 py-2 text-sm bg-[#FAF8F5] dark:bg-[#0C111D] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9] focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label htmlFor="auth-pass" className="block text-xs font-semibold text-[#575162]">
+              <label htmlFor="auth-pass" className="block text-xs font-semibold text-[#575162] dark:text-[#CBD5E1]">
                 Contraseña
               </label>
               {mode === 'register' && (
-                <span className="text-[10px] text-[#8A8394]">8+ letras, 1 mayúscula y 1 número</span>
+                <span className="text-[10px] text-[#8A8394] dark:text-[#94A3B8]">8+ letras, 1 mayúscula y 1 número</span>
               )}
             </div>
             <input
@@ -435,7 +435,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-3.5 py-2 text-sm bg-[#FAF8F5] border border-[#E8E2D8] rounded-xl text-[#2D2938] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
+              className="w-full px-3.5 py-2 text-sm bg-[#FAF8F5] dark:bg-[#0C111D] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9] focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
             />
           </div>
 
@@ -447,7 +447,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 onChange={e => setConsent(e.target.checked)}
                 className="mt-0.5 rounded border-[#DCD5C9] text-[#8C71D6] focus:ring-[#8C71D6]"
               />
-              <span className="text-xs text-[#6B6576] leading-tight">
+              <span className="text-xs text-[#6B6576] dark:text-[#94A3B8] leading-tight">
                 Acepto el aviso de privacidad, el secreto profesional y el resguardo ético de mis datos de bienestar emocional.
               </span>
             </label>
@@ -456,7 +456,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           <div className="pt-2">
             <button
               type="submit"
-              className="w-full py-2.5 px-4 rounded-2xl text-sm font-semibold text-white bg-[#8C71D6] hover:bg-[#7D61CC] transition-all shadow-xs"
+              className="w-full py-2.5 px-4 rounded-2xl text-sm font-semibold text-white bg-[#8C71D6] hover:bg-[#7D61CC] dark:bg-[#7C5FD1] dark:hover:bg-[#6C4EB8] transition-all shadow-xs"
             >
               {mode === 'login' ? `Entrar como ${role}` : `Registrarme como ${role}`}
             </button>
@@ -464,8 +464,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         </form>
 
         {/* Modal Footer */}
-        <div className="px-6 py-4 bg-[#FAF7F2] border-t border-[#F0EAE1] flex items-center justify-between text-xs">
-          <span className="text-[#6E6779]">
+        <div className="px-6 py-4 bg-[#FAF7F2] dark:bg-[#161F36] border-t border-[#F0EAE1] dark:border-[#1E293B] flex items-center justify-between text-xs">
+          <span className="text-[#6E6779] dark:text-[#94A3B8]">
             {mode === 'login' ? '¿Aún no tienes una cuenta?' : '¿Ya cuentas con usuario?'}
           </span>
           <button
@@ -474,7 +474,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               setMode(mode === 'login' ? 'register' : 'login');
               setErrorMsg('');
             }}
-            className="font-bold text-[#8C71D6] hover:underline"
+            className="font-bold text-[#8C71D6] dark:text-[#C4B5FD] hover:underline"
           >
             {mode === 'login' ? 'Crear cuenta' : 'Iniciar sesión'}
           </button>

@@ -53,7 +53,7 @@ export const TestPlanView: React.FC<TestPlanViewProps> = ({ onBack }) => {
 
       {/* Header section with puppy logo */}
       <div className="mb-8 flex items-center gap-3.5">
-        <div className="w-12 h-12 rounded-full bg-white border-2 border-[#EADDFE] shadow-xs flex items-center justify-center overflow-hidden p-0.5 shrink-0">
+        <div className="w-12 h-12 rounded-full bg-white dark:bg-white border-2 border-[#EADDFE] dark:border-[#C4B5FD] shadow-xs dark:shadow-[0_0_15px_rgba(196,181,253,0.3)] flex items-center justify-center overflow-hidden p-1 shrink-0">
           <img
             src={LOGO_URL}
             alt="Felt.O Cachorro"
@@ -61,53 +61,53 @@ export const TestPlanView: React.FC<TestPlanViewProps> = ({ onBack }) => {
           />
         </div>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#2D2938]">
+          <h1 className="text-2xl font-bold tracking-tight text-[#2D2938] dark:text-[#F1F5F9]">
             Plan de Pruebas Unitarias
           </h1>
-          <p className="text-xs sm:text-sm text-[#7A7485] mt-0.5">
+          <p className="text-xs sm:text-sm text-[#7A7485] dark:text-[#94A3B8] mt-0.5">
             Validación de integridad técnica de autenticación, emociones, notificaciones y control clínico.
           </p>
         </div>
       </div>
 
-      {/* Summary Banner in light pastel */}
+      {/* Summary Banner in light pastel / midnight green */}
       <div
         role="status"
         aria-live="polite"
-        className={`mb-6 p-4 rounded-2xl border flex items-center justify-between flex-wrap gap-4 ${
+        className={`mb-6 p-4 rounded-2xl border flex items-center justify-between flex-wrap gap-4 transition-colors ${
           allPassed
-            ? 'bg-[#EDF9F0] border-[#D4F2DC] text-[#29633B]'
-            : 'bg-[#FFF0F3] border-[#FFD7DF] text-[#A3364E]'
+            ? 'bg-[#EDF9F0] dark:bg-[#112419] border-[#D4F2DC] dark:border-[#1E4530] text-[#29633B] dark:text-[#A7F3D0]'
+            : 'bg-[#FFF0F3] dark:bg-[#32131F] border-[#FFD7DF] dark:border-[#521C2F] text-[#A3364E] dark:text-[#FCA5A5]'
         }`}
       >
         <div className="flex items-center gap-3">
           {allPassed ? (
-            <CheckCircle2 className="w-5 h-5 text-[#3D8556] shrink-0" aria-hidden="true" />
+            <CheckCircle2 className="w-5 h-5 text-[#3D8556] dark:text-[#86EFAC] shrink-0" aria-hidden="true" />
           ) : (
-            <XCircle className="w-5 h-5 text-[#C44662] shrink-0" aria-hidden="true" />
+            <XCircle className="w-5 h-5 text-[#C44662] dark:text-[#FCA5A5] shrink-0" aria-hidden="true" />
           )}
           <div>
             <div className="text-sm font-bold">
               {allPassed ? '¡Todas las pruebas unitarias aprobadas! ✨' : 'Se detectaron fallos en las pruebas'}
             </div>
-            <div className="text-xs text-[#528263]">
+            <div className="text-xs text-[#528263] dark:text-[#86EFAC]/90">
               <span className="font-bold tabular-nums">{passedCount}</span> de{' '}
               <span className="font-bold tabular-nums">{results.length}</span> casos validados exitosamente sobre el motor de Felt.O.
             </div>
           </div>
         </div>
 
-        <div className="text-xs font-mono text-[#528263] bg-white/70 px-2.5 py-1 rounded-full border border-[#D4F2DC]">
+        <div className="text-xs font-mono text-[#528263] dark:text-[#86EFAC] bg-white/70 dark:bg-[#161F36] px-2.5 py-1 rounded-full border border-[#D4F2DC] dark:border-[#1E4530]">
           Estado: 100% Funcional
         </div>
       </div>
 
-      {/* Responsive Table in pastel */}
-      <div className="border border-[#EFEAE1] rounded-3xl overflow-hidden bg-white shadow-xs">
+      {/* Responsive Table in pastel / dark midnight */}
+      <div className="border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl overflow-hidden bg-white dark:bg-[#111625] shadow-xs transition-colors">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs sm:text-sm">
             <thead>
-              <tr className="bg-[#FAF7F2] border-b border-[#EFEAE1] text-[#6E6779] font-semibold">
+              <tr className="bg-[#FAF7F2] dark:bg-[#161F36] border-b border-[#EFEAE1] dark:border-[#1E293B] text-[#6E6779] dark:text-[#94A3B8] font-semibold">
                 <th scope="col" className="py-3 px-3.5 w-16">ID</th>
                 <th scope="col" className="py-3 px-3.5">Módulo</th>
                 <th scope="col" className="py-3 px-3.5">Descripción</th>
@@ -117,39 +117,39 @@ export const TestPlanView: React.FC<TestPlanViewProps> = ({ onBack }) => {
                 <th scope="col" className="py-3 px-3.5 text-center w-24">Estatus</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#F5EFE6]">
+            <tbody className="divide-y divide-[#F5EFE6] dark:divide-[#1E293B]">
               {results.map(r => (
-                <tr key={r.id} className="hover:bg-[#FCFAF7] transition-colors">
-                  <td className="py-3.5 px-3.5 font-mono text-[#8C71D6] font-bold whitespace-nowrap">
+                <tr key={r.id} className="hover:bg-[#FCFAF7] dark:hover:bg-[#161F36]/60 transition-colors">
+                  <td className="py-3.5 px-3.5 font-mono text-[#8C71D6] dark:text-[#C4B5FD] font-bold whitespace-nowrap">
                     {r.id}
                   </td>
-                  <td className="py-3.5 px-3.5 font-semibold text-[#2D2938] whitespace-nowrap">
+                  <td className="py-3.5 px-3.5 font-semibold text-[#2D2938] dark:text-[#F1F5F9] whitespace-nowrap">
                     {r.modulo}
                   </td>
-                  <td className="py-3.5 px-3.5 text-[#544E5E]">
+                  <td className="py-3.5 px-3.5 text-[#544E5E] dark:text-[#CBD5E1]">
                     {r.descripcion}
-                    <div className="md:hidden mt-1 text-[#868091] text-[11px]">
+                    <div className="md:hidden mt-1 text-[#868091] dark:text-[#94A3B8] text-[11px]">
                       <span className="font-semibold">Entrada:</span> {r.entrada}
                     </div>
                   </td>
-                  <td className="py-3.5 px-3.5 text-[#7E7788] hidden md:table-cell font-mono text-xs">
+                  <td className="py-3.5 px-3.5 text-[#7E7788] dark:text-[#94A3B8] hidden md:table-cell font-mono text-xs">
                     {r.entrada}
                   </td>
-                  <td className="py-3.5 px-3.5 text-[#7E7788] hidden lg:table-cell">
+                  <td className="py-3.5 px-3.5 text-[#7E7788] dark:text-[#94A3B8] hidden lg:table-cell">
                     {r.esperado}
                   </td>
-                  <td className="py-3.5 px-3.5 text-[#4D4857] text-xs">
+                  <td className="py-3.5 px-3.5 text-[#4D4857] dark:text-[#CBD5E1] text-xs">
                     {r.obtenido}
                   </td>
                   <td className="py-3.5 px-3.5 text-center whitespace-nowrap">
                     {r.aprobado ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-[#29633B] bg-[#EDF9F0] border border-[#D4F2DC]">
-                        <CheckCircle2 className="w-3 h-3 text-[#3D8556]" aria-hidden="true" />
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-[#29633B] dark:text-[#86EFAC] bg-[#EDF9F0] dark:bg-[#112419] border border-[#D4F2DC] dark:border-[#1E4530]">
+                        <CheckCircle2 className="w-3 h-3 text-[#3D8556] dark:text-[#86EFAC]" aria-hidden="true" />
                         Aprobado
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-[#A3364E] bg-[#FFF0F3] border border-[#FFD7DF]">
-                        <XCircle className="w-3 h-3 text-[#C44662]" aria-hidden="true" />
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-[#A3364E] dark:text-[#FCA5A5] bg-[#FFF0F3] dark:bg-[#32131F] border border-[#FFD7DF] dark:border-[#521C2F]">
+                        <XCircle className="w-3 h-3 text-[#C44662] dark:text-[#FCA5A5]" aria-hidden="true" />
                         Fallido
                       </span>
                     )}

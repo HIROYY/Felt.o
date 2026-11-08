@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -7,6 +9,15 @@
     --text-primary: #2D2938;
     --text-muted: #6D6778;
     --border-soft: #EFEAE1;
+    color-scheme: light;
+  }
+
+  .dark {
+    --bg-pastel: #0C111D;
+    --text-primary: #F1F5F9;
+    --text-muted: #94A3B8;
+    --border-soft: #1E293B;
+    color-scheme: dark;
   }
 
   html {
@@ -17,6 +28,7 @@
     scroll-behavior: smooth;
     background-color: var(--bg-pastel);
     color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   body {
@@ -29,9 +41,14 @@
     padding-right: env(safe-area-inset-right, 0px);
   }
 
-  /* Pastel accessible focus ring */
+  /* Accessible focus ring with soothing lavender */
   :focus-visible {
     outline: 2px solid #8C71D6;
+    outline-offset: 2px;
+  }
+
+  .dark :focus-visible {
+    outline: 2px solid #A78BFA;
     outline-offset: 2px;
   }
 }
@@ -41,9 +58,10 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Custom delicate scrollbar for chat */
+/* Custom delicate scrollbar for chat and containers */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
@@ -55,3 +73,54 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #D3CCC0;
 }
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #232B45;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Soothing calm entrance animations */
+@keyframes calmFadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-calm-fade-1 {
+  animation: calmFadeSlideUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.05s;
+}
+
+.animate-calm-fade-2 {
+  animation: calmFadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.18s;
+}
+
+.animate-calm-fade-3 {
+  animation: calmFadeSlideUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.32s;
+}
+
+.animate-calm-fade-4 {
+  animation: calmFadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.45s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-calm-fade-1,
+  .animate-calm-fade-2,
+  .animate-calm-fade-3,
+  .animate-calm-fade-4 {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+

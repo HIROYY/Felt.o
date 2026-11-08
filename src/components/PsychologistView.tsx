@@ -281,9 +281,9 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       {/* Clinician Welcome Banner with Puppy Logo */}
-      <div className="mb-8 p-6 sm:p-7 rounded-3xl bg-white border border-[#EFEAE1] shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+      <div className="mb-8 p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 transition-colors">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-white border-2 border-[#EADDFE] shadow-xs flex items-center justify-center p-1 shrink-0 overflow-hidden">
+          <div className="w-16 h-16 rounded-full bg-white dark:bg-white border-2 border-[#EADDFE] dark:border-[#C4B5FD] shadow-xs dark:shadow-[0_0_15px_rgba(196,181,253,0.3)] flex items-center justify-center p-1.5 shrink-0 overflow-hidden">
             <img
               src={LOGO_URL}
               alt="Felt.O Cachorro"
@@ -292,24 +292,24 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#2D2938]">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#2D2938] dark:text-[#F1F5F9]">
                 {user.nombre} {user.apellidos}
               </h1>
               {user.verificado ? (
-                <span className="text-xs bg-[#EDF9F0] text-[#2C693E] px-2.5 py-0.5 rounded-full font-semibold border border-[#D4F2DC] flex items-center gap-1 shadow-2xs">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#3D8556]" />
+                <span className="text-xs bg-[#EDF9F0] dark:bg-[#112419] text-[#2C693E] dark:text-[#86EFAC] px-2.5 py-0.5 rounded-full font-semibold border border-[#D4F2DC] dark:border-[#1E4530] flex items-center gap-1 shadow-2xs">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#3D8556] dark:text-[#86EFAC]" />
                   <span>Psicólogo Clínico Verificado · DGP</span>
                 </span>
               ) : (
-                <span className="text-xs bg-[#FFFBEB] text-[#8C6910] px-2.5 py-0.5 rounded-full font-semibold border border-[#FDEEBA]">
+                <span className="text-xs bg-[#FFFBEB] dark:bg-[#261F12] text-[#8C6910] dark:text-[#FDE68A] px-2.5 py-0.5 rounded-full font-semibold border border-[#FDEEBA] dark:border-[#4A3D18]">
                   Verificación en trámite
                 </span>
               )}
             </div>
-            <p className="text-xs sm:text-sm text-[#746E80] mt-1">
-              {user.esp || 'Psicología Clínica'} · Cédula: <span className="font-mono font-semibold text-[#2D2938]">{user.cedula || '12345678'}</span>
+            <p className="text-xs sm:text-sm text-[#746E80] dark:text-[#94A3B8] mt-1">
+              {user.esp || 'Psicología Clínica'} · Cédula: <span className="font-mono font-semibold text-[#2D2938] dark:text-[#F1F5F9]">{user.cedula || '12345678'}</span>
               {user.universidad && (
-                <span className="hidden sm:inline text-[#8E8799]"> · {user.universidad}</span>
+                <span className="hidden sm:inline text-[#8E8799] dark:text-[#64748B]"> · {user.universidad}</span>
               )}
             </p>
           </div>
@@ -320,71 +320,71 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
           <button
             type="button"
             onClick={() => onTabChange('suscripcion')}
-            className="p-2 px-3 bg-[#FAF7F2] hover:bg-[#F3EFE9] rounded-2xl flex items-center gap-2 border border-[#EFEAE1] transition-colors shadow-2xs text-left"
+            className="p-2 px-3 bg-[#FAF7F2] dark:bg-[#161F36] hover:bg-[#F3EFE9] dark:hover:bg-[#202B4B] rounded-2xl flex items-center gap-2 border border-[#EFEAE1] dark:border-[#1E293B] transition-colors shadow-2xs text-left"
             title="Ver detalles de suscripción y facturación mensual"
           >
-            <CreditCard className="w-4 h-4 text-[#8C71D6] shrink-0" />
+            <CreditCard className="w-4 h-4 text-[#8C71D6] dark:text-[#A78BFA] shrink-0" />
             <div>
-              <span className="text-[10px] text-[#7A7485] block leading-none">Suscripción Mensual</span>
-              <span className="text-xs font-bold text-[#2D2938]">
+              <span className="text-[10px] text-[#7A7485] dark:text-[#94A3B8] block leading-none">Suscripción Mensual</span>
+              <span className="text-xs font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                 {user.plan === 'ClinicaEquipo' ? 'Clínica & Equipo' : 'Consultorio Pro'}
               </span>
             </div>
             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
               user.estadoSuscripcion === 'Activa'
-                ? 'bg-[#EDF9F0] text-[#2C693E] border-[#D4F2DC]'
-                : 'bg-[#FFFBEB] text-[#8C6910] border-[#FDEEBA]'
+                ? 'bg-[#EDF9F0] dark:bg-[#112419] text-[#2C693E] dark:text-[#86EFAC] border-[#D4F2DC] dark:border-[#1E4530]'
+                : 'bg-[#FFFBEB] dark:bg-[#261F12] text-[#8C6910] dark:text-[#FDE68A] border-[#FDEEBA] dark:border-[#4A3D18]'
             }`}>
               {user.estadoSuscripcion || 'Activa'}
             </span>
           </button>
 
-          <div className="p-2.5 px-3.5 bg-[#FAF7F2] rounded-2xl flex items-center gap-2 border border-[#EFEAE1]">
-            <span className="text-xs text-[#7A7485]">Tu Código:</span>
-            <span className="text-sm font-bold font-mono text-[#8C71D6]">
+          <div className="p-2.5 px-3.5 bg-[#FAF7F2] dark:bg-[#161F36] rounded-2xl flex items-center gap-2 border border-[#EFEAE1] dark:border-[#1E293B]">
+            <span className="text-xs text-[#7A7485] dark:text-[#94A3B8]">Tu Código:</span>
+            <span className="text-sm font-bold font-mono text-[#8C71D6] dark:text-[#C4B5FD]">
               {user.codigo}
             </span>
             <button
               type="button"
               onClick={handleCopyCode}
               aria-label="Copiar código de vinculación"
-              className="p-1 hover:bg-[#EFE9DF] rounded-lg transition-colors text-[#6E6779]"
+              className="p-1 hover:bg-[#EFE9DF] dark:hover:bg-[#232B45] rounded-lg transition-colors text-[#6E6779] dark:text-[#94A3B8]"
             >
-              {copiedCode ? <Check className="w-3.5 h-3.5 text-[#3D8556]" /> : <Copy className="w-3.5 h-3.5" />}
+              {copiedCode ? <Check className="w-3.5 h-3.5 text-[#3D8556] dark:text-[#86EFAC]" /> : <Copy className="w-3.5 h-3.5" />}
             </button>
           </div>
         </div>
       </div>
 
       {/* Native Browser Notification Control Bar */}
-      <div className="mb-8 p-4 sm:p-5 rounded-3xl bg-white border border-[#EFEAE1] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="mb-8 p-4 sm:p-5 rounded-3xl bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 transition-colors">
         <div className="flex items-center gap-3">
           <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${
             notifPermission === 'granted'
-              ? 'bg-[#EDF9F0] border-[#D4F2DC] text-[#2C693E]'
+              ? 'bg-[#EDF9F0] dark:bg-[#112419] border-[#D4F2DC] dark:border-[#1E4530] text-[#2C693E] dark:text-[#86EFAC]'
               : notifPermission === 'denied'
-              ? 'bg-[#FFF0F3] border-[#FFD7DF] text-[#B8445E]'
-              : 'bg-[#FFFBEB] border-[#FDEEBA] text-[#8C6910]'
+              ? 'bg-[#FFF0F3] dark:bg-[#32131F] border-[#FFD7DF] dark:border-[#521C2F] text-[#B8445E] dark:text-[#FCA5A5]'
+              : 'bg-[#FFFBEB] dark:bg-[#261F12] border-[#FDEEBA] dark:border-[#4A3D18] text-[#8C6910] dark:text-[#FDE68A]'
           }`}>
             {notifPermission === 'granted' ? (
-              <BellRing className="w-5 h-5 text-[#3D8556]" />
+              <BellRing className="w-5 h-5 text-[#3D8556] dark:text-[#86EFAC]" />
             ) : notifPermission === 'denied' ? (
-              <BellOff className="w-5 h-5 text-[#B8445E]" />
+              <BellOff className="w-5 h-5 text-[#B8445E] dark:text-[#FCA5A5]" />
             ) : (
-              <Bell className="w-5 h-5 text-[#8C6910]" />
+              <Bell className="w-5 h-5 text-[#8C6910] dark:text-[#FDE68A]" />
             )}
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-bold text-[#2D2938]">
+              <span className="text-xs font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                 Sistema de Notificaciones Nativas del Navegador
               </span>
               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                 notifPermission === 'granted'
-                  ? 'bg-[#EDF9F0] text-[#2C693E] border-[#D4F2DC]'
+                  ? 'bg-[#EDF9F0] dark:bg-[#112419] text-[#2C693E] dark:text-[#86EFAC] border-[#D4F2DC] dark:border-[#1E4530]'
                   : notifPermission === 'denied'
-                  ? 'bg-[#FFF0F3] text-[#B8445E] border-[#FFD7DF]'
-                  : 'bg-[#FFFBEB] text-[#8C6910] border-[#FDEEBA]'
+                  ? 'bg-[#FFF0F3] dark:bg-[#32131F] text-[#B8445E] dark:text-[#FCA5A5] border-[#FFD7DF] dark:border-[#521C2F]'
+                  : 'bg-[#FFFBEB] dark:bg-[#261F12] text-[#8C6910] dark:text-[#FDE68A] border-[#FDEEBA] dark:border-[#4A3D18]'
               }`}>
                 {notifPermission === 'granted'
                   ? '✓ Activas y Autorizadas'
@@ -393,7 +393,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                   : 'Pendiente de activación'}
               </span>
             </div>
-            <p className="text-xs text-[#746E80] mt-0.5 leading-relaxed">
+            <p className="text-xs text-[#746E80] dark:text-[#94A3B8] mt-0.5 leading-relaxed">
               {notifPermission === 'granted'
                 ? 'Recibirás avisos emergentes en tu pantalla y sonido de alerta cuando un paciente reporte Gravedad Alta en el chat.'
                 : notifPermission === 'denied'
@@ -408,7 +408,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
             <button
               type="button"
               onClick={handleRequestPermission}
-              className="px-3.5 py-2 text-xs font-bold text-white bg-[#8C71D6] hover:bg-[#7D61CC] rounded-xl transition-all shadow-xs flex items-center gap-1.5"
+              className="px-3.5 py-2 text-xs font-bold text-white bg-[#8C71D6] hover:bg-[#7D61CC] dark:bg-[#7C5FD1] dark:hover:bg-[#6C4EB8] rounded-xl transition-all shadow-xs flex items-center gap-1.5"
             >
               <Bell className="w-3.5 h-3.5" />
               <span>Activar Notificaciones</span>
@@ -418,10 +418,10 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
           <button
             type="button"
             onClick={handleTestNotification}
-            className="px-3 py-2 text-xs font-semibold text-[#575162] hover:text-[#2D2938] bg-[#FAF8F5] hover:bg-[#F3EFE9] border border-[#E8E2D8] rounded-xl transition-colors flex items-center gap-1.5"
+            className="px-3 py-2 text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] hover:text-[#2D2938] dark:hover:text-white bg-[#FAF8F5] dark:bg-[#161F36] hover:bg-[#F3EFE9] dark:hover:bg-[#202B4B] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl transition-colors flex items-center gap-1.5"
             title="Reproduce el sonido y envía una notificación de prueba"
           >
-            <Volume2 className="w-3.5 h-3.5 text-[#8C71D6]" />
+            <Volume2 className="w-3.5 h-3.5 text-[#8C71D6] dark:text-[#A78BFA]" />
             <span>Probar Alerta</span>
           </button>
         </div>
@@ -479,15 +479,15 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
       {/* Tab: Alertas & Reportes de Gravedad IA (Nueva funcionalidad solicitada) */}
       {activeTab === 'alertas' && (
         <section aria-labelledby="alerts-title" className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EFEAE1]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EFEAE1] dark:border-[#1E293B]">
             <div>
               <div className="flex items-center gap-2">
-                <ShieldAlert className="w-5 h-5 text-[#B8445E]" aria-hidden="true" />
-                <h2 id="alerts-title" className="text-lg font-bold text-[#2D2938]">
+                <ShieldAlert className="w-5 h-5 text-[#B8445E] dark:text-[#F472B6]" aria-hidden="true" />
+                <h2 id="alerts-title" className="text-lg font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                   Alertas y Reportes Clínicos de la IA
                 </h2>
               </div>
-              <p className="text-xs sm:text-sm text-[#7A7485] mt-0.5">
+              <p className="text-xs sm:text-sm text-[#7A7485] dark:text-[#94A3B8] mt-0.5">
                 Evaluaciones de riesgo enviadas automáticamente por Felt.O según la gravedad que manifiesta el paciente al hablar con el chatbot
               </p>
             </div>
@@ -498,7 +498,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               <select
                 value={severityFilter}
                 onChange={e => setSeverityFilter(e.target.value)}
-                className="px-3 py-1.5 rounded-xl border border-[#E8E2D8] bg-white text-[#2D2938] text-xs font-medium"
+                className="px-3 py-1.5 rounded-xl border border-[#E8E2D8] dark:border-[#232B45] bg-white dark:bg-[#161F36] text-[#2D2938] dark:text-[#F1F5F9] text-xs font-medium"
               >
                 <option value="all">Todas las gravedades ({reports.length})</option>
                 <option value="Alta">🚨 Gravedad Alta ({reports.filter(r => r.nivelGravedad === 'Alta').length})</option>
@@ -510,7 +510,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               <select
                 value={statusFilter}
                 onChange={e => setStatusFilter(e.target.value as any)}
-                className="px-3 py-1.5 rounded-xl border border-[#E8E2D8] bg-white text-[#2D2938] text-xs font-medium"
+                className="px-3 py-1.5 rounded-xl border border-[#E8E2D8] dark:border-[#232B45] bg-white dark:bg-[#161F36] text-[#2D2938] dark:text-[#F1F5F9] text-xs font-medium"
               >
                 <option value="all">Todos los estados</option>
                 <option value="pending">Solo Pendientes ({unattendedReports.length})</option>
@@ -536,10 +536,10 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                       onClick={() => setSelectedReport(rep)}
                       className={`p-4.5 rounded-3xl border transition-all cursor-pointer shadow-xs ${
                         isSelected
-                          ? 'border-[#8C71D6] ring-2 ring-[#EADDFE] bg-[#FFFEFC]'
+                          ? 'border-[#8C71D6] dark:border-[#A78BFA] ring-2 ring-[#EADDFE] dark:ring-[#3B315D] bg-[#FFFEFC] dark:bg-[#161F36]'
                           : isHigh && !rep.atendido
-                          ? 'border-[#FFD7DF] bg-[#FFF8F9] hover:bg-[#FFF2F5]'
-                          : 'border-[#EFEAE1] bg-white hover:bg-[#FAF8F5]'
+                          ? 'border-[#FFD7DF] dark:border-[#521C2F] bg-[#FFF8F9] dark:bg-[#201018] hover:bg-[#FFF2F5] dark:hover:bg-[#2A1520]'
+                          : 'border-[#EFEAE1] dark:border-[#1E293B] bg-white dark:bg-[#111625] hover:bg-[#FAF8F5] dark:hover:bg-[#161F36]'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2 mb-2">
@@ -547,36 +547,36 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                           <span
                             className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
                               isHigh
-                                ? 'bg-[#FFF0F3] text-[#B8445E] border-[#FFD7DF]'
+                                ? 'bg-[#FFF0F3] dark:bg-[#32131F] text-[#B8445E] dark:text-[#FCA5A5] border-[#FFD7DF] dark:border-[#521C2F]'
                                 : isMedium
-                                ? 'bg-[#FFF4EB] text-[#B8642A] border-[#FFE3CC]'
-                                : 'bg-[#EDF9F0] text-[#327347] border-[#D4F2DC]'
+                                ? 'bg-[#FFF4EB] dark:bg-[#2A1B14] text-[#B8642A] dark:text-[#FED7AA] border-[#FFE3CC] dark:border-[#4E2B1E]'
+                                : 'bg-[#EDF9F0] dark:bg-[#112419] text-[#327347] dark:text-[#A7F3D0] border-[#D4F2DC] dark:border-[#1E4530]'
                             }`}
                           >
                             Gravedad {rep.nivelGravedad} · Riesgo {rep.puntuacionRiesgo}/5
                           </span>
-                          <span className="text-xs font-bold text-[#2D2938]">
+                          <span className="text-xs font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                             {rep.pacienteNombre}
                           </span>
                         </div>
 
                         {rep.atendido ? (
-                          <span className="text-[10px] font-semibold text-[#327347] bg-[#E8F8EC] px-2 py-0.5 rounded-full">
+                          <span className="text-[10px] font-semibold text-[#327347] dark:text-[#86EFAC] bg-[#E8F8EC] dark:bg-[#112419] px-2 py-0.5 rounded-full border border-transparent dark:border-[#1E4530]">
                             ✓ Atendido
                           </span>
                         ) : (
-                          <span className="text-[10px] font-bold text-[#B8445E] bg-[#FFE2E8] px-2 py-0.5 rounded-full animate-pulse">
+                          <span className="text-[10px] font-bold text-[#B8445E] dark:text-[#FCA5A5] bg-[#FFE2E8] dark:bg-[#32131F] px-2 py-0.5 rounded-full animate-pulse border border-transparent dark:border-[#521C2F]">
                             Pendiente
                           </span>
                         )}
                       </div>
 
-                      <p className="text-xs text-[#5A5464] font-medium leading-relaxed mt-1">
+                      <p className="text-xs text-[#5A5464] dark:text-[#94A3B8] font-medium leading-relaxed mt-1">
                         {rep.resumenClinico}
                       </p>
 
-                      <div className="mt-3 pt-2.5 border-t border-[#F5EFE6] flex items-center justify-between text-[11px] text-[#8E8799]">
-                        <span className="flex items-center gap-1 font-semibold text-[#8C71D6]">
+                      <div className="mt-3 pt-2.5 border-t border-[#F5EFE6] dark:border-[#1E293B] flex items-center justify-between text-[11px] text-[#8E8799] dark:text-[#64748B]">
+                        <span className="flex items-center gap-1 font-semibold text-[#8C71D6] dark:text-[#C4B5FD]">
                           <span>{EMO_DATA[rep.emocionDetectada]?.icon}</span>
                           <span>{rep.emocionDetectada}</span>
                         </span>
@@ -588,7 +588,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                   );
                 })
               ) : (
-                <div className="p-12 text-center bg-white border border-[#EFEAE1] rounded-3xl text-xs text-[#8E8799]">
+                <div className="p-12 text-center bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl text-xs text-[#8E8799] dark:text-[#64748B]">
                   No se encontraron reportes con los filtros seleccionados.
                 </div>
               )}
@@ -597,44 +597,44 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
             {/* Selected Report Detail Card (5 cols) */}
             <div className="lg:col-span-5">
               {selectedReport ? (
-                <div className="bg-white border border-[#EFEAE1] rounded-3xl p-6 shadow-xs sticky top-24 space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#F5EFE6]">
+                <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 shadow-xs sticky top-24 space-y-4 transition-colors">
+                  <div className="flex items-center justify-between pb-3 border-b border-[#F5EFE6] dark:border-[#1E293B]">
                     <div>
-                      <span className="text-[10px] text-[#8E8799] uppercase font-bold tracking-wider">
+                      <span className="text-[10px] text-[#8E8799] dark:text-[#94A3B8] uppercase font-bold tracking-wider">
                         Detalle del Reporte Clínico
                       </span>
-                      <h3 className="text-base font-bold text-[#2D2938]">
+                      <h3 className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                         {selectedReport.pacienteNombre}
                       </h3>
                     </div>
                     <button
                       type="button"
                       onClick={() => setSelectedReport(null)}
-                      className="p-1 text-[#8E8799] hover:text-[#2D2938] rounded-full"
+                      className="p-1 text-[#8E8799] hover:text-[#2D2938] dark:hover:text-white rounded-full"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   </div>
 
                   {/* Level & Risk */}
-                  <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE1]">
+                  <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAF8F5] dark:bg-[#0C111D] border border-[#EFEAE1] dark:border-[#1E293B]">
                     <div>
-                      <span className="text-[11px] text-[#7E7788] block">Nivel de Gravedad</span>
+                      <span className="text-[11px] text-[#7E7788] dark:text-[#94A3B8] block">Nivel de Gravedad</span>
                       <span
                         className={`text-sm font-bold ${
                           selectedReport.nivelGravedad === 'Alta'
-                            ? 'text-[#B8445E]'
+                            ? 'text-[#B8445E] dark:text-[#FCA5A5]'
                             : selectedReport.nivelGravedad === 'Media'
-                            ? 'text-[#B8642A]'
-                            : 'text-[#327347]'
+                            ? 'text-[#B8642A] dark:text-[#FED7AA]'
+                            : 'text-[#327347] dark:text-[#86EFAC]'
                         }`}
                       >
                         {selectedReport.nivelGravedad} (Puntuación {selectedReport.puntuacionRiesgo}/5)
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-[11px] text-[#7E7788] block">Emoción</span>
-                      <span className="text-sm font-bold text-[#2D2938] flex items-center gap-1 justify-end">
+                      <span className="text-[11px] text-[#7E7788] dark:text-[#94A3B8] block">Emoción</span>
+                      <span className="text-sm font-bold text-[#2D2938] dark:text-[#F1F5F9] flex items-center gap-1 justify-end">
                         <span>{EMO_DATA[selectedReport.emocionDetectada]?.icon}</span>
                         <span>{selectedReport.emocionDetectada}</span>
                       </span>
@@ -643,20 +643,20 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
 
                   {/* Message evaluated */}
                   <div>
-                    <h4 className="text-xs font-bold text-[#6E6779] mb-1">
+                    <h4 className="text-xs font-bold text-[#6E6779] dark:text-[#CBD5E1] mb-1">
                       Mensaje del paciente en el chat:
                     </h4>
-                    <p className="text-xs text-[#2D2938] p-3 rounded-2xl bg-[#FFFDF9] border border-[#EFEAE1] italic">
+                    <p className="text-xs text-[#2D2938] dark:text-[#F1F5F9] p-3 rounded-2xl bg-[#FFFDF9] dark:bg-[#161F36] border border-[#EFEAE1] dark:border-[#232B45] italic">
                       "{selectedReport.fragmentoMensaje}"
                     </p>
                   </div>
 
                   {/* Clinical Synthesis */}
                   <div>
-                    <h4 className="text-xs font-bold text-[#6E6779] mb-1">
+                    <h4 className="text-xs font-bold text-[#6E6779] dark:text-[#CBD5E1] mb-1">
                       Evaluación clínica de la IA:
                     </h4>
-                    <p className="text-xs text-[#5A5464] leading-relaxed">
+                    <p className="text-xs text-[#5A5464] dark:text-[#94A3B8] leading-relaxed">
                       {selectedReport.resumenClinico}
                     </p>
                   </div>
@@ -664,14 +664,14 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                   {/* Signals */}
                   {selectedReport.senalesDetectadas && selectedReport.senalesDetectadas.length > 0 && (
                     <div>
-                      <h4 className="text-xs font-bold text-[#6E6779] mb-1.5">
+                      <h4 className="text-xs font-bold text-[#6E6779] dark:text-[#CBD5E1] mb-1.5">
                         Señales y factores detectados:
                       </h4>
                       <div className="flex flex-wrap gap-1.5">
                         {selectedReport.senalesDetectadas.map((s, idx) => (
                           <span
                             key={idx}
-                            className="text-[11px] px-2.5 py-0.5 rounded-full bg-[#FAF8F5] text-[#5A5464] border border-[#EFEAE1]"
+                            className="text-[11px] px-2.5 py-0.5 rounded-full bg-[#FAF8F5] dark:bg-[#161F36] text-[#5A5464] dark:text-[#CBD5E1] border border-[#EFEAE1] dark:border-[#232B45]"
                           >
                             {s}
                           </span>
@@ -681,7 +681,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                   )}
 
                   {/* Recommendation */}
-                  <div className="p-3.5 rounded-2xl bg-[#EDF9F0] border border-[#D4F2DC] text-xs text-[#2C693E]">
+                  <div className="p-3.5 rounded-2xl bg-[#EDF9F0] dark:bg-[#112419] border border-[#D4F2DC] dark:border-[#1E4530] text-xs text-[#2C693E] dark:text-[#86EFAC]">
                     <span className="font-bold block mb-0.5">Pauta de Intervención:</span>
                     {selectedReport.recomendacion}
                   </div>
@@ -692,13 +692,13 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                       <button
                         type="button"
                         onClick={() => handleMarkAttended(selectedReport.id)}
-                        className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-[#4E9B66] hover:bg-[#438758] transition-colors shadow-xs flex items-center justify-center gap-1.5"
+                        className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-[#4E9B66] hover:bg-[#438758] dark:bg-[#3D8556] dark:hover:bg-[#2D7347] transition-colors shadow-xs flex items-center justify-center gap-1.5"
                       >
                         <CheckCircle2 className="w-4 h-4" />
                         <span>Marcar como Atendido</span>
                       </button>
                     ) : (
-                      <div className="text-center py-2 text-xs font-semibold text-[#327347] bg-[#E8F8EC] rounded-xl border border-[#D4F2DC]">
+                      <div className="text-center py-2 text-xs font-semibold text-[#327347] dark:text-[#86EFAC] bg-[#E8F8EC] dark:bg-[#112419] rounded-xl border border-[#D4F2DC] dark:border-[#1E4530]">
                         ✓ Atendido el {selectedReport.fechaAtencion ? new Date(selectedReport.fechaAtencion).toLocaleDateString('es-MX') : 'Recientemente'}
                       </div>
                     )}
@@ -712,7 +712,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                           onTabChange('rep');
                         }
                       }}
-                      className="w-full py-2 px-3 rounded-xl text-xs font-semibold text-[#7252C4] bg-[#F3EFFF] hover:bg-[#EAE1FD] border border-[#E7DCFE] transition-colors flex items-center justify-center gap-1.5"
+                      className="w-full py-2 px-3 rounded-xl text-xs font-semibold text-[#7252C4] dark:text-[#C4B5FD] bg-[#F3EFFF] dark:bg-[#271F42] hover:bg-[#EAE1FD] dark:hover:bg-[#342857] border border-[#E7DCFE] dark:border-[#43356E] transition-colors flex items-center justify-center gap-1.5"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       <span>Ver historial completo del paciente</span>
@@ -720,7 +720,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                   </div>
                 </div>
               ) : (
-                <div className="p-10 text-center bg-white border border-[#EFEAE1] rounded-3xl text-xs text-[#8E8799]">
+                <div className="p-10 text-center bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl text-xs text-[#8E8799] dark:text-[#64748B]">
                   Selecciona una alerta o reporte de la lista para ver el desglose clínico y las recomendaciones de intervención.
                 </div>
               )}
@@ -734,10 +734,10 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
       {activeTab === 'pacs' && (
         <section aria-labelledby="patients-title" className="space-y-6">
           <div>
-            <h2 id="patients-title" className="text-lg font-bold text-[#2D2938]">
+            <h2 id="patients-title" className="text-lg font-bold text-[#2D2938] dark:text-[#F1F5F9]">
               Directorio de Pacientes Vinculados
             </h2>
-            <p className="text-xs sm:text-sm text-[#7A7485]">
+            <p className="text-xs sm:text-sm text-[#7A7485] dark:text-[#94A3B8]">
               {patients.length} pacientes activos bajo tu supervisión clínica
             </p>
           </div>
@@ -751,46 +751,46 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               return (
                 <div
                   key={p.id}
-                  className={`bg-white border rounded-3xl p-5 shadow-xs transition-colors flex flex-col justify-between ${
+                  className={`border rounded-3xl p-5 shadow-xs transition-colors flex flex-col justify-between ${
                     critical || patientAlerts.some(a => a.nivelGravedad === 'Alta')
-                      ? 'border-[#FFD7DF] bg-[#FFF8F9]'
-                      : 'border-[#EFEAE1]'
+                      ? 'border-[#FFD7DF] dark:border-[#521C28] bg-[#FFF8F9] dark:bg-[#201018]'
+                      : 'bg-white dark:bg-[#111625] border-[#EFEAE1] dark:border-[#1E293B]'
                   }`}
                 >
                   <div>
                     <div className="flex items-start justify-between gap-2 mb-2">
                       <div>
-                        <h3 className="font-bold text-[#2D2938] text-sm">
+                        <h3 className="font-bold text-[#2D2938] dark:text-[#F1F5F9] text-sm">
                           {p.nombre} {p.apellidos}
                         </h3>
-                        <span className="text-xs text-[#8A8394] font-mono">
+                        <span className="text-xs text-[#8A8394] dark:text-[#64748B] font-mono">
                           {p.email}
                         </span>
                       </div>
 
                       {patientAlerts.length > 0 && (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#B8445E] bg-[#FFE2E8] px-2.5 py-0.5 rounded-full border border-[#FFD7DF]">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#B8445E] dark:text-[#FDA4AF] bg-[#FFE2E8] dark:bg-[#2B141C] px-2.5 py-0.5 rounded-full border border-[#FFD7DF] dark:border-[#521C28]">
                           <AlertCircle className="w-3 h-3" aria-hidden="true" />
                           {patientAlerts.length} alerta{patientAlerts.length > 1 ? 's' : ''}
                         </span>
                       )}
                     </div>
 
-                    <div className="my-4 pt-3 border-t border-[#F5EFE6] text-xs">
+                    <div className="my-4 pt-3 border-t border-[#F5EFE6] dark:border-[#1E293B] text-xs">
                       {last ? (
                         <div className="flex items-center gap-2.5">
                           <span className="text-2xl">{EMO_DATA[last.e]?.icon}</span>
                           <div>
-                            <span className="font-semibold text-[#2D2938]">
+                            <span className="font-semibold text-[#2D2938] dark:text-[#F1F5F9]">
                               {last.e} ({last.n}/5)
                             </span>
-                            <span className="text-[#8E8799] block text-[11px]">
+                            <span className="text-[#8E8799] dark:text-[#64748B] block text-[11px]">
                               {timeAgoStr(last.t)} {last.nota ? `· "${last.nota}"` : ''}
                             </span>
                           </div>
                         </div>
                       ) : (
-                        <span className="text-[#9A94A4] italic">Sin registros recientes</span>
+                        <span className="text-[#9A94A4] dark:text-[#64748B] italic">Sin registros recientes</span>
                       )}
                     </div>
                   </div>
@@ -802,7 +802,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                         setSelectedPatientId(p.id);
                         onTabChange('rep');
                       }}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-semibold rounded-2xl bg-[#F3EFFF] text-[#7252C4] hover:bg-[#EAE1FD] transition-colors border border-[#E7DCFE]"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-semibold rounded-2xl bg-[#F3EFFF] dark:bg-[#271F42] text-[#7252C4] dark:text-[#C4B5FD] hover:bg-[#EAE1FD] dark:hover:bg-[#342857] transition-colors border border-[#E7DCFE] dark:border-[#43356E]"
                     >
                       <span>Expediente</span>
                       <ChevronRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -814,7 +814,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                           setSelectedReport(patientAlerts[0]);
                           onTabChange('alertas');
                         }}
-                        className="px-3 py-2.5 rounded-2xl bg-[#FFF0F3] text-[#B8445E] border border-[#FFD7DF] text-xs font-bold"
+                        className="px-3 py-2.5 rounded-2xl bg-[#FFF0F3] dark:bg-[#2B141C] text-[#B8445E] dark:text-[#FDA4AF] border border-[#FFD7DF] dark:border-[#521C28] text-xs font-bold"
                         title="Ver alertas de este paciente"
                       >
                         🚨
@@ -831,12 +831,12 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
       {/* Tab: Reportes Mensuales */}
       {activeTab === 'rep' && (
         <section aria-labelledby="reports-title" className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EFEAE1]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EFEAE1] dark:border-[#1E293B]">
             <div>
-              <h2 id="reports-title" className="text-lg font-bold text-[#2D2938]">
+              <h2 id="reports-title" className="text-lg font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                 Reportes Clínicos Mensuales
               </h2>
-              <p className="text-xs sm:text-sm text-[#7A7485]">
+              <p className="text-xs sm:text-sm text-[#7A7485] dark:text-[#94A3B8]">
                 Análisis longitudinal de estados anímicos y respuestas emocionales
               </p>
             </div>
@@ -845,7 +845,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               <select
                 value={activePatientForReport?.id || ''}
                 onChange={e => setSelectedPatientId(Number(e.target.value))}
-                className="px-3 py-1.5 text-xs bg-white border border-[#E8E2D8] rounded-xl text-[#2D2938]"
+                className="px-3 py-1.5 text-xs bg-white dark:bg-[#161F36] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9]"
               >
                 {patients.map(p => (
                   <option key={p.id} value={p.id}>
@@ -857,35 +857,35 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               <button
                 type="button"
                 onClick={handlePrintReport}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-xl border border-[#E8E2D8] bg-white text-[#4D4857] hover:bg-[#FAF8F5] transition-colors"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-xl border border-[#E8E2D8] dark:border-[#232B45] bg-white dark:bg-[#161F36] text-[#4D4857] dark:text-[#CBD5E1] hover:bg-[#FAF8F5] dark:hover:bg-[#1C2642] transition-colors"
               >
-                <Printer className="w-3.5 h-3.5 text-[#8C71D6]" aria-hidden="true" />
+                <Printer className="w-3.5 h-3.5 text-[#8C71D6] dark:text-[#C4B5FD]" aria-hidden="true" />
                 <span>Imprimir</span>
               </button>
             </div>
           </div>
 
           {currentReport && currentReport.ok && currentReport.p ? (
-            <div className="bg-white border border-[#EFEAE1] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+            <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
               
               {/* Patient header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#F5EFE6]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#F5EFE6] dark:border-[#1E293B]">
                 <div>
-                  <h3 className="text-base font-bold text-[#2D2938]">
+                  <h3 className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                     Expediente: {currentReport.p.nombre} {currentReport.p.apellidos}
                   </h3>
-                  <p className="text-xs text-[#7A7485]">
+                  <p className="text-xs text-[#7A7485] dark:text-[#94A3B8]">
                     {currentReport.p.email} · {currentReport.n || 0} registros en el período evaluado
                   </p>
                 </div>
-                <div className="text-xs text-[#8C71D6] font-semibold bg-[#F3EFFF] px-3 py-1 rounded-full border border-[#E7DCFE]">
+                <div className="text-xs text-[#8C71D6] dark:text-[#C4B5FD] font-semibold bg-[#F3EFFF] dark:bg-[#271F42] px-3 py-1 rounded-full border border-[#E7DCFE] dark:border-[#43356E]">
                   Mes: {new Date(2026, selectedMonth).toLocaleDateString('es-MX', { month: 'long' })}
                 </div>
               </div>
 
               {/* Distribution breakdown */}
               <div>
-                <h4 className="text-xs font-bold text-[#6E6779] uppercase tracking-wider mb-3">
+                <h4 className="text-xs font-bold text-[#6E6779] dark:text-[#94A3B8] uppercase tracking-wider mb-3">
                   Distribución de Frecuencia Emocional
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -895,12 +895,12 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                     const meta = EMO_DATA[e];
 
                     return (
-                      <div key={e} className={`p-3 rounded-2xl border ${meta.borderPastel} ${meta.bgPastel} text-center`}>
+                      <div key={e} className={`p-3 rounded-2xl border ${meta.borderPastel} ${meta.borderDark} ${meta.bgPastel} ${meta.bgDark} text-center`}>
                         <span className="text-2xl mb-1 block">{meta.icon}</span>
-                        <span className={`text-xs font-bold ${meta.textPastel} block`}>
+                        <span className={`text-xs font-bold ${meta.textPastel} ${meta.textDark} block`}>
                           {e}
                         </span>
-                        <span className="text-[11px] font-mono text-[#6E6779] tabular-nums font-semibold">
+                        <span className="text-[11px] font-mono text-[#6E6779] dark:text-[#94A3B8] tabular-nums font-semibold">
                           {count} ({pct}%)
                         </span>
                       </div>
@@ -911,14 +911,14 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
 
               {/* Detailed chronology table */}
               <div>
-                <h4 className="text-xs font-bold text-[#6E6779] uppercase tracking-wider mb-3">
+                <h4 className="text-xs font-bold text-[#6E6779] dark:text-[#94A3B8] uppercase tracking-wider mb-3">
                   Registro Cronológico de Estados Anímicos
                 </h4>
                 {currentReport.r && currentReport.r.length > 0 ? (
-                  <div className="border border-[#EFEAE1] rounded-2xl overflow-hidden bg-white">
+                  <div className="border border-[#EFEAE1] dark:border-[#1E293B] rounded-2xl overflow-hidden bg-white dark:bg-[#111625]">
                     <table className="w-full text-left text-xs sm:text-sm border-collapse">
                       <thead>
-                        <tr className="bg-[#FAF7F2] border-b border-[#EFEAE1] text-[#6E6779]">
+                        <tr className="bg-[#FAF7F2] dark:bg-[#161F36] border-b border-[#EFEAE1] dark:border-[#1E293B] text-[#6E6779] dark:text-[#94A3B8]">
                           <th className="py-2.5 px-3 font-semibold">Fecha y Hora</th>
                           <th className="py-2.5 px-3 font-semibold">Emoción</th>
                           <th className="py-2.5 px-3 font-semibold text-center">Intensidad</th>
@@ -926,10 +926,10 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                           <th className="py-2.5 px-3 font-semibold">Nota Reflexiva</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#F5EFE6]">
+                      <tbody className="divide-y divide-[#F5EFE6] dark:divide-[#1E293B]">
                         {currentReport.r.map((r, i) => (
-                          <tr key={i} className="hover:bg-[#FAF8F5]">
-                            <td className="py-2.5 px-3 text-[#7E7788] font-mono whitespace-nowrap">
+                          <tr key={i} className="hover:bg-[#FAF8F5] dark:hover:bg-[#161F36]/60">
+                            <td className="py-2.5 px-3 text-[#7E7788] dark:text-[#94A3B8] font-mono whitespace-nowrap">
                               {new Date(r.t).toLocaleString('es-MX', {
                                 day: '2-digit',
                                 month: 'short',
@@ -937,19 +937,19 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                                 minute: '2-digit'
                               })}
                             </td>
-                            <td className="py-2.5 px-3 font-semibold text-[#2D2938]">
+                            <td className="py-2.5 px-3 font-semibold text-[#2D2938] dark:text-[#F1F5F9]">
                               <span className="mr-1.5">{EMO_DATA[r.e].icon}</span>
                               {r.e}
                             </td>
                             <td className="py-2.5 px-3 text-center font-mono tabular-nums">
-                              <span className={r.n >= 4 ? 'text-[#B8445E] font-bold' : 'text-[#4D4857]'}>
+                              <span className={r.n >= 4 ? 'text-[#B8445E] dark:text-[#FDA4AF] font-bold' : 'text-[#4D4857] dark:text-[#CBD5E1]'}>
                                 {r.n}/5
                               </span>
                             </td>
-                            <td className="py-2.5 px-3 text-[#5A5464]">
+                            <td className="py-2.5 px-3 text-[#5A5464] dark:text-[#94A3B8]">
                               {r.detonante || '—'}
                             </td>
-                            <td className="py-2.5 px-3 text-[#5A5464] italic">
+                            <td className="py-2.5 px-3 text-[#5A5464] dark:text-[#94A3B8] italic">
                               {r.nota ? `"${r.nota}"` : '—'}
                             </td>
                           </tr>
@@ -958,7 +958,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                     </table>
                   </div>
                 ) : (
-                  <p className="text-xs text-[#8E8799] italic py-6 text-center">
+                  <p className="text-xs text-[#8E8799] dark:text-[#64748B] italic py-6 text-center">
                     No se registran eventos emocionales para este paciente en el mes seleccionado.
                   </p>
                 )}
@@ -966,8 +966,8 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
 
             </div>
           ) : (
-            <div className="p-8 text-center bg-white border border-[#EFEAE1] rounded-3xl">
-              <p className="text-sm text-[#7A7485]">Selecciona un paciente para visualizar su informe.</p>
+            <div className="p-8 text-center bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl">
+              <p className="text-sm text-[#7A7485] dark:text-[#94A3B8]">Selecciona un paciente para visualizar su informe.</p>
             </div>
           )}
         </section>
@@ -976,29 +976,29 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
       {/* Tab: Mi Perfil Profesional */}
       {activeTab === 'perf' && (
         <section aria-labelledby="dr-profile" className="max-w-3xl mx-auto space-y-6">
-          <div className="bg-white border border-[#EFEAE1] rounded-3xl p-6 sm:p-7 shadow-xs">
-            <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6]">
+          <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 sm:p-7 shadow-xs">
+            <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6] dark:border-[#1E293B]">
               <div className="flex items-center gap-3.5">
-                <div className="w-14 h-14 rounded-full bg-[#EDF9F0] border-2 border-[#D4F2DC] flex items-center justify-center text-[#2C693E]">
+                <div className="w-14 h-14 rounded-full bg-[#EDF9F0] dark:bg-[#112419] border-2 border-[#D4F2DC] dark:border-[#1E4530] flex items-center justify-center text-[#2C693E] dark:text-[#86EFAC]">
                   <Stethoscope className="w-7 h-7" aria-hidden="true" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h2 id="dr-profile" className="text-lg font-bold text-[#2D2938]">
+                    <h2 id="dr-profile" className="text-lg font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                       {user.nombre} {user.apellidos}
                     </h2>
                     {user.verificado ? (
-                      <span className="text-[11px] bg-[#EDF9F0] text-[#2C693E] px-2.5 py-0.5 rounded-full font-semibold border border-[#D4F2DC] flex items-center gap-1">
-                        <ShieldCheck className="w-3.5 h-3.5 text-[#3D8556]" />
+                      <span className="text-[11px] bg-[#EDF9F0] dark:bg-[#112419] text-[#2C693E] dark:text-[#86EFAC] px-2.5 py-0.5 rounded-full font-semibold border border-[#D4F2DC] dark:border-[#1E4530] flex items-center gap-1">
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#3D8556] dark:text-[#86EFAC]" />
                         <span>Cédula Oficial Verificada</span>
                       </span>
                     ) : (
-                      <span className="text-[11px] bg-[#FFFBEB] text-[#8C6910] px-2.5 py-0.5 rounded-full font-semibold border border-[#FDEEBA]">
+                      <span className="text-[11px] bg-[#FFFBEB] dark:bg-[#2A2310] text-[#8C6910] dark:text-[#FDEEBA] px-2.5 py-0.5 rounded-full font-semibold border border-[#FDEEBA] dark:border-[#52441C]">
                         En trámite de validación
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-[#7A7485] mt-0.5">
+                  <p className="text-xs text-[#7A7485] dark:text-[#94A3B8] mt-0.5">
                     {user.esp || 'Psicología Clínica'}
                   </p>
                 </div>
@@ -1007,7 +1007,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               <button
                 type="button"
                 onClick={() => onTabChange('suscripcion')}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#F3EFFF] text-[#7252C4] hover:bg-[#EAE1FD] border border-[#E7DCFE] transition-colors"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#F3EFFF] dark:bg-[#271F42] text-[#7252C4] dark:text-[#C4B5FD] hover:bg-[#EAE1FD] dark:hover:bg-[#342857] border border-[#E7DCFE] dark:border-[#43356E] transition-colors"
               >
                 <CreditCard className="w-3.5 h-3.5" />
                 <span>Ver Suscripción</span>
@@ -1016,53 +1016,53 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
 
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm pt-4">
               <div>
-                <dt className="text-[#868091] text-xs">Cédula Profesional Oficial</dt>
-                <dd className="font-mono font-bold text-[#2D2938] mt-0.5 flex items-center gap-1.5">
+                <dt className="text-[#868091] dark:text-[#64748B] text-xs">Cédula Profesional Oficial</dt>
+                <dd className="font-mono font-bold text-[#2D2938] dark:text-[#F1F5F9] mt-0.5 flex items-center gap-1.5">
                   <span>{user.cedula || '12345678'}</span>
-                  <span className="text-[10px] bg-[#E8F8EC] text-[#2C693E] px-1.5 py-0.2 rounded font-mono">
+                  <span className="text-[10px] bg-[#E8F8EC] dark:bg-[#112419] text-[#2C693E] dark:text-[#86EFAC] px-1.5 py-0.2 rounded font-mono">
                     SEP / DGP Activa
                   </span>
                 </dd>
               </div>
 
               <div>
-                <dt className="text-[#868091] text-xs">Institución de Egreso</dt>
-                <dd className="font-semibold text-[#2D2938] mt-0.5">
+                <dt className="text-[#868091] dark:text-[#64748B] text-xs">Institución de Egreso</dt>
+                <dd className="font-semibold text-[#2D2938] dark:text-[#F1F5F9] mt-0.5">
                   {user.universidad || 'Universidad Nacional Autónoma de México (UNAM)'}
                 </dd>
               </div>
 
               <div>
-                <dt className="text-[#868091] text-xs">Año de Titulación</dt>
-                <dd className="font-semibold text-[#2D2938] mt-0.5">
+                <dt className="text-[#868091] dark:text-[#64748B] text-xs">Año de Titulación</dt>
+                <dd className="font-semibold text-[#2D2938] dark:text-[#F1F5F9] mt-0.5">
                   {user.anioGraduacion || 2018}
                 </dd>
               </div>
 
               <div>
-                <dt className="text-[#868091] text-xs">Acreditación Adjunta</dt>
-                <dd className="font-mono text-xs text-[#6B6576] mt-0.5 flex items-center gap-1">
+                <dt className="text-[#868091] dark:text-[#64748B] text-xs">Acreditación Adjunta</dt>
+                <dd className="font-mono text-xs text-[#6B6576] dark:text-[#94A3B8] mt-0.5 flex items-center gap-1">
                   <span>📄 {user.documentoAcreditacionNombre || 'Cedula_Profesional_DGP.pdf'}</span>
                 </dd>
               </div>
 
               <div>
-                <dt className="text-[#868091] text-xs">Correo Electrónico</dt>
-                <dd className="font-semibold text-[#2D2938] mt-0.5">
+                <dt className="text-[#868091] dark:text-[#64748B] text-xs">Correo Electrónico</dt>
+                <dd className="font-semibold text-[#2D2938] dark:text-[#F1F5F9] mt-0.5">
                   {user.email}
                 </dd>
               </div>
 
               <div>
-                <dt className="text-[#868091] text-xs">Código de Vinculación para Pacientes</dt>
+                <dt className="text-[#868091] dark:text-[#64748B] text-xs">Código de Vinculación para Pacientes</dt>
                 <dd className="flex items-center gap-2 mt-0.5">
-                  <span className="font-mono font-bold text-sm text-[#8C71D6] bg-[#F3EFFF] px-2.5 py-0.5 rounded-lg border border-[#E7DCFE]">
+                  <span className="font-mono font-bold text-sm text-[#8C71D6] dark:text-[#C4B5FD] bg-[#F3EFFF] dark:bg-[#271F42] px-2.5 py-0.5 rounded-lg border border-[#E7DCFE] dark:border-[#43356E]">
                     {user.codigo}
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyCode}
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs rounded-lg bg-[#FAF8F5] border border-[#EFEAE1] hover:bg-[#F3EFE9] transition-colors"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs rounded-lg bg-[#FAF8F5] dark:bg-[#161F36] border border-[#EFEAE1] dark:border-[#232B45] text-[#2D2938] dark:text-[#CBD5E1] hover:bg-[#F3EFE9] dark:hover:bg-[#1E293B] transition-colors"
                   >
                     {copiedCode ? <Check className="w-3 h-3 text-[#3D8556]" /> : <Copy className="w-3 h-3" />}
                     <span>{copiedCode ? 'Copiado' : 'Copiar'}</span>
@@ -1071,8 +1071,8 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               </div>
             </dl>
 
-            <div className="mt-6 p-4 rounded-2xl bg-[#FFFDF9] border border-[#EFEAE1] text-xs text-[#6B6576] leading-relaxed">
-              <span className="font-bold text-[#2D2938] block mb-1">Guía para el profesional verificado:</span>
+            <div className="mt-6 p-4 rounded-2xl bg-[#FFFDF9] dark:bg-[#161F36] border border-[#EFEAE1] dark:border-[#1E293B] text-xs text-[#6B6576] dark:text-[#94A3B8] leading-relaxed">
+              <span className="font-bold text-[#2D2938] dark:text-[#F1F5F9] block mb-1">Guía para el profesional verificado:</span>
               Comparte tu código ({user.codigo}) con tus pacientes. Cuando se registren en la app,
               los reportes de gravedad y alertas generadas por el chatbot se enviarán en tiempo real a tu pestaña de <strong>Alertas IA</strong> y recibirás notificaciones nativas en tu pantalla.
             </div>
@@ -1085,15 +1085,15 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
         <section aria-labelledby="billing-title" className="space-y-8">
           
           {/* Header Banner */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EFEAE1]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EFEAE1] dark:border-[#1E293B]">
             <div>
               <div className="flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-[#8C71D6]" />
-                <h2 id="billing-title" className="text-lg font-bold text-[#2D2938]">
+                <CreditCard className="w-5 h-5 text-[#8C71D6] dark:text-[#C4B5FD]" />
+                <h2 id="billing-title" className="text-lg font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                   Suscripción Mensual &amp; Modelo Rentable
                 </h2>
               </div>
-              <p className="text-xs sm:text-sm text-[#7A7485] mt-0.5">
+              <p className="text-xs sm:text-sm text-[#7A7485] dark:text-[#94A3B8] mt-0.5">
                 Herramienta clínica de alto retorno de inversión: con solo 1 sesión al mes de 1 paciente, cubres el 100% del servicio y elevas la retención un 45%.
               </p>
             </div>
@@ -1105,7 +1105,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                   setSelectedPlanToBuy(user.plan === 'ClinicaEquipo' ? 'ClinicaEquipo' : 'ConsultorioPro');
                   setIsCheckoutModalOpen(true);
                 }}
-                className="px-4 py-2 text-xs font-bold text-white bg-[#8C71D6] hover:bg-[#7D61CC] rounded-2xl transition-all shadow-xs flex items-center gap-1.5"
+                className="px-4 py-2 text-xs font-bold text-white bg-[#8C71D6] hover:bg-[#7D61CC] dark:bg-[#7D61CC] dark:hover:bg-[#6D51BC] rounded-2xl transition-all shadow-xs flex items-center gap-1.5"
               >
                 <Zap className="w-3.5 h-3.5" />
                 <span>Actualizar / Cambiar Plan</span>
@@ -1114,27 +1114,27 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
           </div>
 
           {/* Current Subscription Status Card */}
-          <div className="bg-white border border-[#EFEAE1] rounded-3xl p-6 sm:p-7 shadow-xs">
+          <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 sm:p-7 shadow-xs">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
-                <span className="text-xs text-[#8E8799] uppercase font-bold tracking-wider block mb-1">
+                <span className="text-xs text-[#8E8799] dark:text-[#64748B] uppercase font-bold tracking-wider block mb-1">
                   Tu Estado Actual
                 </span>
-                <div className="flex items-center gap-3">
-                  <h3 className="text-xl font-bold text-[#2D2938]">
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h3 className="text-xl font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                     {user.plan === 'ClinicaEquipo' ? 'Plan Clínica & Equipo Terapéutico' : 'Plan Consultorio Pro (Individual)'}
                   </h3>
                   <span className={`text-xs font-bold px-3 py-1 rounded-full border ${
                     user.estadoSuscripcion === 'Activa'
-                      ? 'bg-[#EDF9F0] text-[#2C693E] border-[#D4F2DC]'
-                      : 'bg-[#FFFBEB] text-[#8C6910] border-[#FDEEBA]'
+                      ? 'bg-[#EDF9F0] dark:bg-[#112419] text-[#2C693E] dark:text-[#86EFAC] border-[#D4F2DC] dark:border-[#1E4530]'
+                      : 'bg-[#FFFBEB] dark:bg-[#2A2310] text-[#8C6910] dark:text-[#FDEEBA] border-[#FDEEBA] dark:border-[#52441C]'
                   }`}>
                     {user.estadoSuscripcion === 'Activa' ? '✓ Suscripción Activa' : 'Prueba Gratuita (14 días)'}
                   </span>
                 </div>
-                <p className="text-xs text-[#746E80] mt-1.5 leading-relaxed">
+                <p className="text-xs text-[#746E80] dark:text-[#94A3B8] mt-1.5 leading-relaxed">
                   Próxima fecha de corte / renovación:{' '}
-                  <span className="font-semibold text-[#2D2938]">
+                  <span className="font-semibold text-[#2D2938] dark:text-[#F1F5F9]">
                     {user.fechaFinSuscripcion ? new Date(user.fechaFinSuscripcion).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) : '30 de Noviembre de 2026'}
                   </span>
                   {' '}· Facturación automática mensual mediante tarjeta terminación •••• {user.tarjetaUltimos4 || '4242'}.
@@ -1147,8 +1147,8 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                   onClick={handleToggleAutoRenew}
                   className={`px-3.5 py-2 rounded-xl text-xs font-semibold border transition-colors ${
                     user.autoRenovar
-                      ? 'bg-[#FAF8F5] text-[#5A5464] border-[#E8E2D8] hover:bg-[#F3EFE9]'
-                      : 'bg-[#FFF0F3] text-[#B8445E] border-[#FFD7DF] hover:bg-[#FFE4EA]'
+                      ? 'bg-[#FAF8F5] dark:bg-[#161F36] text-[#5A5464] dark:text-[#CBD5E1] border-[#E8E2D8] dark:border-[#232B45] hover:bg-[#F3EFE9] dark:hover:bg-[#1E293B]'
+                      : 'bg-[#FFF0F3] dark:bg-[#2B141C] text-[#B8445E] dark:text-[#FDA4AF] border-[#FFD7DF] dark:border-[#521C28] hover:bg-[#FFE4EA]'
                   }`}
                 >
                   {user.autoRenovar ? 'Desactivar auto-renovación' : 'Reactivar auto-renovación'}
@@ -1160,7 +1160,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                     setSelectedPlanToBuy('ClinicaEquipo');
                     setIsCheckoutModalOpen(true);
                   }}
-                  className="px-4 py-2 rounded-xl text-xs font-bold bg-[#8C71D6] text-white hover:bg-[#7D61CC] transition-colors shadow-xs"
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-[#8C71D6] hover:bg-[#7D61CC] dark:bg-[#7D61CC] text-white transition-colors shadow-xs"
                 >
                   Mejorar a Clínica ($1,399 MXN)
                 </button>
@@ -1169,14 +1169,14 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
           </div>
 
           {/* Interactive Profitability / ROI Calculator for Psychologists */}
-          <div className="bg-white border border-[#EFEAE1] rounded-3xl p-6 sm:p-7 shadow-xs">
+          <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 sm:p-7 shadow-xs">
             <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="w-5 h-5 text-[#4E9B66]" />
-              <h3 className="text-base font-bold text-[#2D2938]">
+              <TrendingUp className="w-5 h-5 text-[#4E9B66] dark:text-[#86EFAC]" />
+              <h3 className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                 Calculadora de Rentabilidad para tu Consultorio
               </h3>
             </div>
-            <p className="text-xs text-[#746E80] leading-relaxed mb-6">
+            <p className="text-xs text-[#746E80] dark:text-[#94A3B8] leading-relaxed mb-6">
               Simula cómo impacta el uso de Felt.O en los ingresos de tu práctica privada.
             </p>
 
@@ -1184,11 +1184,11 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               {/* Sliders (7 cols) */}
               <div className="lg:col-span-7 space-y-5">
                 <div>
-                  <div className="flex justify-between items-center text-xs font-semibold text-[#575162] mb-1.5">
+                  <div className="flex justify-between items-center text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1.5">
                     <label htmlFor="roi-fee-slider">
                       ¿Cuánto cobras en promedio por sesión terapéutica?
                     </label>
-                    <span className="font-bold text-[#8C71D6] font-mono text-sm">
+                    <span className="font-bold text-[#8C71D6] dark:text-[#C4B5FD] font-mono text-sm">
                       ${roiSessionFee} MXN
                     </span>
                   </div>
@@ -1202,7 +1202,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                     onChange={e => setRoiSessionFee(Number(e.target.value))}
                     className="w-full accent-[#8C71D6] cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] text-[#8E8799] mt-1">
+                  <div className="flex justify-between text-[10px] text-[#8E8799] dark:text-[#64748B] mt-1">
                     <span>$350 MXN (Social)</span>
                     <span>$800 MXN (Estándar)</span>
                     <span>$1,800 MXN (Especializada)</span>
@@ -1210,11 +1210,11 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                 </div>
 
                 <div>
-                  <div className="flex justify-between items-center text-xs font-semibold text-[#575162] mb-1.5">
+                  <div className="flex justify-between items-center text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1.5">
                     <label htmlFor="roi-pats-slider">
                       Número de pacientes activos que atiendes:
                     </label>
-                    <span className="font-bold text-[#8C71D6] font-mono text-sm">
+                    <span className="font-bold text-[#8C71D6] dark:text-[#C4B5FD] font-mono text-sm">
                       {roiPatientCount} pacientes
                     </span>
                   </div>
@@ -1227,7 +1227,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                     onChange={e => setRoiPatientCount(Number(e.target.value))}
                     className="w-full accent-[#8C71D6] cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] text-[#8E8799] mt-1">
+                  <div className="flex justify-between text-[10px] text-[#8E8799] dark:text-[#64748B] mt-1">
                     <span>5 pacientes</span>
                     <span>20 pacientes</span>
                     <span>40 pacientes</span>
@@ -1236,29 +1236,29 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               </div>
 
               {/* Dynamic Math Box (5 cols) */}
-              <div className="lg:col-span-5 p-5 rounded-2xl bg-[#FFFDF9] border border-[#EFEAE1] space-y-3.5">
+              <div className="lg:col-span-5 p-5 rounded-2xl bg-[#FFFDF9] dark:bg-[#161F36] border border-[#EFEAE1] dark:border-[#232B45] space-y-3.5">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-[#7A7485]">Ingreso mensual de tu consulta:</span>
-                  <span className="font-bold font-mono text-[#2D2938]">
+                  <span className="text-[#7A7485] dark:text-[#94A3B8]">Ingreso mensual de tu consulta:</span>
+                  <span className="font-bold font-mono text-[#2D2938] dark:text-[#F1F5F9]">
                     ${(roiPatientCount * roiSessionFee * roiSessionsPerMonth).toLocaleString('es-MX')} MXN
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-[#7A7485]">Costo mensual Felt.O Pro:</span>
-                  <span className="font-bold font-mono text-[#8C71D6]">
+                  <span className="text-[#7A7485] dark:text-[#94A3B8]">Costo mensual Felt.O Pro:</span>
+                  <span className="font-bold font-mono text-[#8C71D6] dark:text-[#C4B5FD]">
                     $499 MXN / mes
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center text-xs pt-2 border-t border-[#F5EFE6]">
-                  <span className="font-bold text-[#2C693E]">Sesiones para cubrir el costo:</span>
-                  <span className="font-bold font-mono text-sm text-[#2C693E] bg-[#EDF9F0] px-2.5 py-0.5 rounded-full border border-[#D4F2DC]">
+                <div className="flex justify-between items-center text-xs pt-2 border-t border-[#F5EFE6] dark:border-[#232B45]">
+                  <span className="font-bold text-[#2C693E] dark:text-[#86EFAC]">Sesiones para cubrir el costo:</span>
+                  <span className="font-bold font-mono text-sm text-[#2C693E] dark:text-[#86EFAC] bg-[#EDF9F0] dark:bg-[#112419] px-2.5 py-0.5 rounded-full border border-[#D4F2DC] dark:border-[#1E4530]">
                     {(499 / roiSessionFee).toFixed(2)} sesiones al mes
                   </span>
                 </div>
 
-                <p className="text-[11px] text-[#746E80] leading-relaxed pt-1">
+                <p className="text-[11px] text-[#746E80] dark:text-[#94A3B8] leading-relaxed pt-1">
                   💡 <strong>Conclusión de rentabilidad:</strong> Menos de <strong>1 sola sesión</strong> al mes cubre el 100% de la herramienta. Además, gracias al chatbot y monitoreo de crisis 24/7, la tasa de deserción se reduce un 45%, protegiendo más de <strong>${(roiSessionFee * 4).toLocaleString('es-MX')} MXN</strong> mensuales en pacientes que continúan su tratamiento.
                 </p>
               </div>
@@ -1271,39 +1271,39 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
             {/* Plan 1: Consultorio Pro */}
             <div className={`p-6 sm:p-7 rounded-3xl border transition-all shadow-xs flex flex-col justify-between ${
               user.plan !== 'ClinicaEquipo'
-                ? 'bg-white border-[#8C71D6] ring-2 ring-[#EADDFE]'
-                : 'bg-white border-[#EFEAE1]'
+                ? 'bg-white dark:bg-[#111625] border-[#8C71D6] dark:border-[#8C71D6] ring-2 ring-[#EADDFE] dark:ring-[#271F42]'
+                : 'bg-white dark:bg-[#111625] border-[#EFEAE1] dark:border-[#1E293B]'
             }`}>
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#F3EFFF] text-[#7252C4] border border-[#E7DCFE]">
+                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#F3EFFF] dark:bg-[#271F42] text-[#7252C4] dark:text-[#C4B5FD] border border-[#E7DCFE] dark:border-[#43356E]">
                     Más Popular para Independientes
                   </span>
-                  <span className="text-xs font-semibold text-[#3D8556]">
+                  <span className="text-xs font-semibold text-[#3D8556] dark:text-[#86EFAC]">
                     Rentabilidad Inmediata
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-[#2D2938]">
+                <h3 className="text-lg font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                   Plan Consultorio Pro
                 </h3>
-                <p className="text-xs text-[#746E80] mt-1">
+                <p className="text-xs text-[#746E80] dark:text-[#94A3B8] mt-1">
                   Para psicólogos clínicos con práctica privada que buscan contención continua y triage automático.
                 </p>
 
                 <div className="my-5 flex items-baseline gap-2">
-                  <span className="text-3xl font-extrabold text-[#2D2938] font-mono">
+                  <span className="text-3xl font-extrabold text-[#2D2938] dark:text-[#F1F5F9] font-mono">
                     $499
                   </span>
-                  <span className="text-xs font-semibold text-[#868091]">
+                  <span className="text-xs font-semibold text-[#868091] dark:text-[#64748B]">
                     MXN / mes (~$29 USD)
                   </span>
                 </div>
 
-                <ul className="space-y-2.5 text-xs text-[#575162] mb-6">
+                <ul className="space-y-2.5 text-xs text-[#575162] dark:text-[#CBD5E1] mb-6">
                   {PLANES_PRECIOS.ConsultorioPro.caracteristicas.map((c, idx) => (
                     <li key={idx} className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#3D8556] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-[#3D8556] dark:text-[#86EFAC] shrink-0 mt-0.5" />
                       <span>{c}</span>
                     </li>
                   ))}
@@ -1318,8 +1318,8 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                 }}
                 className={`w-full py-2.5 rounded-2xl text-xs font-bold transition-all shadow-xs ${
                   user.plan !== 'ClinicaEquipo' && user.estadoSuscripcion === 'Activa'
-                    ? 'bg-[#EDF9F0] text-[#2C693E] border border-[#D4F2DC]'
-                    : 'bg-[#8C71D6] hover:bg-[#7D61CC] text-white'
+                    ? 'bg-[#EDF9F0] dark:bg-[#112419] text-[#2C693E] dark:text-[#86EFAC] border border-[#D4F2DC] dark:border-[#1E4530]'
+                    : 'bg-[#8C71D6] hover:bg-[#7D61CC] dark:bg-[#7D61CC] dark:hover:bg-[#6D51BC] text-white'
                 }`}
               >
                 {user.plan !== 'ClinicaEquipo' && user.estadoSuscripcion === 'Activa'
@@ -1331,39 +1331,39 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
             {/* Plan 2: Clínica & Equipo */}
             <div className={`p-6 sm:p-7 rounded-3xl border transition-all shadow-xs flex flex-col justify-between ${
               user.plan === 'ClinicaEquipo'
-                ? 'bg-white border-[#8C71D6] ring-2 ring-[#EADDFE]'
-                : 'bg-white border-[#EFEAE1]'
+                ? 'bg-white dark:bg-[#111625] border-[#8C71D6] dark:border-[#8C71D6] ring-2 ring-[#EADDFE] dark:ring-[#271F42]'
+                : 'bg-white dark:bg-[#111625] border-[#EFEAE1] dark:border-[#1E293B]'
             }`}>
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#EDF9F0] text-[#2C693E] border border-[#D4F2DC]">
+                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#EDF9F0] dark:bg-[#112419] text-[#2C693E] dark:text-[#86EFAC] border border-[#D4F2DC] dark:border-[#1E4530]">
                     Para Clínicas y Equipos
                   </span>
-                  <span className="text-xs font-semibold text-[#8C71D6]">
+                  <span className="text-xs font-semibold text-[#8C71D6] dark:text-[#C4B5FD]">
                     Escala Ilimitada
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-[#2D2938]">
+                <h3 className="text-lg font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                   Plan Clínica &amp; Equipo Terapéutico
                 </h3>
-                <p className="text-xs text-[#746E80] mt-1">
+                <p className="text-xs text-[#746E80] dark:text-[#94A3B8] mt-1">
                   Para consultorios grupales, clínicas de salud mental e instituciones terapéuticas.
                 </p>
 
                 <div className="my-5 flex items-baseline gap-2">
-                  <span className="text-3xl font-extrabold text-[#2D2938] font-mono">
+                  <span className="text-3xl font-extrabold text-[#2D2938] dark:text-[#F1F5F9] font-mono">
                     $1,399
                   </span>
-                  <span className="text-xs font-semibold text-[#868091]">
+                  <span className="text-xs font-semibold text-[#868091] dark:text-[#64748B]">
                     MXN / mes (~$79 USD)
                   </span>
                 </div>
 
-                <ul className="space-y-2.5 text-xs text-[#575162] mb-6">
+                <ul className="space-y-2.5 text-xs text-[#575162] dark:text-[#CBD5E1] mb-6">
                   {PLANES_PRECIOS.ClinicaEquipo.caracteristicas.map((c, idx) => (
                     <li key={idx} className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#3D8556] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-[#3D8556] dark:text-[#86EFAC] shrink-0 mt-0.5" />
                       <span>{c}</span>
                     </li>
                   ))}
@@ -1378,8 +1378,8 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                 }}
                 className={`w-full py-2.5 rounded-2xl text-xs font-bold transition-all shadow-xs ${
                   user.plan === 'ClinicaEquipo' && user.estadoSuscripcion === 'Activa'
-                    ? 'bg-[#EDF9F0] text-[#2C693E] border border-[#D4F2DC]'
-                    : 'bg-[#2D2938] hover:bg-[#1E1B26] text-white'
+                    ? 'bg-[#EDF9F0] dark:bg-[#112419] text-[#2C693E] dark:text-[#86EFAC] border border-[#D4F2DC] dark:border-[#1E4530]'
+                    : 'bg-[#2D2938] hover:bg-[#1E1B26] dark:bg-[#8C71D6] dark:hover:bg-[#7D61CC] text-white'
                 }`}
               >
                 {user.plan === 'ClinicaEquipo' && user.estadoSuscripcion === 'Activa'
@@ -1391,18 +1391,18 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
           </div>
 
           {/* Billing & Fiscal Invoices History (CFDI) */}
-          <div className="bg-white border border-[#EFEAE1] rounded-3xl p-6 sm:p-7 shadow-xs">
-            <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6]">
+          <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 sm:p-7 shadow-xs">
+            <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6] dark:border-[#1E293B]">
               <div>
-                <h3 className="text-base font-bold text-[#2D2938]">
+                <h3 className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                   Historial de Facturación y Comprobantes Fiscales
                 </h3>
-                <p className="text-xs text-[#7A7485]">
+                <p className="text-xs text-[#7A7485] dark:text-[#94A3B8]">
                   Comprobantes deducibles para tus declaraciones mensuales
                 </p>
               </div>
 
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#FAF8F5] text-[#5A5464] border border-[#E8E2D8]">
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#FAF8F5] dark:bg-[#161F36] text-[#5A5464] dark:text-[#CBD5E1] border border-[#E8E2D8] dark:border-[#232B45]">
                 {user.facturas?.length || 1} factura(s) emitida(s)
               </span>
             </div>
@@ -1410,7 +1410,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
             <div className="overflow-x-auto mt-3">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-[#F5EFE6] text-[#868091] font-semibold">
+                  <tr className="border-b border-[#F5EFE6] dark:border-[#1E293B] text-[#868091] dark:text-[#64748B] font-semibold">
                     <th scope="col" className="py-2.5 px-3">Folio Fiscal CFDI</th>
                     <th scope="col" className="py-2.5 px-3">Fecha</th>
                     <th scope="col" className="py-2.5 px-3">Plan Suscrito</th>
@@ -1420,7 +1420,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                     <th scope="col" className="py-2.5 px-3 text-right">Recibo</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#F5EFE6]">
+                <tbody className="divide-y divide-[#F5EFE6] dark:divide-[#1E293B]">
                   {(user.facturas && user.facturas.length > 0 ? user.facturas : [
                     {
                       id: 'FAC-2026-001',
@@ -1433,24 +1433,24 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                       metodoPago: `Tarjeta terminación •••• ${user.tarjetaUltimos4 || '4242'}`
                     }
                   ]).map(f => (
-                    <tr key={f.id} className="hover:bg-[#FAF8F5] transition-colors">
-                      <td className="py-3 px-3 font-mono font-semibold text-[#8C71D6]">
+                    <tr key={f.id} className="hover:bg-[#FAF8F5] dark:hover:bg-[#161F36]/60 transition-colors">
+                      <td className="py-3 px-3 font-mono font-semibold text-[#8C71D6] dark:text-[#C4B5FD]">
                         {f.folioFiscal}
                       </td>
-                      <td className="py-3 px-3 text-[#5A5464]">
+                      <td className="py-3 px-3 text-[#5A5464] dark:text-[#94A3B8]">
                         {new Date(f.fecha).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' })}
                       </td>
-                      <td className="py-3 px-3 font-medium text-[#2D2938]">
+                      <td className="py-3 px-3 font-medium text-[#2D2938] dark:text-[#F1F5F9]">
                         {f.plan}
                       </td>
-                      <td className="py-3 px-3 font-mono font-bold text-[#2D2938]">
+                      <td className="py-3 px-3 font-mono font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                         ${f.monto} {f.moneda}
                       </td>
-                      <td className="py-3 px-3 text-[#7A7485]">
+                      <td className="py-3 px-3 text-[#7A7485] dark:text-[#94A3B8]">
                         {f.metodoPago}
                       </td>
                       <td className="py-3 px-3 text-center">
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#EDF9F0] text-[#2C693E] border border-[#D4F2DC]">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#EDF9F0] dark:bg-[#112419] text-[#2C693E] dark:text-[#86EFAC] border border-[#D4F2DC] dark:border-[#1E4530]">
                           ✓ {f.estado}
                         </span>
                       </td>
@@ -1458,7 +1458,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                         <button
                           type="button"
                           onClick={() => window.print()}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#8C71D6] hover:underline"
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#8C71D6] dark:text-[#C4B5FD] hover:underline"
                         >
                           <Download className="w-3 h-3" />
                           <span>PDF</span>
@@ -1480,19 +1480,19 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
           role="dialog"
           aria-modal="true"
           aria-labelledby="checkout-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#4A4553]/40 backdrop-blur-xs overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A0D14]/60 backdrop-blur-xs overflow-y-auto"
         >
-          <div className="bg-white border border-[#EFEAE1] rounded-3xl w-full max-w-md shadow-xl overflow-hidden my-8">
-            <div className="p-6 pb-4 border-b border-[#F5EFE6] flex items-center justify-between bg-[#FFFDF9]">
+          <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl w-full max-w-md shadow-xl overflow-hidden my-8">
+            <div className="p-6 pb-4 border-b border-[#F5EFE6] dark:border-[#1E293B] flex items-center justify-between bg-[#FFFDF9] dark:bg-[#161F36]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#F3EFFF] border border-[#E7DCFE] flex items-center justify-center text-[#7252C4]">
+                <div className="w-10 h-10 rounded-2xl bg-[#F3EFFF] dark:bg-[#271F42] border border-[#E7DCFE] dark:border-[#43356E] flex items-center justify-center text-[#7252C4] dark:text-[#C4B5FD]">
                   <CreditCard className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 id="checkout-modal-title" className="text-base font-bold text-[#2D2938]">
+                  <h3 id="checkout-modal-title" className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                     Activar Suscripción Mensual
                   </h3>
-                  <p className="text-xs text-[#7A7485]">
+                  <p className="text-xs text-[#7A7485] dark:text-[#94A3B8]">
                     {selectedPlanToBuy === 'ClinicaEquipo' ? 'Plan Clínica & Equipo' : 'Plan Consultorio Pro'}
                   </p>
                 </div>
@@ -1501,7 +1501,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsCheckoutModalOpen(false)}
-                className="p-1.5 text-[#9E97A8] hover:text-[#2D2938] rounded-full"
+                className="p-1.5 text-[#9E97A8] hover:text-[#2D2938] dark:hover:text-[#F1F5F9] rounded-full"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1509,21 +1509,21 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
 
             {/* Price Preview */}
             <div className="p-6 pb-2 space-y-4">
-              <div className="p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#E8E2D8] flex items-center justify-between">
+              <div className="p-3.5 rounded-2xl bg-[#FAF8F5] dark:bg-[#161F36] border border-[#E8E2D8] dark:border-[#232B45] flex items-center justify-between">
                 <div>
-                  <span className="text-xs font-bold text-[#2D2938] block">
+                  <span className="text-xs font-bold text-[#2D2938] dark:text-[#F1F5F9] block">
                     {PLANES_PRECIOS[selectedPlanToBuy].nombre}
                   </span>
-                  <span className="text-[11px] text-[#7A7485]">
+                  <span className="text-[11px] text-[#7A7485] dark:text-[#94A3B8]">
                     Facturación mensual recurrente
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-base font-bold text-[#2D2938] font-mono">
+                  <span className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9] font-mono">
                     ${couponCode.toUpperCase() === 'FELTO20' ? Math.round(PLANES_PRECIOS[selectedPlanToBuy].precioMXN * 0.8) : PLANES_PRECIOS[selectedPlanToBuy].precioMXN} MXN
                   </span>
                   {couponCode.toUpperCase() === 'FELTO20' && (
-                    <span className="text-[10px] text-[#3D8556] block font-semibold">
+                    <span className="text-[10px] text-[#3D8556] dark:text-[#86EFAC] block font-semibold">
                       -20% cupón aplicado
                     </span>
                   )}
@@ -1533,8 +1533,8 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               {billingFeedbackMsg && (
                 <div className={`p-3 rounded-2xl text-xs flex items-center gap-2 ${
                   billingFeedbackMsg.ok
-                    ? 'bg-[#EDF9F0] border border-[#D4F2DC] text-[#2C693E]'
-                    : 'bg-[#FFF0F3] border border-[#FFD7DF] text-[#B8445E]'
+                    ? 'bg-[#EDF9F0] dark:bg-[#112419] border border-[#D4F2DC] dark:border-[#1E4530] text-[#2C693E] dark:text-[#86EFAC]'
+                    : 'bg-[#FFF0F3] dark:bg-[#2B141C] border border-[#FFD7DF] dark:border-[#521C28] text-[#B8445E] dark:text-[#FDA4AF]'
                 }`}>
                   {billingFeedbackMsg.ok ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <AlertCircle className="w-4 h-4 shrink-0" />}
                   <span>{billingFeedbackMsg.text}</span>
@@ -1544,7 +1544,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
               {/* Payment Card Form */}
               <form onSubmit={handleProcessPayment} className="space-y-3">
                 <div>
-                  <label htmlFor="card-holder" className="block text-xs font-semibold text-[#575162] mb-1">
+                  <label htmlFor="card-holder" className="block text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1">
                     Nombre del Titular
                   </label>
                   <input
@@ -1554,12 +1554,12 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                     value={cardHolder}
                     onChange={e => setCardHolder(e.target.value)}
                     placeholder="Dra. Laura Méndez Ruiz"
-                    className="w-full px-3 py-2 text-xs bg-[#FAF8F5] border border-[#E8E2D8] rounded-xl text-[#2D2938] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#8C71D6]"
+                    className="w-full px-3 py-2 text-xs bg-[#FAF8F5] dark:bg-[#161F36] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9] focus:bg-white dark:focus:bg-[#1C2642] focus:outline-none focus:ring-2 focus:ring-[#8C71D6]"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="card-number" className="block text-xs font-semibold text-[#575162] mb-1">
+                  <label htmlFor="card-number" className="block text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1">
                     Número de Tarjeta (16 dígitos)
                   </label>
                   <input
@@ -1570,13 +1570,13 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                     value={cardNumber}
                     onChange={e => setCardNumber(e.target.value)}
                     placeholder="4242 4242 4242 4242"
-                    className="w-full px-3 py-2 text-xs font-mono bg-[#FAF8F5] border border-[#E8E2D8] rounded-xl text-[#2D2938] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#8C71D6]"
+                    className="w-full px-3 py-2 text-xs font-mono bg-[#FAF8F5] dark:bg-[#161F36] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9] focus:bg-white dark:focus:bg-[#1C2642] focus:outline-none focus:ring-2 focus:ring-[#8C71D6]"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label htmlFor="card-exp" className="block text-xs font-semibold text-[#575162] mb-1">
+                    <label htmlFor="card-exp" className="block text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1">
                       Vencimiento (MM/AA)
                     </label>
                     <input
@@ -1587,12 +1587,12 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                       value={cardExp}
                       onChange={e => setCardExp(e.target.value)}
                       placeholder="12/28"
-                      className="w-full px-3 py-2 text-xs font-mono bg-[#FAF8F5] border border-[#E8E2D8] rounded-xl text-[#2D2938] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#8C71D6]"
+                      className="w-full px-3 py-2 text-xs font-mono bg-[#FAF8F5] dark:bg-[#161F36] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9] focus:bg-white dark:focus:bg-[#1C2642] focus:outline-none focus:ring-2 focus:ring-[#8C71D6]"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="card-cvv" className="block text-xs font-semibold text-[#575162] mb-1">
+                    <label htmlFor="card-cvv" className="block text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1">
                       CVV
                     </label>
                     <input
@@ -1603,13 +1603,13 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                       value={cardCvv}
                       onChange={e => setCardCvv(e.target.value)}
                       placeholder="•••"
-                      className="w-full px-3 py-2 text-xs font-mono bg-[#FAF8F5] border border-[#E8E2D8] rounded-xl text-[#2D2938] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#8C71D6]"
+                      className="w-full px-3 py-2 text-xs font-mono bg-[#FAF8F5] dark:bg-[#161F36] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9] focus:bg-white dark:focus:bg-[#1C2642] focus:outline-none focus:ring-2 focus:ring-[#8C71D6]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="coupon-code" className="block text-xs font-semibold text-[#575162] mb-1">
+                  <label htmlFor="coupon-code" className="block text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1">
                     Cupón de Descuento
                   </label>
                   <div className="flex gap-2">
@@ -1619,9 +1619,9 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                       value={couponCode}
                       onChange={e => setCouponCode(e.target.value.toUpperCase())}
                       placeholder="FELTO20"
-                      className="flex-1 px-3 py-2 text-xs font-mono uppercase bg-[#FAF8F5] border border-[#E8E2D8] rounded-xl text-[#2D2938] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#8C71D6]"
+                      className="flex-1 px-3 py-2 text-xs font-mono uppercase bg-[#FAF8F5] dark:bg-[#161F36] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9] focus:bg-white dark:focus:bg-[#1C2642] focus:outline-none focus:ring-2 focus:ring-[#8C71D6]"
                     />
-                    <span className="px-3 py-2 text-[11px] font-semibold text-[#3D8556] bg-[#EDF9F0] rounded-xl border border-[#D4F2DC]">
+                    <span className="px-3 py-2 text-[11px] font-semibold text-[#3D8556] dark:text-[#86EFAC] bg-[#EDF9F0] dark:bg-[#112419] rounded-xl border border-[#D4F2DC] dark:border-[#1E4530]">
                       20% OFF
                     </span>
                   </div>
@@ -1631,7 +1631,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                   <button
                     type="submit"
                     disabled={isProcessingPayment}
-                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-[#8C71D6] hover:bg-[#7D61CC] transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-[#8C71D6] hover:bg-[#7D61CC] dark:bg-[#7D61CC] dark:hover:bg-[#6D51BC] transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     <Lock className="w-3.5 h-3.5" />
                     <span>
@@ -1640,8 +1640,8 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                         : `Pagar $${couponCode.toUpperCase() === 'FELTO20' ? Math.round(PLANES_PRECIOS[selectedPlanToBuy].precioMXN * 0.8) : PLANES_PRECIOS[selectedPlanToBuy].precioMXN} MXN y Activar`}
                     </span>
                   </button>
-                  <p className="text-[10px] text-center text-[#8E8799] mt-2 flex items-center justify-center gap-1">
-                    <Lock className="w-3 h-3 text-[#3D8556]" />
+                  <p className="text-[10px] text-center text-[#8E8799] dark:text-[#64748B] mt-2 flex items-center justify-center gap-1">
+                    <Lock className="w-3 h-3 text-[#3D8556] dark:text-[#86EFAC]" />
                     <span>Pago cifrado SSL 256 bits · Cancela en cualquier momento sin penalizaciones</span>
                   </p>
                 </div>
@@ -1655,78 +1655,78 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
       {activeTab === 'inicio' && (
         <div className="space-y-8">
           
-          {/* KPI Cards Strip in Pastel */}
+          {/* KPI Cards Strip */}
           <section aria-label="Indicadores clave clínicos" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white border border-[#EFEAE1] rounded-3xl p-5 shadow-xs">
-              <span className="text-xs font-semibold text-[#7A7485] block">
+            <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-5 shadow-xs">
+              <span className="text-xs font-semibold text-[#7A7485] dark:text-[#94A3B8] block">
                 Pacientes Activos
               </span>
-              <span className="text-2xl sm:text-3xl font-bold text-[#8C71D6] tabular-nums my-1 block">
+              <span className="text-2xl sm:text-3xl font-bold text-[#8C71D6] dark:text-[#C4B5FD] tabular-nums my-1 block">
                 {patients.length}
               </span>
-              <span className="text-[11px] text-[#9A94A4]">En seguimiento</span>
+              <span className="text-[11px] text-[#9A94A4] dark:text-[#64748B]">En seguimiento</span>
             </div>
 
             <div
               onClick={() => onTabChange('alertas')}
-              className="bg-white border border-[#EFEAE1] hover:border-[#FFD7DF] rounded-3xl p-5 shadow-xs cursor-pointer transition-colors"
+              className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] hover:border-[#FFD7DF] dark:hover:border-[#521C28] rounded-3xl p-5 shadow-xs cursor-pointer transition-colors"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-[#7A7485] block">
+                <span className="text-xs font-semibold text-[#7A7485] dark:text-[#94A3B8] block">
                   Alertas IA del Chat
                 </span>
                 {unattendedHighCount > 0 && (
-                  <span className="w-2 h-2 rounded-full bg-[#B8445E] animate-ping"></span>
+                  <span className="w-2 h-2 rounded-full bg-[#B8445E] dark:bg-[#FDA4AF] animate-ping"></span>
                 )}
               </div>
-              <span className={`text-2xl sm:text-3xl font-bold tabular-nums my-1 block ${unattendedHighCount > 0 ? 'text-[#D45D79]' : 'text-[#8C71D6]'}`}>
+              <span className={`text-2xl sm:text-3xl font-bold tabular-nums my-1 block ${unattendedHighCount > 0 ? 'text-[#D45D79] dark:text-[#FDA4AF]' : 'text-[#8C71D6] dark:text-[#C4B5FD]'}`}>
                 {unattendedReports.length}
               </span>
-              <span className="text-[11px] text-[#9A94A4]">
+              <span className="text-[11px] text-[#9A94A4] dark:text-[#64748B]">
                 {unattendedHighCount} de gravedad alta
               </span>
             </div>
 
-            <div className="bg-white border border-[#EFEAE1] rounded-3xl p-5 shadow-xs">
-              <span className="text-xs font-semibold text-[#7A7485] block">
+            <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-5 shadow-xs">
+              <span className="text-xs font-semibold text-[#7A7485] dark:text-[#94A3B8] block">
                 Sesiones Registradas
               </span>
-              <span className="text-2xl sm:text-3xl font-bold text-[#2D2938] tabular-nums my-1 block">
+              <span className="text-2xl sm:text-3xl font-bold text-[#2D2938] dark:text-[#F1F5F9] tabular-nums my-1 block">
                 {allPatientRecords.length}
               </span>
-              <span className="text-[11px] text-[#9A94A4]">Histórico clínico</span>
+              <span className="text-[11px] text-[#9A94A4] dark:text-[#64748B]">Histórico clínico</span>
             </div>
 
-            <div className="bg-white border border-[#EFEAE1] rounded-3xl p-5 shadow-xs">
-              <span className="text-xs font-semibold text-[#7A7485] block">
+            <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-5 shadow-xs">
+              <span className="text-xs font-semibold text-[#7A7485] dark:text-[#94A3B8] block">
                 Balance Positivo
               </span>
-              <span className="text-2xl sm:text-3xl font-bold text-[#4E9B66] tabular-nums my-1 block">
+              <span className="text-2xl sm:text-3xl font-bold text-[#4E9B66] dark:text-[#86EFAC] tabular-nums my-1 block">
                 {positivePercentage}%
               </span>
-              <span className="text-[11px] text-[#9A94A4]">Calma y Felicidad</span>
+              <span className="text-[11px] text-[#9A94A4] dark:text-[#64748B]">Calma y Felicidad</span>
             </div>
           </section>
 
           {/* Recent AI Triage Alerts Box in Dashboard */}
-          <section aria-labelledby="recent-alerts-title" className="bg-white border border-[#EFEAE1] rounded-3xl p-6 shadow-xs">
-            <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6]">
+          <section aria-labelledby="recent-alerts-title" className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 shadow-xs">
+            <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6] dark:border-[#1E293B]">
               <div className="flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-[#B8445E]" />
-                <h2 id="recent-alerts-title" className="text-base font-bold text-[#2D2938]">
+                <ShieldAlert className="w-4 h-4 text-[#B8445E] dark:text-[#FDA4AF]" />
+                <h2 id="recent-alerts-title" className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                   Últimos Reportes de Gravedad Enviados por el Chatbot
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => onTabChange('alertas')}
-                className="text-xs font-bold text-[#8C71D6] hover:underline"
+                className="text-xs font-bold text-[#8C71D6] dark:text-[#C4B5FD] hover:underline"
               >
                 Ver todas las alertas ({reports.length}) →
               </button>
             </div>
 
-            <div className="divide-y divide-[#F5EFE6] mt-2">
+            <div className="divide-y divide-[#F5EFE6] dark:divide-[#1E293B] mt-2">
               {reports.slice(0, 3).map(rep => (
                 <div
                   key={rep.id}
@@ -1734,7 +1734,7 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                     setSelectedReport(rep);
                     onTabChange('alertas');
                   }}
-                  className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer hover:bg-[#FAF8F5] -mx-2 px-2 rounded-2xl transition-colors"
+                  className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer hover:bg-[#FAF8F5] dark:hover:bg-[#161F36]/60 -mx-2 px-2 rounded-2xl transition-colors"
                 >
                   <div className="flex items-start gap-3">
                     <span className="text-xl shrink-0 mt-0.5">
@@ -1745,39 +1745,39 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                         <span
                           className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${
                             rep.nivelGravedad === 'Alta'
-                              ? 'bg-[#FFF0F3] text-[#B8445E] border-[#FFD7DF]'
+                              ? 'bg-[#FFF0F3] dark:bg-[#2B141C] text-[#B8445E] dark:text-[#FDA4AF] border-[#FFD7DF] dark:border-[#521C28]'
                               : rep.nivelGravedad === 'Media'
-                              ? 'bg-[#FFF4EB] text-[#B8642A] border-[#FFE3CC]'
-                              : 'bg-[#EDF9F0] text-[#327347] border-[#D4F2DC]'
+                              ? 'bg-[#FFF4EB] dark:bg-[#2B1D14] text-[#B8642A] dark:text-[#FDBA74] border-[#FFE3CC] dark:border-[#52341C]'
+                              : 'bg-[#EDF9F0] dark:bg-[#112419] text-[#327347] dark:text-[#86EFAC] border-[#D4F2DC] dark:border-[#1E4530]'
                           }`}
                         >
                           Gravedad {rep.nivelGravedad}
                         </span>
-                        <span className="text-xs font-bold text-[#2D2938]">
+                        <span className="text-xs font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                           {rep.pacienteNombre}
                         </span>
                         {!rep.atendido ? (
-                          <span className="text-[10px] text-[#B8445E] bg-[#FFE2E8] px-2 py-0.5 rounded-full font-bold">
+                          <span className="text-[10px] text-[#B8445E] dark:text-[#FDA4AF] bg-[#FFE2E8] dark:bg-[#2B141C] px-2 py-0.5 rounded-full font-bold">
                             Pendiente
                           </span>
                         ) : (
-                          <span className="text-[10px] text-[#327347] bg-[#E8F8EC] px-2 py-0.5 rounded-full">
+                          <span className="text-[10px] text-[#327347] dark:text-[#86EFAC] bg-[#E8F8EC] dark:bg-[#112419] px-2 py-0.5 rounded-full">
                             ✓ Atendido
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-[#5A5464] mt-1 leading-relaxed">
+                      <p className="text-xs text-[#5A5464] dark:text-[#94A3B8] mt-1 leading-relaxed">
                         {rep.resumenClinico}
                       </p>
                     </div>
                   </div>
 
                   <div className="text-right shrink-0">
-                    <span className="text-xs text-[#8C71D6] font-semibold flex items-center gap-1 justify-end">
+                    <span className="text-xs text-[#8C71D6] dark:text-[#C4B5FD] font-semibold flex items-center gap-1 justify-end">
                       <span>{EMO_DATA[rep.emocionDetectada]?.icon}</span>
                       <span>{rep.emocionDetectada}</span>
                     </span>
-                    <time className="text-[11px] text-[#8E8799] font-mono">
+                    <time className="text-[11px] text-[#8E8799] dark:text-[#64748B] font-mono">
                       {timeAgoStr(rep.fecha)}
                     </time>
                   </div>
@@ -1791,21 +1791,21 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
             
             {/* Left: Patient quick triage list (7 cols) */}
             <div className="lg:col-span-7">
-              <section aria-labelledby="triage-title" className="bg-white border border-[#EFEAE1] rounded-3xl p-6 shadow-xs">
-                <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6]">
-                  <h2 id="triage-title" className="text-base font-bold text-[#2D2938]">
+              <section aria-labelledby="triage-title" className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 shadow-xs">
+                <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6] dark:border-[#1E293B]">
+                  <h2 id="triage-title" className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                     Estado de Pacientes
                   </h2>
                   <button
                     type="button"
                     onClick={() => onTabChange('pacs')}
-                    className="text-xs font-semibold text-[#8C71D6] hover:underline"
+                    className="text-xs font-semibold text-[#8C71D6] dark:text-[#C4B5FD] hover:underline"
                   >
                     Ver todos ({patients.length})
                   </button>
                 </div>
 
-                <div className="divide-y divide-[#F5EFE6] mt-2">
+                <div className="divide-y divide-[#F5EFE6] dark:divide-[#1E293B] mt-2">
                   {patients.map(p => {
                     const last = lastPatientRecord(p.id);
                     const crit = isCriticalPatient(p.id);
@@ -1819,26 +1819,26 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                         }}
                         className={`py-3.5 px-3 -mx-3 rounded-2xl flex items-center justify-between cursor-pointer transition-colors ${
                           crit
-                            ? 'bg-[#FFF8F9] hover:bg-[#FFF0F3]'
-                            : 'hover:bg-[#FAF7F2]'
+                            ? 'bg-[#FFF8F9] dark:bg-[#201018] hover:bg-[#FFF0F3] dark:hover:bg-[#2B141C]'
+                            : 'hover:bg-[#FAF7F2] dark:hover:bg-[#161F36]/60'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-[#F3EFFF] border border-[#EADDFE] flex items-center justify-center text-xs font-bold text-[#7252C4]">
+                          <div className="w-10 h-10 rounded-full bg-[#F3EFFF] dark:bg-[#271F42] border border-[#EADDFE] dark:border-[#43356E] flex items-center justify-center text-xs font-bold text-[#7252C4] dark:text-[#C4B5FD]">
                             {p.nombre.charAt(0)}{p.apellidos.charAt(0)}
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-xs sm:text-sm font-bold text-[#2D2938]">
+                              <span className="text-xs sm:text-sm font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                                 {p.nombre} {p.apellidos}
                               </span>
                               {crit && (
-                                <span className="text-[10px] uppercase font-bold text-[#B8445E] bg-[#FFE2E8] px-2 py-0.5 rounded-full border border-[#FFD7DF]">
+                                <span className="text-[10px] uppercase font-bold text-[#B8445E] dark:text-[#FDA4AF] bg-[#FFE2E8] dark:bg-[#2B141C] px-2 py-0.5 rounded-full border border-[#FFD7DF] dark:border-[#521C28]">
                                   Atención
                                 </span>
                               )}
                             </div>
-                            <span className="text-[11px] text-[#868091] block">
+                            <span className="text-[11px] text-[#868091] dark:text-[#64748B] block">
                               Último: {last ? timeAgoStr(last.t) : 'Sin datos'}
                             </span>
                           </div>
@@ -1847,16 +1847,16 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                         <div className="flex items-center gap-3">
                           {last && (
                             <div className="text-right">
-                              <span className="text-sm font-semibold text-[#2D2938] flex items-center gap-1 justify-end">
+                              <span className="text-sm font-semibold text-[#2D2938] dark:text-[#F1F5F9] flex items-center gap-1 justify-end">
                                 <span>{EMO_DATA[last.e]?.icon}</span>
                                 <span>{last.e}</span>
                               </span>
-                              <span className="text-[11px] text-[#8E8799] tabular-nums font-medium">
+                              <span className="text-[11px] text-[#8E8799] dark:text-[#64748B] tabular-nums font-medium">
                                 Intensidad {last.n}/5
                               </span>
                             </div>
                           )}
-                          <ChevronRight className="w-4 h-4 text-[#A8A1B2]" aria-hidden="true" />
+                          <ChevronRight className="w-4 h-4 text-[#A8A1B2] dark:text-[#64748B]" aria-hidden="true" />
                         </div>
                       </div>
                     );
@@ -1867,11 +1867,11 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
 
             {/* Right: Global Emotion Distribution (5 cols) */}
             <div className="lg:col-span-5">
-              <section aria-labelledby="overview-dist" className="bg-white border border-[#EFEAE1] rounded-3xl p-6 shadow-xs">
-                <h2 id="overview-dist" className="text-base font-bold text-[#2D2938] mb-1">
+              <section aria-labelledby="overview-dist" className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 shadow-xs">
+                <h2 id="overview-dist" className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9] mb-1">
                   Panorama Emocional Global
                 </h2>
-                <p className="text-xs text-[#7A7485] mb-6">
+                <p className="text-xs text-[#7A7485] dark:text-[#94A3B8] mb-6">
                   Frecuencia de emociones en tu consultorio
                 </p>
 
@@ -1886,15 +1886,15 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                     return (
                       <div key={e} className="space-y-1">
                         <div className="flex items-center justify-between text-xs">
-                          <span className="flex items-center gap-1.5 font-semibold text-[#4D4857]">
+                          <span className="flex items-center gap-1.5 font-semibold text-[#4D4857] dark:text-[#CBD5E1]">
                             <span>{meta.icon}</span>
                             <span>{e}</span>
                           </span>
-                          <span className="font-mono text-[#7A7485] tabular-nums font-medium">
-                            {percent}% <span className="text-[10px] text-[#A39CAE]">({count})</span>
+                          <span className="font-mono text-[#7A7485] dark:text-[#94A3B8] tabular-nums font-medium">
+                            {percent}% <span className="text-[10px] text-[#A39CAE] dark:text-[#64748B]">({count})</span>
                           </span>
                         </div>
-                        <div className="w-full h-2 rounded-full bg-[#FAF7F2] overflow-hidden border border-[#EFEAE1]">
+                        <div className="w-full h-2 rounded-full bg-[#FAF7F2] dark:bg-[#161F36] overflow-hidden border border-[#EFEAE1] dark:border-[#1E293B]">
                           <div
                             className="h-full rounded-full transition-all duration-500"
                             style={{ width: `${percent}%`, backgroundColor: meta.barColor }}

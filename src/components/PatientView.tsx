@@ -120,6 +120,59 @@ export const PatientView: React.FC<PatientViewProps> = ({
     }
   };
 
+  // Client-side fallback for GitHub Pages or static deployments where server.ts is unavailable
+  const fallbackClientChat = (text: string, userName: string) => {
+    const lower = text.toLowerCase();
+    const isMediumRisk = /(ansiedad|p[aá]nico|desesperad|abrumad|no puedo respirar|llorar|miedo|soledad|angustia|angustiado|tristeza|depresi[oó]n)/i.test(lower);
+    const isPositive = /(feliz|bien|content|alegr|agradecid|tranquil|calma|gracias|paz)/i.test(lower);
+
+    let reply = '';
+    let nivelGravedad: 'Baja' | 'Media' | 'Alta' = 'Baja';
+    let puntuacionRiesgo = 1;
+    let emocionDetectada: EmotionType = 'Calma';
+    let resumenClinico = 'Consulta de acompañamiento general.';
+    let senalesDetectadas: string[] = ['Contacto cotidiano'];
+    let recomendacion = 'Continuar registro diario y hábitos de autocuidado.';
+
+    if (isMediumRisk) {
+      nivelGravedad = 'Media';
+      puntuacionRiesgo = 3;
+      emocionDetectada = lower.includes('ansiedad') || lower.includes('pánico') ? 'Ansiedad' : 'Triste';
+      resumenClinico = 'Malestar emocional moderado que requiere contención afectiva y escucha empática.';
+      senalesDetectadas = ['Inquietud anímica', 'Solicitud de contención'];
+      recomendacion = 'Realizar ejercicio de respiración 4-4-6 y seguimiento en sesión terapéutica.';
+      reply = `Siento mucho que estés pasando por este instante tan pesado, ${userName} 🐾. Respira despacio conmigo. Inhala hondo... sostén el aire... y suelta suavemente. Es completamente humano sentirse así y tus emociones son válidas. ¿Te gustaría contarme un poquito más o probar la respiración guiada juntos?`;
+    } else if (isPositive) {
+      nivelGravedad = 'Baja';
+      puntuacionRiesgo = 1;
+      emocionDetectada = 'Feliz';
+      resumenClinico = 'Expresión de estabilidad anímica o estado emocional constructivo.';
+      senalesDetectadas = ['Afecto positivo', 'Buen contacto'];
+      recomendacion = 'Reforzar logros y mantener hábitos saludables.';
+      reply = `¡Qué alegría tan linda leer esto, ${userName}! 🐾 Me llena el corazoncito verte bien. Saborear estos instantes nutre tu mente y tus emociones. ¿Qué es lo que más disfrutaste hoy?`;
+    } else {
+      nivelGravedad = 'Baja';
+      puntuacionRiesgo = 2;
+      emocionDetectada = 'Calma';
+      resumenClinico = 'Diálogo reflexivo o desahogo cotidiano en el diario.';
+      senalesDetectadas = ['Expresión cotidiana'];
+      recomendacion = 'Monitoreo en consulta regular.';
+      reply = `Te escucho con mucha atención y ternura, ${userName} 🐾. Cuéntame lo que sientas; este es un espacio seguro para ti donde puedes ser tú mismo/a a tu propio ritmo.`;
+    }
+
+    return {
+      reply,
+      triage: {
+        nivelGravedad,
+        puntuacionRiesgo,
+        emocionDetectada,
+        resumenClinico,
+        senalesDetectadas,
+        recomendacion
+      }
+    };
+  };
+
   const handleSendChatMessage = async (presetText?: string) => {
     const textToSend = (presetText || inputChatText).trim();
     if (!textToSend || isChatLoading) return;
@@ -173,7 +226,7 @@ export const PatientView: React.FC<PatientViewProps> = ({
         }
       ]);
 
-      // Sincronizar en segundo plano con el servidor
+      // Sincronizar en segundo plano si el servidor está disponible
       fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -196,20 +249,33 @@ export const PatientView: React.FC<PatientViewProps> = ({
     try {
       const payload = {
         userName: user.nombre,
-        userEmotion: selectedEmotion || history[0]?.e || 'Tranquilo',
+        userEmotion: selectedEmotion || history[0]?.e || 'Calma',
         messages: updatedMessages.map(m => ({
           role: m.sender === 'user' ? 'user' : 'model',
           text: m.text
         }))
       };
 
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      let data: any = null;
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
 
-      const data = await response.json();
+        if (response.ok) {
+          data = await response.json();
+        }
+      } catch (networkErr) {
+        // Fallback for static GitHub Pages where Express is not running
+        console.info('Static hosting detected or offline. Running client-side triage.', networkErr);
+      }
+
+      if (!data) {
+        data = fallbackClientChat(textToSend, user.nombre);
+      }
+
       const reply = data.reply || 'Aquí estoy a tu lado 🐾. Respira con calma y cuenta conmigo.';
 
       // Process and register AI Clinical Triage Report
@@ -316,9 +382,9 @@ export const PatientView: React.FC<PatientViewProps> = ({
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       
       {/* Welcome Banner with Puppy Mascot */}
-      <div className="mb-8 p-6 sm:p-7 rounded-3xl bg-white border border-[#EFEAE1] shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+      <div className="mb-8 p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 transition-colors">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-white border-2 border-[#EADDFE] shadow-xs flex items-center justify-center p-1 shrink-0 overflow-hidden">
+          <div className="w-16 h-16 rounded-full bg-white dark:bg-white border-2 border-[#EADDFE] dark:border-[#C4B5FD] shadow-xs dark:shadow-[0_0_15px_rgba(196,181,253,0.3)] flex items-center justify-center p-1.5 shrink-0 overflow-hidden">
             <img
               src={LOGO_URL}
               alt="Felt.O Cachorro"
@@ -327,22 +393,22 @@ export const PatientView: React.FC<PatientViewProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#2D2938]">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#2D2938] dark:text-[#F1F5F9]">
                 ¡Hola, {user.nombre}!
               </h1>
-              <span className="text-xs bg-[#F3EFFF] text-[#7C5FD1] px-2.5 py-0.5 rounded-full font-semibold border border-[#E7DCFE]">
+              <span className="text-xs bg-[#F3EFFF] dark:bg-[#271F42] text-[#7C5FD1] dark:text-[#C4B5FD] px-2.5 py-0.5 rounded-full font-semibold border border-[#E7DCFE] dark:border-[#43356E]">
                 Felt.O te acompaña 🐾
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[#746E80] mt-1 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#746E80] dark:text-[#94A3B8] mt-1 leading-relaxed">
               Cada emoción es una pequeña visita que trae un mensaje. Tómate este ratito para ti con calma y ternura.
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          <div className="text-xs text-[#7E7788] flex items-center gap-1.5 bg-[#FAF7F2] px-3 py-1.5 rounded-full border border-[#EFEAE1]">
-            <Calendar className="w-3.5 h-3.5 text-[#8C71D6]" aria-hidden="true" />
+          <div className="text-xs text-[#7E7788] dark:text-[#94A3B8] flex items-center gap-1.5 bg-[#FAF7F2] dark:bg-[#161F36] px-3 py-1.5 rounded-full border border-[#EFEAE1] dark:border-[#1E293B]">
+            <Calendar className="w-3.5 h-3.5 text-[#8C71D6] dark:text-[#A78BFA]" aria-hidden="true" />
             <span>
               {new Date().toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' })}
             </span>
@@ -351,9 +417,9 @@ export const PatientView: React.FC<PatientViewProps> = ({
           <button
             type="button"
             onClick={() => onTabChange('respirar')}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-2xl bg-[#EDF9F0] text-[#2C693E] border border-[#D4F2DC] hover:bg-[#E2F7E8] transition-colors shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-2xl bg-[#EDF9F0] dark:bg-[#122A1C] text-[#2C693E] dark:text-[#86EFAC] border border-[#D4F2DC] dark:border-[#1E432E] hover:bg-[#E2F7E8] dark:hover:bg-[#193A27] transition-colors shadow-xs"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#4E9B66]" aria-hidden="true" />
+            <Sparkles className="w-3.5 h-3.5 text-[#4E9B66] dark:text-[#86EFAC]" aria-hidden="true" />
             <span>Respiración 4-4-6</span>
           </button>
         </div>
@@ -363,14 +429,14 @@ export const PatientView: React.FC<PatientViewProps> = ({
       {showReminder && (
         <section
           aria-label="Recordatorio de autocuidado"
-          className="mb-8 p-4 rounded-2xl border border-[#FDEEBA] bg-[#FFFBEB] flex items-start gap-3 shadow-xs"
+          className="mb-8 p-4 rounded-2xl border border-[#FDEEBA] dark:border-[#4A3D18] bg-[#FFFBEB] dark:bg-[#241F12] flex items-start gap-3 shadow-xs"
         >
-          <Info className="w-5 h-5 text-[#B88B22] shrink-0 mt-0.5" aria-hidden="true" />
+          <Info className="w-5 h-5 text-[#B88B22] dark:text-[#FDE68A] shrink-0 mt-0.5" aria-hidden="true" />
           <div className="text-sm">
-            <h2 className="font-bold text-[#8C6910]">
+            <h2 className="font-bold text-[#8C6910] dark:text-[#FDE68A]">
               Pausa de cariño para ti 🐾
             </h2>
-            <p className="text-[#8C6910]/90 mt-0.5 text-xs sm:text-sm">
+            <p className="text-[#8C6910]/90 dark:text-[#FDE68A]/80 mt-0.5 text-xs sm:text-sm">
               Llevas más de 24 horas sin registrar cómo te sientes. Tómate un minutito para respirar y anotar tu estado.
             </p>
           </div>
@@ -387,12 +453,12 @@ export const PatientView: React.FC<PatientViewProps> = ({
       {/* Tab: Multi-turn Chat with Felt.O puppy companion */}
       {activeTab === 'chat' && (
         <section aria-labelledby="chat-heading" className="max-w-2xl mx-auto my-6">
-          <div className="bg-white border border-[#EFEAE1] rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col h-[600px]">
+          <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col h-[600px] transition-colors">
             
             {/* Chat header */}
-            <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6]">
+            <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6] dark:border-[#1E293B]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white border-2 border-[#EADDFE] shadow-xs p-0.5 overflow-hidden">
+                <div className="w-10 h-10 rounded-full bg-white dark:bg-white border-2 border-[#EADDFE] dark:border-[#C4B5FD] shadow-xs dark:shadow-[0_0_15px_rgba(196,181,253,0.3)] p-1 overflow-hidden">
                   <img
                     src={LOGO_URL}
                     alt="Felt.O Cachorro"
@@ -400,10 +466,10 @@ export const PatientView: React.FC<PatientViewProps> = ({
                   />
                 </div>
                 <div>
-                  <h2 id="chat-heading" className="text-base font-bold text-[#2D2938]">
+                  <h2 id="chat-heading" className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                     Chat con Felt.O
                   </h2>
-                  <span className="text-[11px] text-[#7C5FD1] flex items-center gap-1 font-semibold">
+                  <span className="text-[11px] text-[#7C5FD1] dark:text-[#C4B5FD] flex items-center gap-1 font-semibold">
                     <span className="w-2 h-2 rounded-full bg-[#78CE93]"></span>
                     Compañero empático listo para escucharte 🐾
                   </span>
@@ -422,7 +488,7 @@ export const PatientView: React.FC<PatientViewProps> = ({
                     }
                   ]);
                 }}
-                className="text-xs text-[#8A8394] hover:text-[#8C71D6] hover:underline"
+                className="text-xs text-[#8A8394] dark:text-[#94A3B8] hover:text-[#8C71D6] dark:hover:text-[#C4B5FD] hover:underline"
               >
                 Limpiar chat
               </button>
@@ -434,10 +500,10 @@ export const PatientView: React.FC<PatientViewProps> = ({
                 role="status"
                 className={`p-4 rounded-2xl border text-xs mb-3 flex items-start justify-between gap-3 animate-in fade-in ${
                   latestReportAlert.nivelGravedad === 'Alta'
-                    ? 'bg-[#FFF0F3] border-[#FFD7DF] text-[#B8445E]'
+                    ? 'bg-[#FFF0F3] dark:bg-[#32131F] border-[#FFD7DF] dark:border-[#521C2F] text-[#B8445E] dark:text-[#FCA5A5]'
                     : latestReportAlert.nivelGravedad === 'Media'
-                    ? 'bg-[#FFF4EB] border-[#FFE3CC] text-[#B8642A]'
-                    : 'bg-[#EDF9F0] border-[#D4F2DC] text-[#327347]'
+                    ? 'bg-[#FFF4EB] dark:bg-[#2A1B14] border-[#FFE3CC] dark:border-[#4E2B1E] text-[#B8642A] dark:text-[#FED7AA]'
+                    : 'bg-[#EDF9F0] dark:bg-[#112419] border-[#D4F2DC] dark:border-[#1E4530] text-[#327347] dark:text-[#A7F3D0]'
                 }`}
               >
                 <div className="flex items-start gap-2.5">
@@ -447,7 +513,7 @@ export const PatientView: React.FC<PatientViewProps> = ({
                   <div>
                     <div className="flex items-center gap-2 flex-wrap font-bold">
                       <span>Reporte Clínico de Gravedad {latestReportAlert.nivelGravedad.toUpperCase()} generado</span>
-                      <span className="text-[10px] px-2 py-0.2 rounded-full bg-white/90 border font-mono">
+                      <span className="text-[10px] px-2 py-0.2 rounded-full bg-white/90 dark:bg-[#1E293B] border border-inherit font-mono">
                         Riesgo {latestReportAlert.puntuacionRiesgo}/5
                       </span>
                     </div>
@@ -487,7 +553,7 @@ export const PatientView: React.FC<PatientViewProps> = ({
                   }`}
                 >
                   {msg.sender === 'felto' && (
-                    <div className="w-8 h-8 rounded-full bg-white border border-[#EADDFE] p-0.5 shrink-0 overflow-hidden shadow-xs mt-0.5">
+                    <div className="w-8 h-8 rounded-full bg-white dark:bg-white border border-[#EADDFE] dark:border-[#C4B5FD] p-1 shrink-0 overflow-hidden shadow-xs mt-0.5">
                       <img src={LOGO_URL} alt="Felt.O" className="w-full h-full object-contain" />
                     </div>
                   )}
@@ -495,8 +561,8 @@ export const PatientView: React.FC<PatientViewProps> = ({
                   <div
                     className={`max-w-[82%] px-4 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-xs ${
                       msg.sender === 'user'
-                        ? 'bg-[#8C71D6] text-white rounded-tr-xs font-medium'
-                        : 'bg-[#FAF7F2] text-[#2D2938] rounded-tl-xs border border-[#EFE8DE]'
+                        ? 'bg-[#8C71D6] dark:bg-[#7C5FD1] text-white rounded-tr-xs font-medium'
+                        : 'bg-[#FAF7F2] dark:bg-[#161F36] text-[#2D2938] dark:text-[#F1F5F9] rounded-tl-xs border border-[#EFE8DE] dark:border-[#232B45]'
                     }`}
                   >
                     {msg.text}
@@ -506,10 +572,10 @@ export const PatientView: React.FC<PatientViewProps> = ({
 
               {isChatLoading && (
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-white border border-[#EADDFE] p-0.5 shrink-0 overflow-hidden shadow-xs">
+                  <div className="w-8 h-8 rounded-full bg-white dark:bg-white border border-[#EADDFE] dark:border-[#C4B5FD] p-1 shrink-0 overflow-hidden shadow-xs">
                     <img src={LOGO_URL} alt="Felt.O" className="w-full h-full object-contain" />
                   </div>
-                  <div className="bg-[#FAF7F2] border border-[#EFE8DE] px-4 py-2 rounded-2xl text-xs text-[#7A7485] flex items-center gap-1.5">
+                  <div className="bg-[#FAF7F2] dark:bg-[#161F36] border border-[#EFE8DE] dark:border-[#232B45] px-4 py-2 rounded-2xl text-xs text-[#7A7485] dark:text-[#94A3B8] flex items-center gap-1.5">
                     <span>Felt.O está pensando con cariño</span>
                     <span className="animate-pulse">🐾...</span>
                   </div>
@@ -518,26 +584,26 @@ export const PatientView: React.FC<PatientViewProps> = ({
             </div>
 
             {/* Suggested quick reflection prompts */}
-            <div className="pt-2 pb-2 flex items-center gap-1.5 overflow-x-auto text-[11px] border-t border-[#F5EFE6]">
-              <span className="text-[#8E8799] shrink-0 font-medium">Sugerencias:</span>
+            <div className="pt-2 pb-2 flex items-center gap-1.5 overflow-x-auto text-[11px] border-t border-[#F5EFE6] dark:border-[#1E293B]">
+              <span className="text-[#8E8799] dark:text-[#94A3B8] shrink-0 font-medium">Sugerencias:</span>
               <button
                 type="button"
                 onClick={() => handleSendChatMessage('Hoy me siento un poco abrumado/a con mis pendientes.')}
-                className="px-2.5 py-1 rounded-full bg-[#FFF4EB] text-[#B8642A] border border-[#FFE3CC] whitespace-nowrap hover:bg-[#FFEADA]"
+                className="px-2.5 py-1 rounded-full bg-[#FFF4EB] dark:bg-[#2A1B14] text-[#B8642A] dark:text-[#FED7AA] border border-[#FFE3CC] dark:border-[#4E2B1E] whitespace-nowrap hover:bg-[#FFEADA] dark:hover:bg-[#382319]"
               >
                 Abrumado/a con pendientes
               </button>
               <button
                 type="button"
                 onClick={() => handleSendChatMessage('Tengo un nudo de tristeza y no sé por qué.')}
-                className="px-2.5 py-1 rounded-full bg-[#F0F5FD] text-[#3E6A9E] border border-[#DBE6F8] whitespace-nowrap hover:bg-[#E4EEFB]"
+                className="px-2.5 py-1 rounded-full bg-[#F0F5FD] dark:bg-[#122238] text-[#3E6A9E] dark:text-[#BAE6FD] border border-[#DBE6F8] dark:border-[#1C3B62] whitespace-nowrap hover:bg-[#E4EEFB] dark:hover:bg-[#18304E]"
               >
                 Tristeza sin motivo
               </button>
               <button
                 type="button"
                 onClick={() => handleSendChatMessage('Tuve un logro bonito y quiero celebrarlo contigo.')}
-                className="px-2.5 py-1 rounded-full bg-[#FFFBEB] text-[#9A7314] border border-[#FDEEBA] whitespace-nowrap hover:bg-[#FEF8DD]"
+                className="px-2.5 py-1 rounded-full bg-[#FFFBEB] dark:bg-[#241F12] text-[#9A7314] dark:text-[#FDE68A] border border-[#FDEEBA] dark:border-[#4A3D18] whitespace-nowrap hover:bg-[#FEF8DD] dark:hover:bg-[#342A16]"
               >
                 Celebrar un logro ☀️
               </button>
@@ -556,13 +622,13 @@ export const PatientView: React.FC<PatientViewProps> = ({
                 value={inputChatText}
                 onChange={e => setInputChatText(e.target.value)}
                 placeholder="Escribe lo que sientes o lo que quieras contarle a Felt.O..."
-                className="flex-1 px-4 py-2.5 text-xs sm:text-sm bg-[#FAF8F5] border border-[#E8E2D8] rounded-2xl text-[#2D2938] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
+                className="flex-1 px-4 py-2.5 text-xs sm:text-sm bg-[#FAF8F5] dark:bg-[#0C111D] border border-[#E8E2D8] dark:border-[#232B45] rounded-2xl text-[#2D2938] dark:text-[#F1F5F9] focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
               />
               <button
                 type="submit"
                 disabled={!inputChatText.trim() || isChatLoading}
                 aria-label="Enviar mensaje"
-                className="px-4 py-2.5 rounded-2xl bg-[#8C71D6] hover:bg-[#7D61CC] text-white font-semibold text-xs flex items-center gap-1.5 transition-colors disabled:opacity-50 shadow-xs"
+                className="px-4 py-2.5 rounded-2xl bg-[#8C71D6] hover:bg-[#7D61CC] dark:bg-[#7C5FD1] dark:hover:bg-[#6C4EB8] text-white font-semibold text-xs flex items-center gap-1.5 transition-colors disabled:opacity-50 shadow-xs"
               >
                 <Send className="w-3.5 h-3.5" aria-hidden="true" />
                 <span className="hidden sm:inline">Enviar</span>
@@ -578,45 +644,45 @@ export const PatientView: React.FC<PatientViewProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* User Details */}
-            <div className="bg-white border border-[#EFEAE1] rounded-3xl p-6 shadow-xs">
-              <h2 id="profile-heading" className="text-base font-bold text-[#2D2938] mb-4">
+            <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 shadow-xs transition-colors">
+              <h2 id="profile-heading" className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9] mb-4">
                 Información de tu Cuenta
               </h2>
               <dl className="space-y-3 text-xs sm:text-sm">
                 <div>
-                  <dt className="text-[#868091] text-xs">Nombre Completo</dt>
-                  <dd className="font-semibold text-[#2D2938] mt-0.5">
+                  <dt className="text-[#868091] dark:text-[#94A3B8] text-xs">Nombre Completo</dt>
+                  <dd className="font-semibold text-[#2D2938] dark:text-[#F1F5F9] mt-0.5">
                     {user.nombre} {user.apellidos}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-[#868091] text-xs">Correo Electrónico</dt>
-                  <dd className="font-semibold text-[#2D2938] mt-0.5">{user.email}</dd>
+                  <dt className="text-[#868091] dark:text-[#94A3B8] text-xs">Correo Electrónico</dt>
+                  <dd className="font-semibold text-[#2D2938] dark:text-[#F1F5F9] mt-0.5">{user.email}</dd>
                 </div>
                 <div>
-                  <dt className="text-[#868091] text-xs">Psicólogo Vinculado</dt>
+                  <dt className="text-[#868091] dark:text-[#94A3B8] text-xs">Psicólogo Vinculado</dt>
                   <dd className="font-semibold mt-0.5">
                     {linkedPsi ? (
                       <div className="space-y-1">
-                        <span className="text-[#327347] bg-[#EDF9F0] px-2.5 py-1 rounded-full border border-[#D4F2DC] inline-block font-semibold">
+                        <span className="text-[#327347] dark:text-[#A7F3D0] bg-[#EDF9F0] dark:bg-[#112419] px-2.5 py-1 rounded-full border border-[#D4F2DC] dark:border-[#1E4530] inline-block font-semibold">
                           {linkedPsi.nombre} {linkedPsi.apellidos} ({linkedPsi.codigo})
                         </span>
                         {linkedPsi.verificado && (
-                          <span className="block text-[11px] text-[#3D8556] font-medium">
+                          <span className="block text-[11px] text-[#3D8556] dark:text-[#86EFAC] font-medium">
                             ✓ Psicólogo Titulado y Verificado · Cédula #{linkedPsi.cedula || '12345678'} (DGP)
                           </span>
                         )}
                       </div>
                     ) : (
-                      <span className="text-[#8E8799]">Aún sin vincular</span>
+                      <span className="text-[#8E8799] dark:text-[#64748B]">Aún sin vincular</span>
                     )}
                   </dd>
                 </div>
               </dl>
 
               {/* Linking form */}
-              <form onSubmit={handleLinkPsychologist} className="mt-6 pt-5 border-t border-[#F5EFE6]">
-                <label htmlFor="input-link-psi" className="block text-xs font-semibold text-[#575162] mb-1">
+              <form onSubmit={handleLinkPsychologist} className="mt-6 pt-5 border-t border-[#F5EFE6] dark:border-[#1E293B]">
+                <label htmlFor="input-link-psi" className="block text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1">
                   Vincular o cambiar psicólogo
                 </label>
                 <div className="flex gap-2">
@@ -626,17 +692,17 @@ export const PatientView: React.FC<PatientViewProps> = ({
                     value={linkCodeInput}
                     onChange={e => setLinkCodeInput(e.target.value)}
                     placeholder="Código (Ej. PSIC-5678)"
-                    className="flex-1 px-3.5 py-2 text-xs uppercase font-mono bg-[#FAF8F5] border border-[#E8E2D8] rounded-xl text-[#2D2938] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
+                    className="flex-1 px-3.5 py-2 text-xs uppercase font-mono bg-[#FAF8F5] dark:bg-[#0C111D] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9] focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
                   />
                   <button
                     type="submit"
-                    className="px-4 py-2 text-xs font-semibold text-white bg-[#8C71D6] hover:bg-[#7D61CC] rounded-xl transition-colors shadow-xs"
+                    className="px-4 py-2 text-xs font-semibold text-white bg-[#8C71D6] hover:bg-[#7D61CC] dark:bg-[#7C5FD1] dark:hover:bg-[#6C4EB8] rounded-xl transition-colors shadow-xs"
                   >
                     Vincular
                   </button>
                 </div>
                 {linkStatusMsg && (
-                  <p className={`mt-2 text-xs font-semibold ${linkStatusMsg.ok ? 'text-[#327347]' : 'text-[#B8445E]'}`}>
+                  <p className={`mt-2 text-xs font-semibold ${linkStatusMsg.ok ? 'text-[#327347] dark:text-[#86EFAC]' : 'text-[#B8445E] dark:text-[#FCA5A5]'}`}>
                     {linkStatusMsg.text}
                   </p>
                 )}
@@ -644,15 +710,15 @@ export const PatientView: React.FC<PatientViewProps> = ({
             </div>
 
             {/* Privacy & ARCO Rights */}
-            <div className="bg-white border border-[#EFEAE1] rounded-3xl p-6 shadow-xs flex flex-col justify-between">
+            <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 shadow-xs flex flex-col justify-between transition-colors">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <Shield className="w-5 h-5 text-[#8C71D6]" aria-hidden="true" />
-                  <h2 className="text-base font-bold text-[#2D2938]">
+                  <Shield className="w-5 h-5 text-[#8C71D6] dark:text-[#A78BFA]" aria-hidden="true" />
+                  <h2 className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                     Tus Derechos y Privacidad
                   </h2>
                 </div>
-                <p className="text-xs text-[#6B6576] leading-relaxed mb-4">
+                <p className="text-xs text-[#6B6576] dark:text-[#94A3B8] leading-relaxed mb-4">
                   En Felt.O cuidamos tus datos sensibles con la máxima confidencialidad. Puedes descargar tu historial
                   o ejercer tu derecho al olvido eliminándolo permanentemente cuando gustes.
                 </p>
@@ -661,16 +727,16 @@ export const PatientView: React.FC<PatientViewProps> = ({
                   <button
                     type="button"
                     onClick={handleExportData}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl border border-[#EFEAE1] bg-[#FAF8F5] text-xs font-semibold text-[#4D4857] hover:bg-[#F3EFE9] transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl border border-[#EFEAE1] dark:border-[#1E293B] bg-[#FAF8F5] dark:bg-[#161F36] text-xs font-semibold text-[#4D4857] dark:text-[#CBD5E1] hover:bg-[#F3EFE9] dark:hover:bg-[#202B4B] transition-colors"
                   >
-                    <Download className="w-4 h-4 text-[#8C71D6]" aria-hidden="true" />
+                    <Download className="w-4 h-4 text-[#8C71D6] dark:text-[#A78BFA]" aria-hidden="true" />
                     <span>Descargar mi historial (.JSON)</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setShowDeleteConfirm(true)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl border border-[#FFD7DF] bg-[#FFF0F3] text-xs font-semibold text-[#B8445E] hover:bg-[#FFE4EA] transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl border border-[#FFD7DF] dark:border-[#521C2F] bg-[#FFF0F3] dark:bg-[#2C131D] text-xs font-semibold text-[#B8445E] dark:text-[#FCA5A5] hover:bg-[#FFE4EA] dark:hover:bg-[#3D1826] transition-colors"
                   >
                     <Trash2 className="w-4 h-4" aria-hidden="true" />
                     <span>Eliminar mi historial (Derechos ARCO)</span>
@@ -678,31 +744,31 @@ export const PatientView: React.FC<PatientViewProps> = ({
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-[#F5EFE6] text-[11px] text-[#8E8799]">
-                Registros totales acumulados: <span className="font-bold text-[#2D2938] tabular-nums">{history.length}</span>
+              <div className="mt-6 pt-4 border-t border-[#F5EFE6] dark:border-[#1E293B] text-[11px] text-[#8E8799] dark:text-[#94A3B8]">
+                Registros totales acumulados: <span className="font-bold text-[#2D2938] dark:text-[#F1F5F9] tabular-nums">{history.length}</span>
               </div>
             </div>
 
           </div>
 
           {/* Clinical Reports History from Chat AI Triage */}
-          <div className="bg-white border border-[#EFEAE1] rounded-3xl p-6 shadow-xs">
-            <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6]">
+          <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 shadow-xs transition-colors">
+            <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE6] dark:border-[#1E293B]">
               <div>
-                <h3 className="text-base font-bold text-[#2D2938]">
+                <h3 className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                   Reportes Clínicos Enviados a tu Terapeuta 🐾
                 </h3>
-                <p className="text-xs text-[#7A7485]">
+                <p className="text-xs text-[#7A7485] dark:text-[#94A3B8]">
                   Evaluaciones automáticas de gravedad generadas durante tus conversaciones con Felt.O
                 </p>
               </div>
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#F3EFFF] text-[#7252C4] border border-[#E7DCFE]">
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#F3EFFF] dark:bg-[#271F42] text-[#7252C4] dark:text-[#C4B5FD] border border-[#E7DCFE] dark:border-[#43356E]">
                 {patientReports.length} {patientReports.length === 1 ? 'reporte' : 'reportes'}
               </span>
             </div>
 
             {patientReports.length > 0 ? (
-              <div className="divide-y divide-[#F5EFE6] mt-3">
+              <div className="divide-y divide-[#F5EFE6] dark:divide-[#1E293B] mt-3">
                 {patientReports.map(rep => (
                   <div key={rep.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-start gap-3">
@@ -714,37 +780,37 @@ export const PatientView: React.FC<PatientViewProps> = ({
                           <span
                             className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
                               rep.nivelGravedad === 'Alta'
-                                ? 'bg-[#FFF0F3] text-[#B8445E] border-[#FFD7DF]'
+                                ? 'bg-[#FFF0F3] dark:bg-[#32131F] text-[#B8445E] dark:text-[#FCA5A5] border-[#FFD7DF] dark:border-[#521C2F]'
                                 : rep.nivelGravedad === 'Media'
-                                ? 'bg-[#FFF4EB] text-[#B8642A] border-[#FFE3CC]'
-                                : 'bg-[#EDF9F0] text-[#327347] border-[#D4F2DC]'
+                                ? 'bg-[#FFF4EB] dark:bg-[#2A1B14] text-[#B8642A] dark:text-[#FED7AA] border-[#FFE3CC] dark:border-[#4E2B1E]'
+                                : 'bg-[#EDF9F0] dark:bg-[#112419] text-[#327347] dark:text-[#A7F3D0] border-[#D4F2DC] dark:border-[#1E4530]'
                             }`}
                           >
                             Gravedad {rep.nivelGravedad} (Riesgo {rep.puntuacionRiesgo}/5)
                           </span>
-                          <span className="text-xs font-semibold text-[#4D4857]">
+                          <span className="text-xs font-semibold text-[#4D4857] dark:text-[#CBD5E1]">
                             {rep.emocionDetectada}
                           </span>
                           {rep.atendido ? (
-                            <span className="text-[10px] text-[#327347] bg-[#E8F8EC] px-2 py-0.5 rounded-full">
+                            <span className="text-[10px] text-[#327347] dark:text-[#86EFAC] bg-[#E8F8EC] dark:bg-[#112419] px-2 py-0.5 rounded-full border border-transparent dark:border-[#1E4530]">
                               ✓ Revisado por terapeuta
                             </span>
                           ) : (
-                            <span className="text-[10px] text-[#B8642A] bg-[#FFF4EB] px-2 py-0.5 rounded-full">
+                            <span className="text-[10px] text-[#B8642A] dark:text-[#FED7AA] bg-[#FFF4EB] dark:bg-[#2A1B14] px-2 py-0.5 rounded-full border border-transparent dark:border-[#4E2B1E]">
                               Pendiente de revisión
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-[#5A5464] mt-1 leading-relaxed">
+                        <p className="text-xs text-[#5A5464] dark:text-[#94A3B8] mt-1 leading-relaxed">
                           {rep.resumenClinico}
                         </p>
-                        <p className="text-[11px] text-[#8A8394] mt-0.5 italic">
+                        <p className="text-[11px] text-[#8A8394] dark:text-[#64748B] mt-0.5 italic">
                           "Mensaje evaluado: {rep.fragmentoMensaje}"
                         </p>
                       </div>
                     </div>
 
-                    <time className="text-[11px] font-mono text-[#8E8799] shrink-0 sm:text-right">
+                    <time className="text-[11px] font-mono text-[#8E8799] dark:text-[#64748B] shrink-0 sm:text-right">
                       {new Date(rep.fecha).toLocaleString('es-MX', {
                         day: '2-digit',
                         month: 'short',
@@ -756,7 +822,7 @@ export const PatientView: React.FC<PatientViewProps> = ({
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-[#8E8799] italic py-6 text-center">
+              <p className="text-xs text-[#8E8799] dark:text-[#64748B] italic py-6 text-center">
                 Aún no se han generado reportes clínicos desde el chat.
               </p>
             )}
@@ -768,13 +834,13 @@ export const PatientView: React.FC<PatientViewProps> = ({
       {activeTab === 'inicio' && (
         <div className="space-y-8">
           
-          {/* Quick Check-in Card in Light Pastel */}
-          <section aria-labelledby="checkin-heading" className="bg-white border border-[#EFEAE1] rounded-3xl p-6 sm:p-8 shadow-xs">
+          {/* Quick Check-in Card in Light Pastel / Midnight Blue */}
+          <section aria-labelledby="checkin-heading" className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 sm:p-8 shadow-xs transition-colors">
             <div className="max-w-2xl">
-              <h2 id="checkin-heading" className="text-lg font-bold text-[#2D2938]">
+              <h2 id="checkin-heading" className="text-lg font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                 ¿Cómo late tu corazón hoy?
               </h2>
-              <p className="text-xs sm:text-sm text-[#746E80] mt-1">
+              <p className="text-xs sm:text-sm text-[#746E80] dark:text-[#94A3B8] mt-1">
                 Selecciona la emoción que más resuene contigo en este instante:
               </p>
             </div>
@@ -792,17 +858,17 @@ export const PatientView: React.FC<PatientViewProps> = ({
                     onClick={() => setSelectedEmotion(emotion)}
                     className={`flex flex-col items-center justify-center p-4 rounded-2xl border transition-all text-center ${
                       isSelected
-                        ? `${meta.bgPastel} ${meta.borderPastel} shadow-xs ring-2 ring-[#8C71D6] scale-102`
-                        : `${meta.bgPastel} border-transparent hover:${meta.borderPastel} hover:shadow-xs`
+                        ? `${meta.bgPastel} ${meta.bgDark} ${meta.borderPastel} ${meta.borderDark} shadow-xs ring-2 ring-[#8C71D6] dark:ring-[#A78BFA] scale-102`
+                        : `${meta.bgPastel} ${meta.bgDark} border-transparent hover:${meta.borderPastel} dark:hover:${meta.borderDark} hover:shadow-xs`
                     }`}
                   >
                     <span className="text-2xl mb-1.5" aria-hidden="true">
                       {meta.icon}
                     </span>
-                    <span className={`text-xs font-bold ${meta.textPastel}`}>
+                    <span className={`text-xs font-bold ${meta.textPastel} ${meta.textDark}`}>
                       {emotion}
                     </span>
-                    <span className="text-[10px] text-[#8E8799] truncate max-w-full mt-0.5">
+                    <span className="text-[10px] text-[#8E8799] dark:text-[#94A3B8] truncate max-w-full mt-0.5">
                       {meta.label.split('&')[1]?.trim() || ''}
                     </span>
                   </button>
@@ -812,12 +878,12 @@ export const PatientView: React.FC<PatientViewProps> = ({
 
             {/* Detailed configuration when emotion is selected */}
             {selectedEmotion && (
-              <div className="pt-4 border-t border-[#F5EFE6] max-w-2xl space-y-4 animate-in fade-in duration-200">
+              <div className="pt-4 border-t border-[#F5EFE6] dark:border-[#1E293B] max-w-2xl space-y-4 animate-in fade-in duration-200">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Intensity slider */}
                   <div>
-                    <label htmlFor="intensity-slider" className="block text-xs font-semibold text-[#575162] mb-1">
-                      Intensidad percibida: <span className="tabular-nums font-bold text-[#8C71D6]">{intensity}/5</span>
+                    <label htmlFor="intensity-slider" className="block text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1">
+                      Intensidad percibida: <span className="tabular-nums font-bold text-[#8C71D6] dark:text-[#C4B5FD]">{intensity}/5</span>
                     </label>
                     <input
                       id="intensity-slider"
@@ -826,9 +892,9 @@ export const PatientView: React.FC<PatientViewProps> = ({
                       max="5"
                       value={intensity}
                       onChange={e => setIntensity(Number(e.target.value))}
-                      className="w-full accent-[#8C71D6] cursor-pointer"
+                      className="w-full accent-[#8C71D6] dark:accent-[#A78BFA] cursor-pointer"
                     />
-                    <div className="flex justify-between text-[10px] text-[#8E8799] mt-1">
+                    <div className="flex justify-between text-[10px] text-[#8E8799] dark:text-[#64748B] mt-1">
                       <span>1 (Suave)</span>
                       <span>3 (Moderada)</span>
                       <span>5 (Intensa)</span>
@@ -837,14 +903,14 @@ export const PatientView: React.FC<PatientViewProps> = ({
 
                   {/* Context / Trigger */}
                   <div>
-                    <label htmlFor="trigger-select" className="block text-xs font-semibold text-[#575162] mb-1">
+                    <label htmlFor="trigger-select" className="block text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1">
                       Contexto o detonante principal
                     </label>
                     <select
                       id="trigger-select"
                       value={trigger}
                       onChange={e => setTrigger(e.target.value)}
-                      className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-[#E8E2D8] rounded-xl text-[#2D2938] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
+                      className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] dark:bg-[#0C111D] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9] focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
                     >
                       <option value="Trabajo / Estudio">Trabajo / Estudio</option>
                       <option value="Familia">Familia</option>
@@ -859,8 +925,8 @@ export const PatientView: React.FC<PatientViewProps> = ({
 
                 {/* Personal Note */}
                 <div>
-                  <label htmlFor="emotion-note" className="block text-xs font-semibold text-[#575162] mb-1">
-                    Nota o pensamiento reflexivo <span className="font-normal text-[#8A8394]">(opcional)</span>
+                  <label htmlFor="emotion-note" className="block text-xs font-semibold text-[#575162] dark:text-[#CBD5E1] mb-1">
+                    Nota o pensamiento reflexivo <span className="font-normal text-[#8A8394] dark:text-[#94A3B8]">(opcional)</span>
                   </label>
                   <input
                     id="emotion-note"
@@ -868,7 +934,7 @@ export const PatientView: React.FC<PatientViewProps> = ({
                     value={note}
                     onChange={e => setNote(e.target.value)}
                     placeholder="¿Qué pensamiento o situación acompañó esta emoción?"
-                    className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] border border-[#E8E2D8] rounded-xl text-[#2D2938] focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
+                    className="w-full px-3.5 py-2 text-xs bg-[#FAF8F5] dark:bg-[#0C111D] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9] focus:bg-white dark:focus:bg-[#161F36] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8C71D6]"
                   />
                 </div>
 
@@ -877,14 +943,14 @@ export const PatientView: React.FC<PatientViewProps> = ({
                   <button
                     type="button"
                     onClick={() => handleQuickRegister(selectedEmotion)}
-                    className="px-5 py-2.5 text-xs font-bold text-white bg-[#8C71D6] hover:bg-[#7D61CC] rounded-xl transition-all shadow-xs"
+                    className="px-5 py-2.5 text-xs font-bold text-white bg-[#8C71D6] hover:bg-[#7D61CC] dark:bg-[#7C5FD1] dark:hover:bg-[#6C4EB8] rounded-xl transition-all shadow-xs"
                   >
                     Guardar en mi Diario
                   </button>
                   <button
                     type="button"
                     onClick={() => setSelectedEmotion(null)}
-                    className="px-3.5 py-2 text-xs font-semibold text-[#8A8394] hover:text-[#2D2938]"
+                    className="px-3.5 py-2 text-xs font-semibold text-[#8A8394] dark:text-[#94A3B8] hover:text-[#2D2938] dark:hover:text-[#F1F5F9]"
                   >
                     Cancelar
                   </button>
@@ -897,18 +963,18 @@ export const PatientView: React.FC<PatientViewProps> = ({
               <div
                 role="status"
                 aria-live="polite"
-                className="mt-6 p-4 rounded-2xl border border-[#D4F2DC] bg-[#EDF9F0] text-xs sm:text-sm animate-in fade-in"
+                className="mt-6 p-4 rounded-2xl border border-[#D4F2DC] dark:border-[#1E4530] bg-[#EDF9F0] dark:bg-[#112419] text-xs sm:text-sm animate-in fade-in"
               >
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-[#327347] shrink-0 mt-0.5" aria-hidden="true" />
+                  <CheckCircle className="w-5 h-5 text-[#327347] dark:text-[#86EFAC] shrink-0 mt-0.5" aria-hidden="true" />
                   <div className="space-y-1">
-                    <p className="font-bold text-[#29633B]">
+                    <p className="font-bold text-[#29633B] dark:text-[#A7F3D0]">
                       Emoción registrada: {feedbackMsg.emotion} ✨
                     </p>
-                    <p className="text-[#327347] leading-relaxed">
+                    <p className="text-[#327347] dark:text-[#A7F3D0]/90 leading-relaxed">
                       {feedbackMsg.msg}
                     </p>
-                    <p className="text-[#2C693E] text-xs italic pt-1">
+                    <p className="text-[#2C693E] dark:text-[#86EFAC] text-xs italic pt-1">
                       💡 {feedbackMsg.exercise}
                     </p>
                   </div>
@@ -922,11 +988,11 @@ export const PatientView: React.FC<PatientViewProps> = ({
             
             {/* Left: Emotion Balance Metrics (4 cols) */}
             <div className="lg:col-span-4 space-y-6">
-              <section aria-labelledby="metrics-heading" className="bg-white border border-[#EFEAE1] rounded-3xl p-6 shadow-xs">
-                <h2 id="metrics-heading" className="text-base font-bold text-[#2D2938] mb-1">
+              <section aria-labelledby="metrics-heading" className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 shadow-xs transition-colors">
+                <h2 id="metrics-heading" className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9] mb-1">
                   Tu Balance Emocional
                 </h2>
-                <p className="text-xs text-[#7A7485] mb-6">
+                <p className="text-xs text-[#7A7485] dark:text-[#94A3B8] mb-6">
                   Distribución acumulada ({history.length} registros)
                 </p>
 
@@ -940,15 +1006,15 @@ export const PatientView: React.FC<PatientViewProps> = ({
                       return (
                         <div key={e} className="space-y-1">
                           <div className="flex items-center justify-between text-xs">
-                            <span className="flex items-center gap-1.5 font-semibold text-[#4D4857]">
+                            <span className="flex items-center gap-1.5 font-semibold text-[#4D4857] dark:text-[#CBD5E1]">
                               <span>{meta.icon}</span>
                               <span>{e}</span>
                             </span>
-                            <span className="font-mono text-[#7A7485] tabular-nums font-medium">
-                              {percent}% <span className="text-[10px] text-[#A39CAE]">({count})</span>
+                            <span className="font-mono text-[#7A7485] dark:text-[#94A3B8] tabular-nums font-medium">
+                              {percent}% <span className="text-[10px] text-[#A39CAE] dark:text-[#64748B]">({count})</span>
                             </span>
                           </div>
-                          <div className="w-full h-2 rounded-full bg-[#FAF7F2] overflow-hidden border border-[#EFEAE1]">
+                          <div className="w-full h-2 rounded-full bg-[#FAF7F2] dark:bg-[#161F36] overflow-hidden border border-[#EFEAE1] dark:border-[#1E293B]">
                             <div
                               className="h-full rounded-full transition-all duration-500"
                               style={{ width: `${percent}%`, backgroundColor: meta.barColor }}
@@ -959,28 +1025,28 @@ export const PatientView: React.FC<PatientViewProps> = ({
                     })}
                   </div>
                 ) : (
-                  <p className="text-xs text-[#8E8799] italic py-4 text-center">
+                  <p className="text-xs text-[#8E8799] dark:text-[#64748B] italic py-4 text-center">
                     Aún no cuentas con registros para calcular tu balance.
                   </p>
                 )}
               </section>
 
               {/* Chat with Puppy Companion Quick Teaser */}
-              <div className="bg-[#FFFDF9] border border-[#EFEAE1] rounded-3xl p-6 text-xs sm:text-sm shadow-xs flex items-center gap-3.5">
-                <div className="w-12 h-12 rounded-full bg-white border border-[#EADDFE] shadow-xs p-0.5 shrink-0 overflow-hidden">
+              <div className="bg-[#FFFDF9] dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 text-xs sm:text-sm shadow-xs flex items-center gap-3.5 transition-colors">
+                <div className="w-12 h-12 rounded-full bg-white dark:bg-white border border-[#EADDFE] dark:border-[#C4B5FD] shadow-xs dark:shadow-[0_0_15px_rgba(196,181,253,0.3)] p-1 shrink-0 overflow-hidden">
                   <img src={LOGO_URL} alt="Felt.O" className="w-full h-full object-contain" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-[#2D2938]">
+                  <h3 className="font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                     ¿Quieres platicar conmigo?
                   </h3>
-                  <p className="text-[#746E80] text-xs mt-0.5 mb-2">
+                  <p className="text-[#746E80] dark:text-[#94A3B8] text-xs mt-0.5 mb-2">
                     Felt.O está listo para escucharte con cariño.
                   </p>
                   <button
                     type="button"
                     onClick={() => onTabChange('chat')}
-                    className="inline-flex items-center gap-1 font-bold text-[#8C71D6] hover:underline text-xs"
+                    className="inline-flex items-center gap-1 font-bold text-[#8C71D6] dark:text-[#C4B5FD] hover:underline text-xs"
                   >
                     <span>Abrir Chat con Felt.O 🐾</span>
                   </button>
@@ -990,24 +1056,24 @@ export const PatientView: React.FC<PatientViewProps> = ({
 
             {/* Right: History Chronology (8 cols) */}
             <div className="lg:col-span-8">
-              <section aria-labelledby="history-heading" className="bg-white border border-[#EFEAE1] rounded-3xl p-6 shadow-xs">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F5EFE6]">
+              <section aria-labelledby="history-heading" className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 shadow-xs transition-colors">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F5EFE6] dark:border-[#1E293B]">
                   <div>
-                    <h2 id="history-heading" className="text-base font-bold text-[#2D2938]">
+                    <h2 id="history-heading" className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                       Historial en tu Diario
                     </h2>
-                    <p className="text-xs text-[#7A7485]">
+                    <p className="text-xs text-[#7A7485] dark:text-[#94A3B8]">
                       Tus reflexiones guardadas con amor
                     </p>
                   </div>
 
                   {/* Filter selector */}
                   <div className="flex items-center gap-1.5 text-xs">
-                    <span className="text-[#868091]">Filtrar:</span>
+                    <span className="text-[#868091] dark:text-[#94A3B8]">Filtrar:</span>
                     <select
                       value={historyFilter}
                       onChange={e => setHistoryFilter(e.target.value)}
-                      className="px-3 py-1.5 text-xs bg-[#FAF8F5] border border-[#E8E2D8] rounded-xl text-[#2D2938]"
+                      className="px-3 py-1.5 text-xs bg-[#FAF8F5] dark:bg-[#0C111D] border border-[#E8E2D8] dark:border-[#232B45] rounded-xl text-[#2D2938] dark:text-[#F1F5F9]"
                     >
                       <option value="all">Todas ({history.length})</option>
                       {(Object.keys(EMO_DATA) as EmotionType[]).map(e => (
@@ -1020,7 +1086,7 @@ export const PatientView: React.FC<PatientViewProps> = ({
                 </div>
 
                 {filteredHistory.length > 0 ? (
-                  <div className="divide-y divide-[#F5EFE6] mt-2">
+                  <div className="divide-y divide-[#F5EFE6] dark:divide-[#1E293B] mt-2">
                     {filteredHistory.map((item, idx) => {
                       const meta = EMO_DATA[item.e];
                       const dateStr = new Date(item.t).toLocaleString('es-MX', {
@@ -1038,31 +1104,31 @@ export const PatientView: React.FC<PatientViewProps> = ({
                             </span>
                             <div>
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${meta.badgePastel}`}>
+                                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${meta.badgePastel} ${meta.badgeDark}`}>
                                   {item.e}
                                 </span>
-                                <span className="text-[11px] text-[#A39CAE]">·</span>
-                                <span className="text-[11px] text-[#6E6779] tabular-nums font-medium">
+                                <span className="text-[11px] text-[#A39CAE] dark:text-[#64748B]">·</span>
+                                <span className="text-[11px] text-[#6E6779] dark:text-[#94A3B8] tabular-nums font-medium">
                                   Intensidad {item.n}/5
                                 </span>
                                 {item.detonante && (
                                   <>
-                                    <span className="text-[11px] text-[#A39CAE]">·</span>
-                                    <span className="text-[11px] text-[#6E6779]">
+                                    <span className="text-[11px] text-[#A39CAE] dark:text-[#64748B]">·</span>
+                                    <span className="text-[11px] text-[#6E6779] dark:text-[#94A3B8]">
                                       {item.detonante}
                                     </span>
                                   </>
                                 )}
                               </div>
                               {item.nota && (
-                                <p className="text-xs text-[#4D4857] mt-1 italic">
+                                <p className="text-xs text-[#4D4857] dark:text-[#CBD5E1] mt-1 italic">
                                   "{item.nota}"
                                 </p>
                               )}
                             </div>
                           </div>
 
-                          <time className="text-[11px] text-[#9A94A4] font-mono shrink-0 whitespace-nowrap">
+                          <time className="text-[11px] text-[#9A94A4] dark:text-[#64748B] font-mono shrink-0 whitespace-nowrap">
                             {dateStr}
                           </time>
                         </article>
@@ -1070,7 +1136,7 @@ export const PatientView: React.FC<PatientViewProps> = ({
                     })}
                   </div>
                 ) : (
-                  <div className="py-12 text-center text-xs text-[#8E8799]">
+                  <div className="py-12 text-center text-xs text-[#8E8799] dark:text-[#64748B]">
                     No hay registros con el filtro seleccionado.
                   </div>
                 )}
@@ -1088,16 +1154,16 @@ export const PatientView: React.FC<PatientViewProps> = ({
           role="dialog"
           aria-modal="true"
           aria-labelledby="confirm-delete-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#4A4553]/40 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#050811]/60 backdrop-blur-xs"
         >
-          <div className="bg-white border border-[#EFEAE1] rounded-3xl p-6 max-w-md w-full shadow-xl">
-            <div className="flex items-center gap-3 text-[#B8445E] mb-3">
+          <div className="bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] rounded-3xl p-6 max-w-md w-full shadow-xl">
+            <div className="flex items-center gap-3 text-[#B8445E] dark:text-[#FCA5A5] mb-3">
               <AlertTriangle className="w-6 h-6" aria-hidden="true" />
-              <h3 id="confirm-delete-title" className="text-base font-bold text-[#2D2938]">
+              <h3 id="confirm-delete-title" className="text-base font-bold text-[#2D2938] dark:text-[#F1F5F9]">
                 Confirmar eliminación de historial
               </h3>
             </div>
-            <p className="text-xs text-[#6B6576] leading-relaxed mb-6">
+            <p className="text-xs text-[#6B6576] dark:text-[#94A3B8] leading-relaxed mb-6">
               Esta acción borrará definitivamente tus registros de emociones y sesiones de chat en ejercicio de tus
               derechos ARCO. Esta acción no se puede deshacer.
             </p>
@@ -1105,7 +1171,7 @@ export const PatientView: React.FC<PatientViewProps> = ({
               <button
                 type="button"
                 onClick={() => setShowDeleteConfirm(false)}
-                className="px-4 py-2 text-xs font-semibold rounded-xl text-[#6E6779] hover:bg-[#FAF8F5]"
+                className="px-4 py-2 text-xs font-semibold rounded-xl text-[#6E6779] dark:text-[#94A3B8] hover:bg-[#FAF8F5] dark:hover:bg-[#161F36]"
               >
                 Cancelar
               </button>

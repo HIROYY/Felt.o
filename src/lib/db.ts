@@ -18,7 +18,17 @@ import {
 
 export const H = 3600000; // 1 hour in ms
 export const now = () => Date.now();
-export const LOGO_URL = '/assets/aistudio/image_8c0d2048.png';
+
+export const getLogoUrl = () => {
+  if (typeof window !== 'undefined') {
+    const path = window.location.pathname;
+    if (path.includes('/Felt.o')) {
+      return '/Felt.o/assets/aistudio/image_8c0d2048.png';
+    }
+  }
+  return './assets/aistudio/image_8c0d2048.png';
+};
+export const LOGO_URL = getLogoUrl();
 
 export const EMO_DATA: Record<
   EmotionType,
@@ -30,6 +40,10 @@ export const EMO_DATA: Record<
     borderPastel: string;
     textPastel: string;
     badgePastel: string;
+    bgDark: string;
+    borderDark: string;
+    textDark: string;
+    badgeDark: string;
     barColor: string;
     mensaje: string;
     ejercicio: string;
@@ -44,6 +58,10 @@ export const EMO_DATA: Record<
     borderPastel: 'border-[#FDEEBA]',
     textPastel: 'text-[#9A7314]',
     badgePastel: 'bg-[#FEF8DD] text-[#8C6910]',
+    bgDark: 'dark:bg-[#241F12]',
+    borderDark: 'dark:border-[#4A3D18]',
+    textDark: 'dark:text-[#FDE68A]',
+    badgeDark: 'dark:bg-[#362D15] dark:text-[#FDE68A]',
     barColor: '#F0C95C',
     descripcion: 'Sensación de plenitud, satisfacción y energía positiva.',
     mensaje: '¡Qué lindo que sientas esto! Guardar y saborear momentos luminosos nutre tu bienestar.',
@@ -57,6 +75,10 @@ export const EMO_DATA: Record<
     borderPastel: 'border-[#D4F2DC]',
     textPastel: 'text-[#327347]',
     badgePastel: 'bg-[#E3F6E8] text-[#29633B]',
+    bgDark: 'dark:bg-[#112419]',
+    borderDark: 'dark:border-[#1E4530]',
+    textDark: 'dark:text-[#A7F3D0]',
+    badgeDark: 'dark:bg-[#183625] dark:text-[#A7F3D0]',
     barColor: '#78CE93',
     descripcion: 'Paz mental, equilibrio emocional y sosiego interior.',
     mensaje: 'La serenidad es un remanso suave para renovar fuerzas y estar contigo.',
@@ -70,6 +92,10 @@ export const EMO_DATA: Record<
     borderPastel: 'border-[#DBE6F8]',
     textPastel: 'text-[#3E6A9E]',
     badgePastel: 'bg-[#E4EEFB] text-[#345B8B]',
+    bgDark: 'dark:bg-[#122238]',
+    borderDark: 'dark:border-[#1C3B62]',
+    textDark: 'dark:text-[#BAE6FD]',
+    badgeDark: 'dark:bg-[#1A3050] dark:text-[#BAE6FD]',
     barColor: '#8BB2E8',
     descripcion: 'Desánimo, sensibilidad o necesidad de cobijo y consuelo.',
     mensaje: 'Está bien sentirse triste a veces. Tus emociones merecen ser escuchadas con ternura.',
@@ -83,6 +109,10 @@ export const EMO_DATA: Record<
     borderPastel: 'border-[#FFE3CC]',
     textPastel: 'text-[#B8642A]',
     badgePastel: 'bg-[#FFEADA] text-[#A65520]',
+    bgDark: 'dark:bg-[#2A1B14]',
+    borderDark: 'dark:border-[#4E2B1E]',
+    textDark: 'dark:text-[#FED7AA]',
+    badgeDark: 'dark:bg-[#3C2317] dark:text-[#FED7AA]',
     barColor: '#F7A76E',
     descripcion: 'Inquietud, mente acelerada o sensación de prisa.',
     mensaje: 'Vamos a respirar juntitos paso a paso. Recuerda que este instante es seguro.',
@@ -96,6 +126,10 @@ export const EMO_DATA: Record<
     borderPastel: 'border-[#E5D7FE]',
     textPastel: 'text-[#684EB2]',
     badgePastel: 'bg-[#EAE1FD] text-[#583E9E]',
+    bgDark: 'dark:bg-[#211738]',
+    borderDark: 'dark:border-[#412E6C]',
+    textDark: 'dark:text-[#DDD6FE]',
+    badgeDark: 'dark:bg-[#2F2150] dark:text-[#DDD6FE]',
     barColor: '#A892E8',
     descripcion: 'Alerta ante la incertidumbre o sensación de desprotección.',
     mensaje: 'El miedo nos pide cariño y seguridad. Respira despacio; no estás solo.',
@@ -109,6 +143,10 @@ export const EMO_DATA: Record<
     borderPastel: 'border-[#FFD7DF]',
     textPastel: 'text-[#B8445E]',
     badgePastel: 'bg-[#FFE2E8] text-[#A3364E]',
+    bgDark: 'dark:bg-[#2A131C]',
+    borderDark: 'dark:border-[#522030]',
+    textDark: 'dark:text-[#FECDD3]',
+    badgeDark: 'dark:bg-[#3D1A27] dark:text-[#FECDD3]',
     barColor: '#F08B9F',
     descripcion: 'Inconformidad o frustración que necesita canalizarse con amabilidad.',
     mensaje: 'Tu frustración tiene una razón válida. Permítete soltar la tensión sin juzgarte.',
