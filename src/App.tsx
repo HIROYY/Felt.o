@@ -10,15 +10,11 @@ import { Header } from './components/Header';
 import { PatientView } from './components/PatientView';
 import { PsychologistView } from './components/PsychologistView';
 import { AuthModal } from './components/AuthModal';
-import { TestPlanView } from './components/TestPlanView';
 import { motion } from 'motion/react';
 import {
   UserCircle2,
   Stethoscope,
-  Sparkles,
-  ArrowRight,
-  LifeBuoy,
-  Heart
+  ArrowRight
 } from 'lucide-react';
 
 export default function App() {
@@ -54,18 +50,6 @@ export default function App() {
     setIsDarkMode(prev => !prev);
   };
 
-  // Sync hash with test suite if opened
-  useEffect(() => {
-    const handleHash = () => {
-      if (window.location.hash === '#pruebas') {
-        setCurrentTab('pruebas');
-      }
-    };
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
-
   const handleLoginSuccess = (user: User) => {
     setCurrentUser(user);
     setShowAuthModal(false);
@@ -86,6 +70,53 @@ export default function App() {
     setDb({ ...loadDB() });
   };
 
+  // Real-time synchronization across browser tabs and windows
+  // Ensures psychologists receive updates instantly when patients submit alerts or diary entries
+  useEffect(() => {
+    const handleSync = () => {
+      setDb({ ...loadDB() });
+    };
+
+    // Listen to localStorage changes in other tabs
+    window.addEventListener('storage', handleSync);
+    // Listen to custom event in the same tab
+    window.addEventListener('felto:db-updated', handleSync);
+    // Sync on window focus or tab activation
+    window.addEventListener('focus', handleSync);
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        handleSync();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    // Fast background polling check (every 2.5s) to guarantee data is never stale
+    const interval = setInterval(() => {
+      const fresh = loadDB();
+      setDb(prev => {
+        const prevCount = prev.reportesClinicos?.length || 0;
+        const freshCount = fresh.reportesClinicos?.length || 0;
+        const prevEmoCount = prev.emo?.length || 0;
+        const freshEmoCount = fresh.emo?.length || 0;
+        const prevFirstRepId = prev.reportesClinicos?.[0]?.id;
+        const freshFirstRepId = fresh.reportesClinicos?.[0]?.id;
+
+        if (prevCount !== freshCount || prevEmoCount !== freshEmoCount || prevFirstRepId !== freshFirstRepId) {
+          return { ...fresh };
+        }
+        return prev;
+      });
+    }, 2500);
+
+    return () => {
+      window.removeEventListener('storage', handleSync);
+      window.removeEventListener('felto:db-updated', handleSync);
+      window.removeEventListener('focus', handleSync);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      clearInterval(interval);
+    };
+  }, []);
+
   const unattendedAlertsCount = currentUser?.rol === 'Psicólogo'
     ? (db.reportesClinicos || []).filter(r => r.psicologoId === currentUser.id && !r.atendido && r.nivelGravedad === 'Alta').length
     : 0;
@@ -97,14 +128,7 @@ export default function App() {
       <Header
         currentUser={currentUser}
         currentTab={currentTab}
-        onTabChange={tab => {
-          setCurrentTab(tab);
-          if (tab === 'pruebas') {
-            window.location.hash = 'pruebas';
-          } else if (window.location.hash === '#pruebas') {
-            window.location.hash = '';
-          }
-        }}
+        onTabChange={setCurrentTab}
         onLogout={handleLogout}
         onOpenAuth={() => handleOpenAuth('Paciente')}
         unattendedAlertsCount={unattendedAlertsCount}
@@ -114,14 +138,7 @@ export default function App() {
 
       {/* Main Content Area */}
       <div className="flex-1">
-        {currentTab === 'pruebas' ? (
-          <TestPlanView
-            onBack={() => {
-              setCurrentTab('inicio');
-              window.location.hash = '';
-            }}
-          />
-        ) : currentUser?.rol === 'Psicólogo' ? (
+        {currentUser?.rol === 'Psicólogo' ? (
           <PsychologistView
             user={currentUser}
             db={db}
@@ -249,75 +266,6 @@ export default function App() {
                 </button>
               </motion.div>
             </motion.div>
-
-            {/* Evidence & Technical Rigor Section */}
-            <div className="border-t border-[#EFEAE1] dark:border-[#1E293B] pt-12">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                <motion.div
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  className="p-6 rounded-3xl bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] shadow-xs"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-[#FFF4EB] dark:bg-[#2A1B14] border border-[#FFE3CC] dark:border-[#4E2B1E] flex items-center justify-center mb-3.5 text-[#D97D45] dark:text-[#FED7AA]">
-                    <Sparkles className="w-4 h-4" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-sm font-bold text-[#2D2938] dark:text-[#F1F5F9]">
-                    Modo Claro &amp; Nocturno Relajante
-                  </h3>
-                  <p className="text-xs text-[#6E6779] dark:text-[#94A3B8] mt-1.5 leading-relaxed">
-                    Diseñado con tonos pasteles suaves para el día y azul medianoche con lavanda profunda para la noche, cuidando tus ojos con alto contraste y calma visual.
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                  className="p-6 rounded-3xl bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] shadow-xs"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-[#F0F5FD] dark:bg-[#122238] border border-[#DBE6F8] dark:border-[#1C3B62] flex items-center justify-center mb-3.5 text-[#5C8FD4] dark:text-[#BAE6FD]">
-                    <Heart className="w-4 h-4" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-sm font-bold text-[#2D2938] dark:text-[#F1F5F9]">
-                    Chat Empático y Triage Inmediato
-                  </h3>
-                  <p className="text-xs text-[#6E6779] dark:text-[#94A3B8] mt-1.5 leading-relaxed">
-                    Conversaciones empáticas con respuesta en 0ms y contención inmediata en casos de riesgo grave (gravedad 4-5) con notificación nativa a psicólogos.
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
-                  className="p-6 rounded-3xl bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] shadow-xs"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-[#EDF9F0] dark:bg-[#122A1C] border border-[#D4F2DC] dark:border-[#1E432E] flex items-center justify-center mb-3.5 text-[#4E9B66] dark:text-[#86EFAC]">
-                    <LifeBuoy className="w-4 h-4" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-sm font-bold text-[#2D2938] dark:text-[#F1F5F9]">
-                    Plan de Pruebas Unitarias
-                  </h3>
-                  <p className="text-xs text-[#6E6779] dark:text-[#94A3B8] mt-1.5 leading-relaxed">
-                    Casos de prueba automatizados (PU01 a PU06) ejecutables en vivo para verificar la seguridad técnica y clínica del sistema.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCurrentTab('pruebas');
-                      window.location.hash = 'pruebas';
-                    }}
-                    className="mt-3 text-xs font-bold text-[#8C71D6] dark:text-[#C4B5FD] hover:underline inline-flex items-center gap-1"
-                  >
-                    <span>Ver resultados de pruebas</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </motion.div>
-
-              </div>
-            </div>
 
           </main>
         )}

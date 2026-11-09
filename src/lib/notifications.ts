@@ -125,22 +125,49 @@ try {
 }
 
 export function broadcastCriticalAlert(report: ClinicalReport) {
-  if (channel && report.nivelGravedad === 'Alta') {
+  if (channel) {
     try {
       channel.postMessage({
         type: 'FELTO_CRITICAL_REPORT',
-        report
+        report,
+        timestamp: Date.now()
       });
     } catch (err) {
       console.warn('Error broadcasting alert:', err);
     }
   }
 
-  // Also dispatch a window event for same-page components
+  // Also dispatch window custom event for same-page components
   if (typeof window !== 'undefined') {
     window.dispatchEvent(
       new CustomEvent('felto:critical-report', {
         detail: report
+      })
+    );
+    window.dispatchEvent(
+      new CustomEvent('felto:db-updated', {
+        detail: { report, timestamp: Date.now() }
+      })
+    );
+  }
+}
+
+export function broadcastDBSync() {
+  if (channel) {
+    try {
+      channel.postMessage({
+        type: 'FELTO_DB_SYNC',
+        timestamp: Date.now()
+      });
+    } catch {
+      // ignore
+    }
+  }
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent('felto:db-updated', {
+        detail: { timestamp: Date.now() }
       })
     );
   }
@@ -149,7 +176,7 @@ export function broadcastCriticalAlert(report: ClinicalReport) {
 export function subscribeToCriticalAlerts(callback: (report: ClinicalReport) => void): () => void {
   const handleWindowCustomEvent = (e: Event) => {
     const custom = e as CustomEvent<ClinicalReport>;
-    if (custom.detail && custom.detail.nivelGravedad === 'Alta') {
+    if (custom.detail) {
       callback(custom.detail);
     }
   };
@@ -177,3 +204,4 @@ export function subscribeToCriticalAlerts(callback: (report: ClinicalReport) => 
     }
   };
 }
+

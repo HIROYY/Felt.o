@@ -18,6 +18,7 @@ import {
   obtenerReportesPaciente
 } from '../lib/db';
 import { broadcastCriticalAlert } from '../lib/notifications';
+import { evaluarCrisisMuerte } from '../lib/triageAutomaton';
 import { BreathingExercise } from './BreathingExercise';
 import {
   Calendar,
@@ -122,8 +123,24 @@ export const PatientView: React.FC<PatientViewProps> = ({
 
   // Client-side fallback for GitHub Pages or static deployments where server.ts is unavailable
   const fallbackClientChat = (text: string, userName: string) => {
+    // 1. Evaluar primero con el autómata de crisis expandido
+    const crisisEval = evaluarCrisisMuerte(text);
+    if (crisisEval.isCritical) {
+      return {
+        reply: crisisEval.immediateReply || `Por favor, detente un segundo y escúchame con todo mi corazón 🐾. Tu vida tiene un valor inmenso y no estás solo/a. Línea de la Vida 24/7: 800 911 2000 o Emergencias: 911.`,
+        triage: {
+          nivelGravedad: crisisEval.nivelGravedad,
+          puntuacionRiesgo: crisisEval.score,
+          emocionDetectada: 'Triste' as EmotionType,
+          resumenClinico: crisisEval.resumenClinico,
+          senalesDetectadas: crisisEval.senalesDetectadas,
+          recomendacion: crisisEval.recomendacion
+        }
+      };
+    }
+
     const lower = text.toLowerCase();
-    const isMediumRisk = /(ansiedad|p[aá]nico|desesperad|abrumad|no puedo respirar|llorar|miedo|soledad|angustia|angustiado|tristeza|depresi[oó]n)/i.test(lower);
+    const isMediumRisk = crisisEval.nivelGravedad === 'Media' || /(ansiedad|p[aá]nico|desesperad|abrumad|no puedo respirar|llorar|miedo|soledad|angustia|angustiado|tristeza|depresi[oó]n)/i.test(lower);
     const isPositive = /(feliz|bien|content|alegr|agradecid|tranquil|calma|gracias|paz)/i.test(lower);
 
     let reply = '';
@@ -188,22 +205,22 @@ export const PatientView: React.FC<PatientViewProps> = ({
     setChatMessages(updatedMessages);
     setInputChatText('');
 
-    // ZERO-LATENCY CRISIS FAST-PATH (Gravedad 4 y superior: ideación suicida, autolesiones o expresiones límite)
-    // Responde instantáneamente en 0ms sin demora de red ni espera al modelo de IA
-    const HIGH_CRISIS_REGEX = /(me quiero morir|me quiero suicidar|me quiero eliminar|no quiero vivir|acabar con mi vida|quitarme la vida|deseo morir|quiero morir|quiero desaparecer|hacerme da[ñn]o|matarme|cortarme|no vale la pena vivir|suicidio|no puedo m[aá]s con mi vida|terminar con todo|ya no aguanto m[aá]s|me quiero quitar la vida|no quiero existir)/i;
+    // ZERO-LATENCY CRISIS FAST-PATH EXPANDIDO CON AUTÓMATA LÉXICO-SEMÁNTICO
+    // Detecta ideación de muerte, suicidio, métodos letales y crisis límite con cientos de variantes ortográficas en 0ms
+    const crisisEval = evaluarCrisisMuerte(textToSend);
 
-    if (HIGH_CRISIS_REGEX.test(textToSend)) {
-      // 1. Generación inmediata del reporte clínico de Gravedad Alta (puntuación 5/5)
+    if (crisisEval.isCritical) {
+      // 1. Generación inmediata del reporte clínico de Gravedad Alta (puntuación 4 o 5)
       const immediateReport = crearReporteGravedad(db, {
         pacienteId: user.id,
         pacienteNombre: `${user.nombre} ${user.apellidos}`.trim(),
         psicologoId: user.psic,
         nivelGravedad: 'Alta',
-        puntuacionRiesgo: 5,
+        puntuacionRiesgo: crisisEval.score,
         emocionDetectada: 'Triste',
-        resumenClinico: `ALERTA CRÍTICA INMEDIATA: Paciente manifiesta ideación de alto riesgo ("${textToSend}"). Protocolo de contención inmediata activado sin latencia.`,
-        senalesDetectadas: ['Ideación de riesgo inminente', 'Crisis de sobrecarga límite', 'Riesgo vital elevado'],
-        recomendacion: 'Protocolo de emergencia: Contactar inmediatamente al paciente y/o a su red de apoyo. Valorar derivación a urgencias psiquiátricas.',
+        resumenClinico: crisisEval.resumenClinico,
+        senalesDetectadas: crisisEval.senalesDetectadas,
+        recomendacion: crisisEval.recomendacion,
         fragmentoMensaje: textToSend
       });
       saveDB(db);
@@ -214,7 +231,7 @@ export const PatientView: React.FC<PatientViewProps> = ({
       broadcastCriticalAlert(immediateReport);
 
       // 3. Respuesta de contención cálida, tierna e instantánea de Felt.O con números de emergencia
-      const immediateReply = `Por favor, detente un segundo y escúchame con todo mi corazón 🐾. Tu vida tiene un valor inmenso y me importas profundamente. Sé que el dolor se siente asfixiante e insoportable en este instante, pero no estás solo/a. He emitido de inmediato una alerta de emergencia al consultorio de tu psicólogo y aquí tienes apoyo directo y gratuito las 24 horas:\n\n• Línea de la Vida (gratuita 24/7): 800 911 2000\n• Emergencias Médicas Inmediatas: 911\n\nQuédate conmigo un momento, respira despacio y permítenos acompañarte. ¿Hay alguien de confianza cerca con quien puedas estar ahora?`;
+      const immediateReply = crisisEval.immediateReply || `Por favor, detente un segundo y escúchame con todo mi corazón 🐾. Tu vida tiene un valor inmenso y me importas profundamente. Sé que el dolor se siente asfixiante e insoportable en este instante, pero no estás solo/a. He emitido de inmediato una alerta de emergencia al consultorio de tu psicólogo y aquí tienes apoyo directo y gratuito las 24 horas:\n\n• Línea de la Vida (gratuita 24/7): 800 911 2000\n• Emergencias Médicas Inmediatas: 911\n\nQuédate conmigo un momento, respira despacio y permítenos acompañarte. ¿Hay alguien de confianza cerca con quien puedas estar ahora?`;
 
       setChatMessages(prev => [
         ...prev,

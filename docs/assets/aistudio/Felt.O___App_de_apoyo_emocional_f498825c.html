@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Felt.O</title>
+<style>
+:root{--ac:#7c5cd6;--acs:#f1ebff;--bg:#f4f1ff;--card:#fff;--tx:#1f2437;--mu:#6b7280;--bd:#e5e7eb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body.psi{--ac:#16a34a;--acs:#e3f8ea;--bg:#eafaf0}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--card:#1e2130;--tx:#eceef6;--mu:#a1a7bb;--bd:#33384d;--bg:#171a28;--acs:#2a2548}:root:not([data-theme="light"]) body.psi{--acs:#173826;--bg:#12231a}}
+:root[data-theme="dark"]{--card:#1e2130;--tx:#eceef6;--mu:#a1a7bb;--bd:#33384d;--bg:#171a28;--acs:#2a2548}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Inter,system-ui,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:14px}
+button{font:inherit;cursor:pointer}
+.c{background:var(--card);border-radius:14px;padding:16px;box-shadow:0 2px 10px #0000000d;border:1px solid var(--bd)}
+.ctr{min-height:100vh;display:grid;place-items:center;padding:16px}
+.logo{width:56px;height:56px;border-radius:50%;background:#fff;display:block;margin:0 auto 6px;box-shadow:0 4px 14px #7c5cd633}
+.btn{border:1px solid var(--bd);background:var(--acs);color:var(--ac);font-weight:700;border-radius:10px;padding:10px 14px}
+.btn.p{background:var(--ac);color:#fff;border-color:var(--ac)}.btn.k{background:#000;color:#fff}
+.btn.pp{background:#f1ebff;color:#7c5cd6}.btn.pg{background:#e3f8ea;color:#16a34a}
+input,select{width:100%;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;margin:3px 0 10px}
+label{font-size:11px;font-weight:600;color:var(--mu)}
+.auth{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+.auth .l{display:grid;place-content:center;text-align:center;padding:24px;background:linear-gradient(135deg,#eef4ff,#efe6ff);color:#4b5563}
+body.psi .auth .l{background:linear-gradient(135deg,#e8fff0,#d9f7e4)}
+.auth .r{padding:32px 6vw;display:flex;flex-direction:column;justify-content:center;background:var(--card)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.app{display:grid;grid-template-columns:200px 1fr;min-height:100vh}
+.sb{background:linear-gradient(var(--acs),var(--bg));padding:16px 10px;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--bd)}
+.sb a{padding:9px 12px;border-radius:10px;cursor:pointer;color:var(--tx)}.sb a.on{background:var(--card);color:var(--ac);font-weight:700;box-shadow:0 1px 4px #0001}
+.mn{padding:22px;max-width:980px}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:15px;margin:0 0 10px}
+.mu{color:var(--mu);font-size:12px}
+.em{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 18px}.em button{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 16px;font-weight:700;box-shadow:0 2px 6px #0001}
+.ch{display:flex;gap:12px;align-items:center;margin-bottom:8px}.sq{width:40px;height:40px;border-radius:10px;flex:none}
+.k4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}.k4 b{font-size:22px;color:var(--ac);display:block}
+.g2{display:grid;grid-template-columns:1.2fr 1fr;gap:12px}
+.pt{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:var(--bg);margin-bottom:8px;cursor:pointer}.pt.al{background:#fee2e2;color:#7f1d1d}
+.bar{display:flex;align-items:center;gap:8px;margin:7px 0;font-size:12px}.bar i{flex:1;height:7px;border-radius:5px;background:var(--bd);overflow:hidden}.bar u{display:block;height:100%}
+.bb{padding:9px 12px;border-radius:12px;margin:6px 0;max-width:85%}.bot{background:var(--acs)}.me{background:var(--ac);color:#fff;margin-left:auto}
+.opts{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid var(--bd);padding:6px;text-align:left;vertical-align:top}th{background:var(--acs)}
+.ok{color:#15803d;font-weight:700}.no{color:#b91c1c;font-weight:700}
+.msg{margin:8px 0;padding:9px 12px;border-radius:10px;font-size:13px}.msg.e{background:#fee2e2;color:#7f1d1d}.msg.s{background:#dcfce7;color:#14532d}.msg.i{background:var(--acs);color:var(--ac)}
+@media(max-width:700px){.auth{grid-template-columns:1fr}.auth .l{padding:18px}.app{grid-template-columns:1fr}.sb{flex-direction:row;overflow-x:auto;padding:8px;align-items:center}.sb a{white-space:nowrap;margin:0!important}.sb .lg{display:none}.k4{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.mn{padding:14px}}
+</style></head><body>
+<div id="v"></div>
+<script>
+const MASC="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4BAMAAABaqCYtAAAAGFBMVEX///////3+/v76+vvw7/zs6vvk4fNTU1N/NckKAAAD6UlEQVR42mWUz2tUVxTHP+fOkB+mydw7KbVVGN9M2oJE44wRoaVKaoPd1D+gC6Eumm4baPF/sJtAd4Wi4FpcSrMK2JWY5MWi7SYzb6IYYzvz7jOik5B5p4s3iSO+3eHD95zz7jnnK7O8+cSiov4gzveRWOuIxcXvQNF23I4wZSd2X5ur7NP2s6fPQOOB5NA7yv98IoApmXXK+9l6DbXDGqkhpl6B5oWC71Oqry0DmNpp37DdRhXRDIoWwrrMOdDW71K1hbhedsS9tNLunnX7tW9MNXyQrxFn3cpYa/A42r57a2R46NCnd4Y6vn3Idnpw8+G3unhr5Xn5/vLIcPHj3efK8JEetK1vBq+NVIYtxcqfyyfGb58a9FJ0w51cBXm9MrN4dLDdiONkYLxy5/Ozaw2Gdz6iY0Bb3+1sd30EsNFdPbGQDwJ8A8SAfWh/7YZ1gDSN0gfH/UlL2vVYg8RGg6hvcNs3Bl4AERixBLu2j6ElicA1IF+gNWO0j6VpyvmNGAWDQrtfSGR9YKHgMaJY/Fs0i8Y8BuDBWOUtGlribGQx2KR+WjQsRQY5RmqAoKn5wJDiS8tztFaAtHrMWnq9Rxi8WfpgzsnTnwGzFoUrRbEABvKQ5MSpFwFKX++EF69xdYtIUAys7y5wD21hKhaLfP8DS21nfbYmj3Pp3VPd62B9Yy8XBewRuV5mFAkYr041Q1mM/G1Y6P2SASgJ+LVXP80zAcCP5g1M3/OX1mw1IhepG72ys5RvViDtKXM3Bi8vM0Wr6rqP7PYOl23vHCzGH/eH537jPjAwr9drS+cSCJ6Qx0BBrs+7q6CJhcUqqzMAQm5y8B/d3Dz58rCADKH37j3dOvH+0U7Tjn+YRxTYHtxdmB4PdGU5V4qC7fAzFEseZ1IgPDe9mgLTcUpUDr/wbHxCniRoqAETVhPFxkAAuY3AWAyMBaQohN165AHqkVIuChgoAgoEuYCm6w1zPTEZjLLGo/UiJ5c9oCJzo2Uw4AJXFJSpuaT86OqMqZjqDO5i9rZJGbS2V33lotErpJZaGhBL7+HLFNIqiFZf2a0HuNbflt24AHnQF8c8pK3N3fiJ3uzCwHz3r8nH1pObBLFbZmOyc2Gkc2Ho9aXpM1/yy+yQ9NZEi9bHcgamYRZg66xte8B4QMqNI6u0Vvn3NhrHf9wUbWYO5kAK9zdGIzkVmqkQmCi8PC8ekFmxIOmKWPBjiYNG4CeccgBxrdXsdtQXC8lELQt6e+bHa2mcmdhYs1JD+y1V4/EzxRUAHn9Vzpxc5cBvfVGcV8EV92/ZuwOo3jliBxxYfJxHvWbFYrGuD2U1e1aiFPqBCvwPGjyvn5yIdskAAAAASUVORK5CYII=";
+const EMO={Feliz:["😊","#fde68a"],Triste:["😢","#bfdbfe"],Enojo:["😠","#fecaca"],Miedo:["😨","#ddd6fe"],Ansiedad:["😰","#fed7aa"],Calma:["😌","#bbf7d0"]};
+const POS=["Feliz","Calma"];
+const MSG={Feliz:"Qué bueno que te sientas así. Disfruta este momento y anótalo como algo que te hizo bien.",Triste:"Lamento que estés pasando por esto. Está bien sentirse así; no tienes que cargarlo solo.",Enojo:"Es válido sentir enojo. Respira profundo antes de responder y date un momento.",Miedo:"Lo que sientes es comprensible. Intenta nombrar qué te preocupa y respirar despacio.",Ansiedad:"Vamos paso a paso. Prueba inhalar 4 segundos, sostener 4 y exhalar 6.",Calma:"Excelente. Aprovecha esta tranquilidad para descansar o hacer algo que disfrutes."};
+const REC={Feliz:"Mensaje de apoyo: escribe tres cosas buenas de hoy.",Triste:"Ejercicio de escritura emocional: describe qué te hace falta hoy.",Enojo:"Ejercicio de relajación: tensa y suelta tus hombros 5 veces.",Miedo:"Ejercicio de respiración: inhala 4 s, sostén 4 s, exhala 6 s.",Ansiedad:"Ejercicio de respiración: 5 ciclos de respiración lenta.",Calma:"Mensaje de apoyo: mantén tu rutina de descanso."};
+// ---------- datos
+const L=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const hash=s=>{let x=5381;for(const c of s)x=(x*33^c.charCodeAt(0))>>>0;return"h$"+x.toString(36)};
+const H=3600000,now=()=>Date.now();
+function seed(){const t=now(),u=(id,rol,n,a,e,p,x)=>({id,rol,nombre:n,apellidos:a,email:e,pass:hash(p),...x});
+return{users:[u(1,"Psicólogo","Laura","Méndez Ruiz","psic@felt.o","Psico#123",{codigo:"PSIC-5678",cedula:"12345678",esp:"Psicología clínica"}),
+u(2,"Paciente","Estrella","Gomez Rebolledo","estrella@correo.com","Segura#123",{psic:1}),u(3,"Paciente","Yamelin","Perez Barrera","yamelin@correo.com","Segura#123",{psic:1}),u(4,"Paciente","Veida","Zuñiga Guerrero","veida@correo.com","Segura#123",{psic:1})],
+emo:[{u:2,e:"Feliz",n:4,t:t-2*H,nota:"Buen día"},{u:2,e:"Feliz",n:3,t:t-30*H},{u:2,e:"Calma",n:3,t:t-54*H},{u:3,e:"Miedo",n:5,t:t-20*H,nota:"Examen"},{u:3,e:"Triste",n:4,t:t-50*H},{u:4,e:"Triste",n:2,t:t-60*H},{u:4,e:"Enojo",n:2,t:t-80*H},{u:4,e:"Feliz",n:3,t:t-100*H}],chats:[]}}
+let DB=L("felto-db",null);if(!DB||!DB.users)DB=seed();
+const save=()=>{try{localStorage.setItem("felto-db",JSON.stringify(DB))}catch(e){}};
+// ---------- lógica (probada en el plan de pruebas)
+const OK=(d,x)=>({ok:true,...x}),ER=m=>({ok:false,msg:m});
+function registrar(db,d){if(!d.email||!/^\S+@\S+\.\S+$/.test(d.email))return ER("Correo no válido");if(db.users.some(u=>u.email===d.email))return ER("El correo ya está registrado");
+if(!d.pass||d.pass.length<8||!/\d/.test(d.pass)||!/[A-Z]/.test(d.pass))return ER("La contraseña debe tener 8 caracteres, una mayúscula y un número");
+const u={id:Math.max(0,...db.users.map(x=>x.id))+1,rol:d.rol||"Paciente",nombre:d.nombre||"Usuario",apellidos:d.apellidos||"",email:d.email,pass:hash(d.pass)};
+if(u.rol==="Psicólogo"){u.codigo="PSIC-"+(1000+u.id*7);u.cedula=d.cedula;u.esp=d.esp}else if(d.codigo){const p=db.users.find(x=>x.codigo===d.codigo);if(!p)return ER("Código de vinculación no válido");u.psic=p.id}
+db.users.push(u);return OK(0,{u})}
+function login(db,email,pass){const u=db.users.find(x=>x.email===email);return u&&u.pass===hash(pass)?OK(0,{u}):ER("Contraseña incorrecta")}
+function regEmo(db,uid,e,n,nota,t){if(!EMO[e])return ER("Emoción no válida");const r={u:uid,e,n:n||3,t:t||now(),nota};db.emo.push(r);return OK(0,{r})}
+function historial(db,uid){return db.emo.filter(x=>x.u===uid).sort((a,b)=>b.t-a.t)}
+function recordatorio(db,uid,t){const h=historial(db,uid);return(!h.length||(t||now())-h[0].t>=24*H)}
+function reporte(db,psi,pac,mes){const p=db.users.find(x=>x.id===pac);if(!p||p.psic!==psi)return ER("Acceso no autorizado");const r=historial(db,pac).filter(x=>new Date(x.t).getMonth()===mes);const c={};r.forEach(x=>c[x.e]=(c[x.e]||0)+1);return OK(0,{p,r,c,n:r.length})}
+// ---------- UI
+const $=s=>document.querySelector(s),V=$("#v");let ses=null,pg="inicio",perfil="Paciente",modo="login",chat=null,flash="";
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=t=>new Date(t).toLocaleString("es-MX",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+const ago=t=>{const h=Math.round((now()-t)/H);return h<1?"hoy":h<24?"hoy":h<48?"ayer":"hace "+Math.floor(h/24)+" días"};
+const go=(p)=>{pg=p;chat=null;flash="";draw()};
+const setPerfil=p=>{perfil=p;modo="login";flash="";draw()};
+function draw(){document.body.className=(ses?ses.rol:perfil)==="Psicólogo"?"psi":"";
+if(location.hash==="#pruebas")return pruebas();
+if(!ses&&!perfil)return sel();ses?app():auth()}
+function sel(){V.innerHTML=`<div class="ctr"><div class="c" style="text-align:center;width:min(360px,100%);padding:28px"><img class="logo" src="${MASC}" alt="Felt.O"><h1>Felt.O</h1><p style="font-weight:600;margin:6px 0">Hola, Bienvenid@ a Felt.O</p><p class="mu">¿Cómo te gustaría ingresar?</p><div class="row"><button class="btn pp" onclick="setPerfil('Paciente')">Paciente</button><button class="btn pg" onclick="setPerfil('Psicólogo')">Psicólogo</button></div><p class="mu" style="margin-top:18px"><a href="#pruebas" onclick="setTimeout(draw)">Ver plan de pruebas</a></p></div></div>`}
+function auth(){const P=perfil==="Psicólogo",reg=modo==="reg";
+V.innerHTML=`<div class="auth"><div class="l"><img class="logo" style="width:80px;height:80px" src="${MASC}" alt=""><h1 style="font-size:28px">Felt.O</h1><p>${P&&reg?"Únete como profesional y acompaña el bienestar emocional de tus pacientes.":"Un espacio seguro para conectar con tus emociones y tu bienestar mental."}</p><p><span class="btn" style="background:#fff;border-radius:20px;font-size:12px">${P?"Panel profesional":"Tu compañero emocional"}</span></p><p><a href="#" onclick="perfil=null;draw();return false">← Cambiar perfil</a></p></div>
+<div class="r"><h1>${reg?(P?"Registro profesional":"Crear una cuenta"):"Iniciar sesión"}</h1><p class="mu">${reg?"Completa tus datos para "+(P?"solicitar acceso":"comenzar"):"Ingresa tu correo para continuar"}</p>${flash}
+<div id="f">${reg?`<label>Nombre</label><input id="nombre" placeholder="Nombre"><div class="row"><div><label>Apellido paterno</label><input id="pat" placeholder="Paterno"></div><div><label>Apellido materno</label><input id="mat" placeholder="Materno"></div></div><div class="row"><div><label>Fecha de nacimiento</label><input id="nac" type="date"></div><div><label>Género</label><select id="gen"><option>Selecciona…</option><option>Femenino</option><option>Masculino</option><option>Otro</option></select></div></div>`:""}
+<label>Correo electrónico</label><input id="email" type="email" placeholder="email@dominio.com"><label>Contraseña</label><input id="pass" type="password" placeholder="Tu contraseña">
+${reg&&P?`<div class="row"><div><label>Cédula profesional</label><input id="ced"></div><div><label>Especialidad</label><input id="esp"></div></div>`:""}${reg&&!P?`<label>Código de vinculación de tu psicólogo (opcional)</label><input id="cod" placeholder="PSIC-5678">`:""}
+${reg?`<label style="display:flex;gap:8px;align-items:center"><input id="cons" type="checkbox" style="width:auto;margin:0"> Acepto el aviso de privacidad y el tratamiento de mis datos sensibles</label><br>`:""}
+<button class="btn ${reg?"p":"k"}" style="width:100%" onclick="${reg?"doReg()":"doLogin()"}">${reg?"Crear cuenta":"Entrar"}</button></div>
+<hr style="border:0;border-top:1px solid var(--bd);margin:14px 0"><button class="btn" style="width:100%" onclick="modo='${reg?"login":"reg"}';flash='';draw()">${reg?"Ya tengo cuenta — Iniciar sesión":"No tengo cuenta — Registrarme"}</button>
+<p class="mu" style="text-align:center">Al continuar, aceptas nuestros <u>Términos</u> y <u>Política de Privacidad</u>.</p>${reg?"":`<p class="mu" style="text-align:center">Demo: ${P?"psic@felt.o / Psico#123":"estrella@correo.com / Segura#123"}</p>`}</div></div>`}
+const v=i=>($("#"+i)||{}).value||"";
+function doLogin(){const r=login(DB,v("email"),v("pass"));if(!r.ok){flash=`<div class="msg e">${r.msg}</div>`;return auth()}
+if(r.u.rol!==perfil){flash=`<div class="msg e">Esta cuenta es de ${r.u.rol}. Elige el perfil correcto.</div>`;return auth()}ses=r.u;pg="inicio";flash="";draw()}
+function doReg(){if(!$("#cons").checked){flash='<div class="msg e">Debes aceptar el consentimiento para continuar</div>';return auth()}
+const r=registrar(DB,{rol:perfil,nombre:v("nombre"),apellidos:v("pat")+" "+v("mat"),email:v("email"),pass:v("pass"),cedula:v("ced"),esp:v("esp"),codigo:v("cod")});
+if(!r.ok){flash=`<div class="msg e">${r.msg}</div>`;return auth()}save();ses=r.u;pg="inicio";flash="";draw()}
+function menu(items){return`<div class="sb"><div class="lg" style="text-align:center"><img class="logo" src="${MASC}" alt=""><b style="font-size:18px">Felt.O</b><div class="mu">${ses.rol==="Psicólogo"?"Dr/a. Psicólogo":"Hola, "+esc(ses.nombre)} 👋</div></div>${items.map(([k,t])=>`<a class="${pg===k?"on":""}" onclick="go('${k}')">${t}</a>`).join("")}<a style="margin-top:auto" onclick="ses=null;perfil=null;draw()">🚪 Cerrar sesión</a></div>`}
+function bars(c,n){return Object.keys(EMO).filter(k=>c[k]).map(k=>`<div class="bar"><span style="width:70px">${EMO[k][0]} ${k}</span><i><u style="width:${Math.round(c[k]*100/n)}%;background:${EMO[k][1]}"></u></i><b>${Math.round(c[k]*100/n)}%</b></div>`).join("")||'<p class="mu">Sin registros</p>'}
+function app(){const P=ses.rol==="Psicólogo";V.innerHTML=`<div class="app">${P?menu([["inicio","🏠 Inicio"],["pacs","👥 Mis pacientes"],["rep","📊 Reportes"],["perf","📋 Mi perfil"]]):menu([["inicio","🏠 Inicio"],["chat","💬 Nuevo chat"],["perf","📋 Mi perfil"]])}<div class="mn">${P?psi():pac()}</div></div>`}
+function pac(){const h=historial(DB,ses.id);
+if(pg==="chat")return nuevoChat();
+if(pg==="perf"){const c={};h.forEach(x=>c[x.e]=(c[x.e]||0)+1);const ps=DB.users.find(x=>x.id===ses.psic);return`<h1>Mi perfil</h1><div class="g2"><div class="c"><h2>Datos</h2><p>${esc(ses.nombre)} ${esc(ses.apellidos)}<br><span class="mu">${esc(ses.email)}</span></p><p class="mu">Psicólogo vinculado: ${ps?esc(ps.nombre+" "+ps.apellidos)+" ("+ps.codigo+")":"sin vincular"}</p><button class="btn" onclick="if(confirm('¿Eliminar tu historial emocional?')){DB.emo=DB.emo.filter(x=>x.u!==ses.id);DB.chats=DB.chats.filter(x=>x.u!==ses.id);save();go('perf')}">Eliminar mi historial (derechos ARCO)</button></div><div class="c"><h2>Mi progreso emocional</h2>${bars(c,h.length)}<p class="mu">${h.length} registros</p></div></div>`}
+const ch=DB.chats.filter(x=>x.u===ses.id).slice().reverse();
+return`<h1>¿Cómo te sientes hoy?</h1><p class="mu">Puedes registrar varias emociones durante el día</p>${flash}${recordatorio(DB,ses.id)?'<div class="msg i">🔔 Recordatorio: llevas más de 24 horas sin registrar cómo te sientes.</div>':""}<div class="em">${["Feliz","Triste","Enojo","Miedo"].map(e=>`<button onclick="quick('${e}')">${EMO[e][0]} ${e}</button>`).join("")}</div><h2>Chats anteriores</h2>${ch.length?ch.map(x=>`<div class="c ch"><div class="sq" style="background:${EMO[x.e][1]}"></div><div><b>Chat #${x.id}</b><div class="mu">${esc(x.res)}</div></div></div>`).join(""):'<p class="mu">Aún no tienes chats. Inicia uno desde “Nuevo chat”.</p>'}<h2 style="margin-top:14px">Registros recientes</h2>${h.slice(0,4).map(x=>`<div class="mu">${EMO[x.e][0]} ${x.e} · intensidad ${x.n}/5 · ${fmt(x.t)}</div>`).join("")}`}
+function quick(e){regEmo(DB,ses.id,e,3);save();flash=`<div class="msg s"><b>Emoción registrada: ${e}.</b> ${MSG[e]}<br><i>${REC[e]}</i></div>`;draw()}
+const Q=[["¿Cómo describirías tu día?",["Muy bien","Tranquilo","Pesado","Complicado"]],["¿Qué emoción sientes con más fuerza?",Object.keys(EMO)],["¿Qué tan intensa es? (1 a 5)",["1","2","3","4","5"]],["¿Qué lo originó?",["Escuela","Familia","Amigos","Salud","No lo sé"]]];
+function nuevoChat(){if(!chat)chat={i:0,a:[]};let h=`<h1>Nuevo chat</h1><p class="mu">Responde eligiendo una opción</p><div class="c">`;
+Q.forEach((q,i)=>{if(i<=chat.i){h+=`<div class="bb bot">${q[0]}</div>`;if(i<chat.i)h+=`<div class="bb me">${chat.a[i]}</div>`}});
+if(chat.i<Q.length)h+=`<div class="opts">${Q[chat.i][1].map(o=>`<button class="btn" onclick="resp('${o}')">${o}</button>`).join("")}</div>`;
+else{const e=chat.a[1],n=+chat.a[2];h+=`<div class="bb me">${chat.a[3]}</div><div class="bb bot">Detecté que tu emoción principal es <b>${EMO[e][0]} ${e}</b> (intensidad ${n}/5). ${MSG[e]}<br><br><i>${REC[e]}</i></div><p class="mu">¿Te resultó útil este mensaje? <button class="btn" onclick="flash='<div class=&quot;msg s&quot;>¡Gracias por tu opinión!</div>';go('inicio')">👍 Sí</button> <button class="btn" onclick="go('inicio')">👎 No</button></p>`}
+return h+"</div>"}
+function resp(o){chat.a[chat.i]=o;chat.i++;if(chat.i===Q.length){const e=chat.a[1];regEmo(DB,ses.id,e,+chat.a[2],"",now());DB.chats.push({id:DB.chats.filter(x=>x.u===ses.id).length+1,u:ses.id,e,res:"Sentí "+e.toLowerCase()+" · "+chat.a[3]});save()}draw()}
+function psi(){const pts=DB.users.filter(x=>x.psic===ses.id),all=DB.emo.filter(x=>pts.some(p=>p.id===x.u)),c={};all.forEach(x=>c[x.e]=(c[x.e]||0)+1);
+const last=p=>historial(DB,p.id)[0],crit=p=>{const l=last(p);return l&&["Triste","Miedo"].includes(l.e)&&l.n>=4};
+const row=p=>{const l=last(p);return`<div class="pt ${crit(p)?"al":""}" onclick="verPac(${p.id})"><div><b>${esc(p.nombre)} ${esc(p.apellidos)}</b><div class="mu">Última sesión: ${l?ago(l.t):"sin registros"}</div></div><span style="font-size:22px">${l?EMO[l.e][0]:"—"}</span></div>`};
+if(pg==="pacs")return`<h1>Mis pacientes</h1>${pts.map(row).join("")}`;
+if(pg==="rep"){return`<h1>Reportes</h1><div class="c"><label>Paciente</label><select id="sp" onchange="rp()">${pts.map(p=>`<option value="${p.id}">${esc(p.nombre)} ${esc(p.apellidos)}</option>`).join("")}</select><button class="btn p" onclick="rp()">Generar reporte mensual</button><div id="rr"></div></div>`}
+if(pg==="perf")return`<h1>Mi perfil</h1><div class="c"><p><b>${esc(ses.nombre)} ${esc(ses.apellidos)}</b><br><span class="mu">${esc(ses.email)} · Cédula ${esc(ses.cedula||"—")} · ${esc(ses.esp||"")}</span></p><p>Tu código de vinculación: <b style="font-size:20px;color:var(--ac)">${ses.codigo}</b></p><p class="mu">Compártelo con tus pacientes para que se registren asociados a tu consulta.</p></div>`;
+const d=new Date().toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long",year:"numeric"}),pos=all.length?Math.round(all.filter(x=>POS.includes(x.e)).length*100/all.length):0;
+return`<h1>Bienvenido/a, Psicólogo 👋</h1><p class="mu">Aquí tienes el resumen de hoy · ${d}</p><div class="k4"><div class="c"><b>${pts.length}</b><span class="mu">Pacientes activos</span></div><div class="c"><b>7</b><span class="mu">Sesiones esta semana</span></div><div class="c"><b>${pts.filter(crit).length}</b><span class="mu">Alertas críticas</span></div><div class="c"><b>${pos}%</b><span class="mu">Emociones positivas</span></div></div><div class="g2"><div class="c"><h2>👥 Mis pacientes</h2>${pts.map(row).join("")}</div><div class="c"><h2>📊 Resumen emocional</h2><p class="mu">Emociones registradas esta semana</p>${bars(c,all.length)}</div></div>`}
+function verPac(id){pg="rep";draw();$("#sp").value=id;rp()}
+function rp(){const r=reporte(DB,ses.id,+$("#sp").value,new Date().getMonth());$("#rr").innerHTML=r.ok?`<h2 style="margin-top:14px">Reporte mensual — ${esc(r.p.nombre)} ${esc(r.p.apellidos)}</h2><p class="mu">${r.n} registros emocionales</p>${bars(r.c,r.n)}<table><tr><th>Fecha</th><th>Emoción</th><th>Intensidad</th></tr>${r.r.map(x=>`<tr><td>${fmt(x.t)}</td><td>${EMO[x.e][0]} ${x.e}</td><td>${x.n}/5</td></tr>`).join("")}</table>`:`<div class="msg e">${r.msg}</div>`}
+// ---------- plan de pruebas
+function pruebas(){document.body.className="";const T=()=>{const db=JSON.parse(JSON.stringify(seed())),t=now(),R=[];
+const add=(id,mod,desc,ent,esp,fn)=>{let o,s;try{const x=fn();o=x[0];s=x[1]}catch(e){o="Error: "+e.message;s=false}R.push([id,mod,desc,ent,esp,o,s])};
+add("PU01","Autenticación","Registrar un nuevo usuario con datos válidos","ana@correo.com; Segura#123","Cuenta creada y usuario redirigido a la pantalla principal",()=>{const r=registrar(db,{email:"ana@correo.com",pass:"Segura#123"});return[r.ok&&login(db,"ana@correo.com","Segura#123").ok?"Cuenta creada correctamente":r.msg,r.ok]});
+add("PU02","Autenticación","Rechazar inicio de sesión con contraseña incorrecta","Correo válido; contraseña incorrecta","Mensaje de error “Contraseña incorrecta”",()=>{const r=login(db,"ana@correo.com","Mala#999");return[r.ok?"Sesión iniciada":"Mensaje: “"+r.msg+"”",!r.ok&&r.msg==="Contraseña incorrecta"]});
+add("PU03","Registro de emociones","Registrar la emoción seleccionada por el usuario","Selección: “Triste”","Emoción registrada: triste",()=>{const r=regEmo(db,2,"Triste",3);return["Emoción registrada: "+r.r.e.toLowerCase(),r.ok&&r.r.e==="Triste"]});
+add("PU04","Registro de progreso","Guardar el historial emocional del día","Emoción: ansiedad; fecha actual","Registro almacenado en la base de datos",()=>{const n=db.emo.length;regEmo(db,2,"Ansiedad",3,"",now()+5);return[db.emo.length===n+1?"Registro almacenado correctamente":"No se guardó",historial(db,2)[0].e==="Ansiedad"]});
+add("PU05","Notificaciones","Enviar recordatorio por inactividad","Usuario inactivo por 24 horas","Notificación enviada al usuario",()=>{const x=recordatorio(db,2,t+25*H);return[x?"Notificación enviada correctamente":"Sin notificación",x&&!recordatorio(db,2,t)]});
+add("PU06","Reportes (psicólogo)","Generar reporte mensual de un usuario autorizado","ID de usuario; rango de fechas del mes","Reporte con historial emocional generado",()=>{const r=reporte(db,1,2,new Date().getMonth()),x=reporte(db,3,2,0);return[r.ok&&r.n>0?"Reporte generado correctamente ("+r.n+" registros); acceso ajeno: "+x.msg:r.msg,r.ok&&r.n>0&&!x.ok]});return R};
+const R=T(),ap=R.filter(x=>x[6]).length;
+V.innerHTML=`<div class="mn" style="margin:auto"><p><a href="#" onclick="location.hash='';draw();return false">← Volver a Felt.O</a></p><h1>Plan de pruebas — Pruebas unitarias</h1><p class="mu">Cada prueba ejecuta la lógica real de la aplicación sobre una copia de datos de prueba.</p><div class="msg ${ap===R.length?"s":"e"}"><b>${ap} de ${R.length} pruebas aprobadas</b></div><div style="overflow-x:auto"><table><tr><th>ID</th><th>Módulo</th><th>Descripción</th><th>Datos de entrada</th><th>Resultado esperado</th><th>Resultado obtenido</th><th>Estatus</th></tr>${R.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td class="${r[6]?"ok":"no"}">${r[6]?"Aprobado":"Fallido"}</td></tr>`).join("")}</table></div><p><button class="btn p" onclick="pruebas()">Ejecutar de nuevo</button></p></div>`}
+addEventListener("hashchange",draw);perfil=null;draw();
+</script></body></html>

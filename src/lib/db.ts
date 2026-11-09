@@ -21,9 +21,10 @@ export const now = () => Date.now();
 
 export const getLogoUrl = () => {
   if (typeof window !== 'undefined') {
-    const path = window.location.pathname;
-    if (path.includes('/Felt.o')) {
-      return '/Felt.o/assets/aistudio/image_8c0d2048.png';
+    const pathname = window.location.pathname;
+    const match = pathname.match(/\/([^\/]*felt\.?o[^\/]*)/i);
+    if (match) {
+      return `/${match[1]}/assets/aistudio/image_8c0d2048.png`;
     }
   }
   return './assets/aistudio/image_8c0d2048.png';
@@ -325,6 +326,9 @@ export function loadDB(): Database {
 export function saveDB(db: Database) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('felto:db-updated', { detail: { timestamp: Date.now() } }));
+    }
   } catch (err) {
     console.error('Error saving database to localStorage:', err);
   }

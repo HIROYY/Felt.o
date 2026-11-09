@@ -8,6 +8,7 @@ import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { evaluarCrisisMuerte } from './src/lib/triageAutomaton.ts';
 
 dotenv.config();
 
@@ -56,6 +57,21 @@ DEBES RESPONDER EXCLUSIVAMENTE UN OBJETO JSON con esta estructura exacta:
 `;
 
 function fallbackClassifier(lastUserMsg: string, userName?: string) {
+  const crisisEval = evaluarCrisisMuerte(lastUserMsg);
+  if (crisisEval.isCritical) {
+    return {
+      reply: crisisEval.immediateReply || `Por favor, detente un segundo y escúchame con todo mi corazón 🐾. Tu vida tiene un valor inmenso y me importas profundamente. He emitido de inmediato una alerta de emergencia al consultorio de tu psicólogo y aquí tienes apoyo directo y gratuito las 24 horas: Línea de la Vida 800 911 2000 o Emergencias 911.`,
+      triage: {
+        nivelGravedad: crisisEval.nivelGravedad,
+        puntuacionRiesgo: crisisEval.score,
+        emocionDetectada: 'Triste' as const,
+        resumenClinico: crisisEval.resumenClinico,
+        senalesDetectadas: crisisEval.senalesDetectadas,
+        recomendacion: crisisEval.recomendacion
+      }
+    };
+  }
+
   const lower = lastUserMsg.toLowerCase();
 
   const criticalKeywords = [
@@ -144,20 +160,20 @@ app.post('/api/chat', async (req, res) => {
 
     const lastUserMsg = messages[messages.length - 1]?.text || '';
 
-    // ZERO-LATENCY FAST-PATH: Situaciones críticas y de riesgo vital (ej. "me quiero morir", "me quiero suicidar", etc.)
+    // ZERO-LATENCY FAST-PATH: Situaciones críticas y de riesgo vital con autómata expandido
     // Responde instantáneamente en < 1ms sin esperar latencia de red para contención inmediata
-    const HIGH_CRISIS_REGEX = /(me quiero morir|me quiero suicidar|me quiero eliminar|no quiero vivir|acabar con mi vida|quitarme la vida|deseo morir|quiero morir|quiero desaparecer|hacerme da[ñn]o|matarme|cortarme|no vale la pena vivir|suicidio|no puedo m[aá]s con mi vida|terminar con todo|ya no aguanto m[aá]s|me quiero quitar la vida|no quiero existir)/i;
+    const crisisEval = evaluarCrisisMuerte(lastUserMsg);
 
-    if (HIGH_CRISIS_REGEX.test(lastUserMsg)) {
+    if (crisisEval.isCritical) {
       return res.json({
-        reply: `Por favor, detente un segundo y escúchame con todo mi corazón 🐾. Tu vida tiene un valor inmenso y me importas profundamente. Sé que el dolor se siente asfixiante e insoportable en este instante, pero no estás solo/a. He emitido de inmediato una alerta de emergencia al consultorio de tu psicólogo y aquí tienes apoyo directo y gratuito las 24 horas:\n\n• Línea de la Vida (gratuita 24/7): 800 911 2000\n• Emergencias Médicas Inmediatas: 911\n\nQuédate conmigo un momento, respira despacio y permítenos acompañarte. ¿Hay alguien de confianza cerca con quien puedas estar ahora?`,
+        reply: crisisEval.immediateReply || `Por favor, detente un segundo y escúchame con todo mi corazón 🐾. Tu vida tiene un valor inmenso y me importas profundamente. Sé que el dolor se siente asfixiante e insoportable en este instante, pero no estás solo/a. He emitido de inmediato una alerta de emergencia al consultorio de tu psicólogo y aquí tienes apoyo directo y gratuito las 24 horas:\n\n• Línea de la Vida (gratuita 24/7): 800 911 2000\n• Emergencias Médicas Inmediatas: 911\n\nQuédate conmigo un momento, respira despacio y permítenos acompañarte. ¿Hay alguien de confianza cerca con quien puedas estar ahora?`,
         triage: {
-          nivelGravedad: 'Alta',
-          puntuacionRiesgo: 5,
+          nivelGravedad: crisisEval.nivelGravedad,
+          puntuacionRiesgo: crisisEval.score,
           emocionDetectada: 'Triste',
-          resumenClinico: `ALERTA CRÍTICA INMEDIATA: Paciente manifiesta ideación suicida o autolesiva explícita ("${lastUserMsg}"). Respuesta rápida de contención activada.`,
-          senalesDetectadas: ['Ideación suicida / autolesiva explícita', 'Crisis aguda de desbordamiento', 'Riesgo vital elevado'],
-          recomendacion: 'Protocolo de emergencia: Contactar inmediatamente al paciente y/o a su red de apoyo familiar. Valorar derivación a urgencias psiquiátricas.'
+          resumenClinico: crisisEval.resumenClinico,
+          senalesDetectadas: crisisEval.senalesDetectadas,
+          recomendacion: crisisEval.recomendacion
         },
         isFastPath: true
       });

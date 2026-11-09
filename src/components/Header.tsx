@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { LogOut, FileCheck, Sparkles, ShieldAlert, CreditCard, Sun, Moon } from 'lucide-react';
+import { LogOut, Sparkles, ShieldAlert, CreditCard, Sun, Moon } from 'lucide-react';
 import { User } from '../types';
 import { LOGO_URL } from '../lib/db';
 
@@ -190,19 +190,6 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </>
           ) : null}
-
-          <button
-            type="button"
-            onClick={() => onTabChange('pruebas')}
-            className={`transition-colors flex items-center gap-1.5 whitespace-nowrap py-1 ${
-              currentTab === 'pruebas'
-                ? 'text-[#7252C4] dark:text-[#C4B5FD] font-semibold border-b-2 border-[#8C71D6] dark:border-[#A78BFA]'
-                : 'hover:text-[#2D2938] dark:hover:text-[#F1F5F9] text-[#868091] dark:text-[#94A3B8]'
-            }`}
-          >
-            <FileCheck className="w-4 h-4" aria-hidden="true" />
-            <span>Plan de Pruebas</span>
-          </button>
         </nav>
 
         {/* Zone 3: Actions + Theme Switcher */}
@@ -339,13 +326,6 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </>
           )}
-          <button
-            type="button"
-            onClick={() => onTabChange('pruebas')}
-            className={`px-3 py-1.5 rounded-xl whitespace-nowrap ${currentTab === 'pruebas' ? 'bg-[#F3EFFF] dark:bg-[#271F42] text-[#7252C4] dark:text-[#C4B5FD] font-semibold border border-[#E7DCFE] dark:border-[#3F3169]' : 'text-[#868091] dark:text-[#94A3B8]'}`}
-          >
-            Pruebas
-          </button>
         </div>
       )}
     </header>

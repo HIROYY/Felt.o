@@ -51,7 +51,9 @@ import {
   Download,
   Lock,
   Zap,
-  Award
+  Award,
+  RefreshCw,
+  Radio
 } from 'lucide-react';
 
 interface PsychologistViewProps {
@@ -102,22 +104,65 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
   const [roiPatientCount, setRoiPatientCount] = useState<number>(18); // 18 active patients
   const [roiSessionsPerMonth, setRoiSessionsPerMonth] = useState<number>(2); // 2 sessions per patient/month
 
-  // Subscribe to real-time high gravity clinical alerts (cross-tab & in-app)
+  // Live Synchronization & Alert Toast Banner state
+  const [liveAlertBanner, setLiveAlertBanner] = useState<ClinicalReport | null>(null);
+  const [lastSyncTime, setLastSyncTime] = useState<number>(Date.now());
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+
+  // Subscribe to real-time clinical alerts & continuous sync (cross-tab & in-app)
+  // Ensures psychologist dashboard ALWAYS reloads immediately when any patient reports an alert
   useEffect(() => {
+    // 1. Escuchar alertas clínicas en tiempo real
     const unsubscribe = subscribeToCriticalAlerts((critReport) => {
-      // Trigger native desktop notification with audio chime
+      // Disparar sonido y notificación nativa
       sendNativeCriticalNotification(critReport, () => {
         onTabChange('alertas');
         setSelectedReport(critReport);
+        setSeverityFilter('all');
       });
-      // Refresh DB so new report is visible in clinician's list
+
+      // Recargar base de datos inmediatamente para no quedarse con datos antiguos
       onUpdateDB();
+      setLastSyncTime(Date.now());
+      setLiveAlertBanner(critReport);
+
+      // Si el psicólogo está en la pestaña de alertas, enfocar el reporte nuevo de inmediato
+      if (activeTab === 'alertas') {
+        setSelectedReport(critReport);
+        setSeverityFilter('all');
+      }
     });
+
+    // 2. Escuchar evento de actualización global de base de datos
+    const handleDbUpdated = () => {
+      onUpdateDB();
+      setLastSyncTime(Date.now());
+    };
+    window.addEventListener('felto:db-updated', handleDbUpdated);
+    window.addEventListener('storage', handleDbUpdated);
+    window.addEventListener('focus', handleDbUpdated);
+
+    // 3. Polling activo de sincronización en vivo cada 2.5s para garantizar datos frescos
+    const syncInterval = setInterval(() => {
+      onUpdateDB();
+      setLastSyncTime(Date.now());
+    }, 2500);
 
     return () => {
       unsubscribe();
+      window.removeEventListener('felto:db-updated', handleDbUpdated);
+      window.removeEventListener('storage', handleDbUpdated);
+      window.removeEventListener('focus', handleDbUpdated);
+      clearInterval(syncInterval);
     };
-  }, [onTabChange, onUpdateDB]);
+  }, [activeTab, onTabChange, onUpdateDB]);
+
+  const handleManualSync = () => {
+    setIsSyncing(true);
+    onUpdateDB();
+    setLastSyncTime(Date.now());
+    setTimeout(() => setIsSyncing(false), 500);
+  };
 
   const handleRequestPermission = async () => {
     const result = await requestNotificationPermission();
@@ -280,6 +325,55 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      {/* Real-time alert banner whenever a patient alert is triggered */}
+      {liveAlertBanner && (
+        <div className="mb-6 p-4 rounded-3xl bg-[#FFF0F3] dark:bg-[#3D1422] border-2 border-[#FFCCD5] dark:border-[#83263E] text-[#B8445E] dark:text-[#FCA5A5] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg animate-bounce-once">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-[#FFE4E9] dark:bg-[#5C1E32] flex items-center justify-center shrink-0">
+              <span className="text-xl">🚨</span>
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#FFCCD5] dark:bg-[#5C1E32] text-[#8E2840] dark:text-[#FCA5A5] px-2 py-0.5 rounded-full">
+                  Alerta Inmediata en Vivo
+                </span>
+                <span className="text-[11px] text-[#8E2840] dark:text-[#F87171]">
+                  Sincronizado ahora
+                </span>
+              </div>
+              <p className="text-sm font-bold text-[#2D2938] dark:text-[#F1F5F9] mt-0.5">
+                {liveAlertBanner.pacienteNombre} · Gravedad {liveAlertBanner.nivelGravedad} ({liveAlertBanner.puntuacionRiesgo}/5)
+              </p>
+              <p className="text-xs text-[#6B2032] dark:text-[#FCA5A5] line-clamp-1 italic">
+                "{liveAlertBanner.fragmentoMensaje || liveAlertBanner.resumenClinico}"
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+            <button
+              type="button"
+              onClick={() => {
+                onTabChange('alertas');
+                setSelectedReport(liveAlertBanner);
+                setSeverityFilter('all');
+                setLiveAlertBanner(null);
+              }}
+              className="px-4 py-2 text-xs font-bold text-white bg-[#B8445E] hover:bg-[#9E354D] dark:bg-[#E11D48] dark:hover:bg-[#BE123C] rounded-xl shadow-xs transition-transform hover:scale-105"
+            >
+              Ver en Alertas IA
+            </button>
+            <button
+              type="button"
+              onClick={() => setLiveAlertBanner(null)}
+              className="p-2 text-[#8E2840] dark:text-[#FCA5A5] hover:bg-[#FFE0E6] dark:hover:bg-[#4E1929] rounded-xl transition-colors"
+              title="Cerrar aviso"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Clinician Welcome Banner with Puppy Logo */}
       <div className="mb-8 p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#111625] border border-[#EFEAE1] dark:border-[#1E293B] shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 transition-colors">
         <div className="flex items-center gap-4">
@@ -316,6 +410,29 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
         </div>
 
         <div className="flex items-center gap-3 shrink-0 flex-wrap">
+          {/* Real-time synchronization indicator */}
+          <div className="p-2 px-3 bg-[#FAF7F2] dark:bg-[#161F36] rounded-2xl flex items-center gap-2 border border-[#EFEAE1] dark:border-[#1E293B] shadow-2xs">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22C55E] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#16A34A]"></span>
+            </span>
+            <div className="text-left">
+              <span className="text-[10px] text-[#7A7485] dark:text-[#94A3B8] block leading-none">Triage en Vivo</span>
+              <span className="text-xs font-semibold text-[#2C693E] dark:text-[#86EFAC]">
+                Sincronizado
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleManualSync}
+              title="Actualizar datos clínicos ahora"
+              aria-label="Actualizar datos clínicos"
+              className="p-1 hover:bg-[#EFE9DF] dark:hover:bg-[#232B45] rounded-lg transition-colors text-[#6E6779] dark:text-[#94A3B8]"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#8C71D6]' : ''}`} />
+            </button>
+          </div>
+
           {/* Subscription quick badge button */}
           <button
             type="button"
@@ -516,6 +633,17 @@ export const PsychologistView: React.FC<PsychologistViewProps> = ({
                 <option value="pending">Solo Pendientes ({unattendedReports.length})</option>
                 <option value="attended">Solo Atendidos</option>
               </select>
+
+              {/* Instant Sync Button */}
+              <button
+                type="button"
+                onClick={handleManualSync}
+                className="px-3 py-1.5 rounded-xl border border-[#E8E2D8] dark:border-[#232B45] bg-[#FAF8F5] dark:bg-[#161F36] hover:bg-[#F3EFE9] dark:hover:bg-[#202B4B] text-[#575162] dark:text-[#CBD5E1] text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                title="Actualizar listado de alertas clínicas en tiempo real"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#8C71D6]' : ''}`} />
+                <span>Actualizar</span>
+              </button>
             </div>
           </div>
 
